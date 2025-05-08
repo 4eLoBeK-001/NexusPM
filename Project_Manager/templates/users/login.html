@@ -16,9 +16,11 @@
         
         <!-- Форма -->
         <form method="post" class="p-8">
+            {% csrf_token %}
+
             {% for field in form %}
             <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-medium mb-2" for="email">
+                <label class="block text-gray-700 text-sm font-medium mb-2" for="{{ field.id_for_label }}">
                     <i class="fas {{ field.field.widget.attrs.fas }} mr-2 text-indigo-500"></i>{{ field.label }}
                 </label>
                 {{ field }}
