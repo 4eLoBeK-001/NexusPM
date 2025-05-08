@@ -4,13 +4,15 @@ from django.contrib.auth.forms import AuthenticationForm
 
 from .models import User
 
+CLASS_FOR_FIELDS = 'w-full px-4 py-3 text-slate-200 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition'
+
 class LoginUserForm(AuthenticationForm):
     
     username = forms.CharField(
         label='Логин', 
         max_length=150, 
         widget=forms.TextInput(attrs=
-            {'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition',
+            {'class': CLASS_FOR_FIELDS,
              'id': 'login',
              'placeholder': 'Введите логин',
              'fas': 'fa-user'
@@ -20,7 +22,7 @@ class LoginUserForm(AuthenticationForm):
     password = forms.CharField(
         label='Пароль', 
         widget=forms.PasswordInput(attrs=
-            {'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition',
+            {'class': CLASS_FOR_FIELDS,
              'id': 'password',
              'placeholder': '••••••••',
              'fas': 'fa-lock'
@@ -38,23 +40,23 @@ class RegisterUserForm(forms.ModelForm):
 
         widgets = {
             'first_name': forms.TextInput(attrs=
-                {'class': 'w-full px-4 py-3 text-slate-200 input-field rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition',
+                {'class': CLASS_FOR_FIELDS + ' input-field',
                  'id': 'first-name',
                  'placeholder': 'Имя',
             }),
             'last_name': forms.TextInput(attrs=
-                {'class': 'w-full px-4 py-3 text-slate-200 input-field rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition',
+                {'class': CLASS_FOR_FIELDS + ' input-field',
                  'id': 'last-name',
                  'placeholder': 'Фамилия',
             }),
             'username': forms.TextInput(attrs=
-                {'class': 'w-full px-4 py-3 text-slate-200 input-field rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition',
+                {'class': CLASS_FOR_FIELDS + ' input-field',
                  'id': 'login',
                  'fas': 'fa-user-edit',
                  'placeholder': 'Введите логин',
             }),
             'email': forms.TextInput(attrs=
-                {'class': 'w-full px-4 py-3 text-slate-200 input-field rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition',
+                {'class': CLASS_FOR_FIELDS + ' input-field',
                  'id': 'email',
                  'fas': 'fa-envelope',
                  'placeholder': 'Введите почту',
