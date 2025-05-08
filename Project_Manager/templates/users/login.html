@@ -15,32 +15,17 @@
         </div>
         
         <!-- Форма -->
-        <form class="p-8">
+        <form method="post" class="p-8">
+            {% for field in form %}
             <div class="mb-6">
                 <label class="block text-gray-700 text-sm font-medium mb-2" for="email">
-                    <i class="fas fa-envelope mr-2 text-indigo-500"></i>Email
+                    <i class="fas {{ field.field.widget.attrs.fas }} mr-2 text-indigo-500"></i>{{ field.label }}
                 </label>
-                <input 
-                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                    id="email" 
-                    type="email" 
-                    placeholder="Введите почту"
-                >
+                {{ field }}
+                <div class="form_error">{{ field.errors }} </div>
             </div>
-            
-            <div class="mb-6">
-                <label class="block text-gray-700 text-sm font-medium mb-2" for="password">
-                    <i class="fas fa-lock mr-2 text-indigo-500"></i>Пароль
-                </label>
-                <input 
-                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                    id="password" 
-                    type="password" 
-                    placeholder="••••••••"
-                >
-            </div>
-            
-            
+            {% endfor %}
+     
             <button 
                 type="submit"
                 class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200 transform hover:scale-105"
@@ -51,7 +36,7 @@
         
         <!-- Подвал -->
         <div class="bg-gray-50 px-8 py-6 text-center">
-            <p class="text-gray-600 text-sm">
+            <p class="text-gray-600 text-base">
                 Еще нет аккаунта? 
                 <a href="{% url 'users:register' %}" class="text-indigo-600 font-medium hover:text-indigo-500">
                     Зарегистрироваться
@@ -64,4 +49,4 @@
 
 </div>
 
-{% endblock content%}
+{% endblock content %}
