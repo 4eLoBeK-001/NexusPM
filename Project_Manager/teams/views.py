@@ -4,4 +4,4 @@ from django.shortcuts import render
 
 def workplace(request):
     
-    return render(request, 'teams/project_manage.html')
+    return render(request, 'teams/workplace.html')
