@@ -31,12 +31,13 @@
       </div>
         
         <!-- Кнопка внизу -->
-        <button class="relative mt-auto px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+        <button class="relative mt-auto px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors" onclick="add_team_modal.showModal()">
           <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 stroke-white stroke-[2.5]" viewBox="0 0 24 24" fill="none" >
             <path d="M12 3v18M3 12h18" />
           </svg>
-          Добавить новый
+          Создать команду
         </button>
+        {% include 'includes/add-team-modal.html' %}
         
       </div>
     </div>
