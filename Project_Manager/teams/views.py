@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_http_methods
 
+from .forms import AddTeamForm
 from .models import Team
-# Create your views here.
+
 
 def workplace(request):
     
@@ -13,3 +15,12 @@ def team_list(request):
         'teams': teams
     }
     return render(request, 'teams/team_list.html', context)
+
+@require_http_methods(['POST'])
+def create_team(request):
+    form = AddTeamForm(request.POST)
+    if form.is_valid():
+        team = form.save(commit=False)
+        team.author = request.user
+        team.save()
+    return redirect(request.META.get('HTTP_REFERER'))

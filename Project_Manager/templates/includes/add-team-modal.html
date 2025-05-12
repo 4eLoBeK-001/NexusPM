@@ -1,9 +1,27 @@
 
 
 <dialog id="add_team_modal" class="modal">
-    <div class="modal-box bg-gray-200">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick="add_team_modal.close();">✕</button>
-      <h3 class="text-lg font-bold text-black">Заголовок</h3>
-      <p class="py-4 text-black">Текст</p>
+    <div class="modal-box bg-gray-100 max-w-md p-6 rounded-lg shadow-xl">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition-colors" onclick="add_team_modal.close();">✕</button>
+      <h3 class="text-2xl font-bold text-gray-800 mb-4">Создание команды</h3>
+      <form action="{% url 'teams:create_team' %}" method="post">
+        {% csrf_token %}
+        
+        {% for field in context_form %}
+        <div class="flex flex-col gap-4">
+          <div class="form-control w-full">
+            <label class="label" for="id_name">
+              <span class="text-base label-text text-gray-700 font-medium">{{ field.label }}</span>
+            </label>
+            {{ field }}
+        </div>
+        </div>
+        {% endfor %}
+
+        <div class="modal-action mt-6">
+          <button class="btn btn-primary text-sm text-white" type="submit">Создать команду</button>
+        </div>
+
+      </form>
     </div>
 </dialog>

@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'teams.context_processors.all_teams_processor',
+                'teams.context_processors.project_form_processor',
             ],
         },
     },
