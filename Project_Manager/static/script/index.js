@@ -12,3 +12,10 @@ document.addEventListener('DOMContentLoaded', function() {
       mobileMenu.classList.add('hidden');
     });
 });
+
+
+function hideMessage(btn) {
+  const messageDiv = btn.closest('div');
+  
+  messageDiv.style.opacity = '0';
+}
