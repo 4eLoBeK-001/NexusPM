@@ -30,3 +30,10 @@ def create_team(request):
             extra_tags=team.id
         )
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+@require_http_methods(['GET'])
+def search_team(request):
+    search = request.GET.get('search', '')
+    queryset = Team.objects.filter(name__icontains=search)
+    return render(request, 'includes/team_list.html', {'context_teams': queryset})
