@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
+from django.contrib import messages
 
 from .forms import AddTeamForm
 from .models import Team
@@ -23,4 +24,9 @@ def create_team(request):
         team = form.save(commit=False)
         team.author = request.user
         team.save()
+        messages.success(
+            request, 
+            message=f'Команда {team.name} успешно создана',
+            extra_tags=team.id
+        )
     return redirect(request.META.get('HTTP_REFERER'))

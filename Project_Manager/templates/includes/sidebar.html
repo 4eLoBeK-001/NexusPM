@@ -1,13 +1,39 @@
 
 
 <!-- Sidebar -->
-<aside class="w-64 bg-white shadow-md flex flex-col">
+<aside class="min-w-64 bg-white shadow-md flex flex-col">
   <div class="px-6 py-4 text-2xl font-semibold border-b">Описание</div>
   <nav class="flex-1 px-4 py-2 space-y-2">
     <a href="{% url 'projects:home' %}" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800">На главную</a>
     <div class="dropdown dropdown-right w-full">
-      <div tabindex="0" role="button" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800 w-full text-left">Проекты</div>
+      <div tabindex="0" role="button" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800 w-full text-left">Команды</div>
+      <!-- Заголовок -->
       <div tabindex="0" class="dropdown-content bg-white w-[34vh] rounded-box z-10 w-64 p-3 shadow-md ml-2 flex flex-col gap-2">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-medium text-gray-800">Поиск</h3>
+          <div class="group relative inline-block">
+            <a 
+              href="{% url 'teams:team_list' %}" 
+              class="p-1 rounded hover:bg-gray-200"
+            >
+              <i class="fas fa-external-link-alt text-teal-600"></i>
+            </a>
+            
+            <!-- Тултип -->
+            <span class="
+              absolute 
+              bottom-full left-1/2 -translate-x-1/2 
+              mb-2 hidden group-hover:block
+              bg-gray-800 text-white text-xs 
+              rounded px-2 py-1 
+              whitespace-nowrap
+              before:absolute before:top-full before:left-1/2 before:-translate-x-1/2
+              before:border-4 before:border-transparent before:border-t-gray-800
+            ">
+              Список команд
+            </span>
+          </div>
+        </div>
         <!-- Строка поиска -->
         <div class="relative">
           <input 
@@ -47,4 +73,3 @@
     <button class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100 rounded">Выйти</button>
   </div>
 </aside>
-
