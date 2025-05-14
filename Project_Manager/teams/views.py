@@ -12,10 +12,14 @@ def workplace(request):
 
 def team_list(request):
     teams = Team.objects.all()
+    team_forms = {team.id: AddTeamForm(instance=team) for team in teams}
     context = {
-        'teams': teams
+        'teams': teams,
+        'team_forms': team_forms,
     }
     return render(request, 'teams/team_list.html', context)
+
+
 
 @require_http_methods(['POST'])
 def create_team(request):
@@ -29,6 +33,16 @@ def create_team(request):
             message=f'Команда {team.name} успешно создана',
             extra_tags=team.id
         )
+    return redirect(request.META.get('HTTP_REFERER'))
+
+# @require_http_methods(['PUT', 'PATCH'])
+def update_team(request, pk):
+    team = Team.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = AddTeamForm(request.POST, instance=team)
+        if form.is_valid():
+            form.save()
+            return redirect(request.META.get('HTTP_REFERER'))
     return redirect(request.META.get('HTTP_REFERER'))
 
 

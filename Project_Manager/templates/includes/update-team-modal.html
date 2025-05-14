@@ -1,0 +1,29 @@
+
+<dialog id="update_team_modal_{{ team.id }}" class="modal">
+    <div class="modal-box bg-gray-100 max-w-md p-6 rounded-lg shadow-xl">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition-colors" onclick="document.getElementById('update_team_modal_{{ team.id }}').close();">✕</button>
+      <h3 class="text-2xl font-bold text-gray-800 mb-4">Изменение команды</h3>
+      <form action="{% url 'teams:update_team' team.id %}" method="post">
+        {% csrf_token %}
+        
+        <div class="flex flex-col gap-4">
+            {% for field in form %}
+              <div class="form-control w-full">
+                <label class="label" for="{{ field.id_for_label }}">
+                  <span class="text-base label-text text-gray-700 font-medium">{{ field.label }}</span>
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                  <div class="text-red-600 text-sm mt-1">{{ field.errors }}</div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          
+
+        <div class="modal-action mt-6">
+          <button class="btn btn-primary text-sm text-white" type="submit">Сохранить</button>
+        </div>
+      </form>
+    </div>
+</dialog>
