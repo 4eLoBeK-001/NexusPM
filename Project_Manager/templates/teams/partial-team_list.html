@@ -1,49 +1,64 @@
 {% load static custom_filters %}
 
-
-{% for team in teams %}
-    <div class="shadow-lg relative self-start card w-80 border border-solid border-gray-200 rounded-2xl mx-4 p-4 mb-6 transition-all duration-500 col-span-12  xl:p-6  lg:col-span-3 md:col-span-6 ">
-        <div class="relative mb-6">
-            <a href="">
-                <svg width="46" height="46" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8.66699 12.8162L11.3501 15.4993C11.5616 15.7107 11.9043 15.7109 12.1158 15.4997L17.8753 9.75033M13.0003 23.8337C7.01724 23.8337 2.16699 18.9834 2.16699 13.0003C2.16699 7.01724 7.01724 2.16699 13.0003 2.16699C18.9834 2.16699 23.8337 7.01724 23.8337 13.0003C23.8337 18.9834 18.9834 23.8337 13.0003 23.8337Z" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                </svg>
-            </a>
-            <div class="dropdown dropdown-end absolute top-0 right-0 w-[30px] h-auto rounded-md hover:bg-gray-300">
-                <!-- Кнопка с иконкой (без фона) -->
-                <div tabindex="0" role="button" class="pointer bg-transparent border-none hover:bg-transparent">
-                    <img 
-                        class="w-[30px] h-auto" 
-                        src="{% static 'img/ellipsis.png' %}" 
-                        alt="Menu"
-                    >
+{% if teams %}
+    {% for team in teams %}
+        <div class="shadow-lg relative self-start card w-80 border border-solid border-gray-200 rounded-2xl mx-4 p-4 mb-6 transition-all duration-500 col-span-12  xl:p-6  lg:col-span-3 md:col-span-6 ">
+            <div class="relative mb-6">
+                <a href="">
+                    <svg width="46" height="46" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8.66699 12.8162L11.3501 15.4993C11.5616 15.7107 11.9043 15.7109 12.1158 15.4997L17.8753 9.75033M13.0003 23.8337C7.01724 23.8337 2.16699 18.9834 2.16699 13.0003C2.16699 7.01724 7.01724 2.16699 13.0003 2.16699C18.9834 2.16699 23.8337 7.01724 23.8337 13.0003C23.8337 18.9834 18.9834 23.8337 13.0003 23.8337Z" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </a>
+                <div class="dropdown dropdown-end absolute top-0 right-0 w-[30px] h-auto rounded-md hover:bg-gray-300">
+                    <!-- Кнопка с иконкой (без фона) -->
+                    <div tabindex="0" role="button" class="pointer bg-transparent border-none hover:bg-transparent">
+                        <img 
+                            class="w-[30px] h-auto" 
+                            src="{% static 'img/ellipsis.png' %}" 
+                            alt="Menu"
+                        >
+                    </div>
+                    
+                    <!-- Выпадающее меню -->
+                    <ul tabindex="0" class="dropdown-content menu bg-gray-100 border border-gray-400 shadow-md rounded-lg z-10 w-52 p-2">
+                        <li><a class="rounded text-gray-600 hover:bg-gray-200"  onclick="document.getElementById('update_team_modal_{{ team.id }}').showModal()">Редактировать</a></li>
+                        <li><a class="rounded text-red-500 hover:bg-red-500 hover:text-white">Удалить</a></li>
+                        {% with form=team_forms|dictkey:team.id %}
+                            {% include 'includes/update-team-modal.html' %}
+                        {% endwith %}
+                    </ul>
                 </div>
-                
-                <!-- Выпадающее меню -->
-                <ul tabindex="0" class="dropdown-content menu bg-gray-100 border border-gray-400 shadow-md rounded-lg z-10 w-52 p-2">
-                    <li><a class="rounded text-gray-600 hover:bg-gray-200"  onclick="document.getElementById('update_team_modal_{{ team.id }}').showModal()">Редактировать</a></li>
-                    <li><a class="rounded text-red-500 hover:bg-red-500 hover:text-white">Удалить</a></li>
-                    {% with form=team_forms|dictkey:team.id %}
-                        {% include 'includes/update-team-modal.html' %}
-                    {% endwith %}
-                </ul>
-            </div>
 
+            </div>
+            <div class="h-[100px]">
+                <h4 class="text-base font-semibold text-gray-900 mb-2 capitalize transition-all duration-500 ">{{ team.name }}</h4>
+            </div>
+            <button class="px-5 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-full shadow-sm">Перейти</button>
+            
+            <!-- Footer -->
+            <div class="mt-[15px] flex cursor-pointer group relative max-w-max">
+                <img class="w-[1.25rem] h-[1.30rem] mr-1.5 self-center grayscale-[100%] brightness-75" src="{% static 'img/calendar.png' %}">
+                <p class="text-zinc-500">{{ team.created_at|date:"d.m.Y" }}</p>
+                <!-- Кастомный тултип -->
+                <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs text-center py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                    Создано: {{ team.created_at|date:"d.m.Y" }} <br>
+                    {{ team.author }}
+                </span>
+            </div>
         </div>
-        <div class="h-[100px]">
-            <h4 class="text-base font-semibold text-gray-900 mb-2 capitalize transition-all duration-500 ">{{ team.name }}</h4>
-        </div>
-        <button class="px-5 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-full shadow-sm">Перейти</button>
-        
-        <!-- Footer -->
-        <div class="mt-[15px] flex cursor-pointer group relative max-w-max">
-            <img class="w-[1.25rem] h-[1.30rem] mr-1.5 self-center grayscale-[100%] brightness-75" src="{% static 'img/calendar.png' %}">
-            <p class="text-zinc-500">{{ team.created_at|date:"d.m.Y" }}</p>
-            <!-- Кастомный тултип -->
-            <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs text-center py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                Создано: {{ team.created_at|date:"d.m.Y" }} <br>
-                {{ team.author }}
-            </span>
-        </div>
-    </div>
     {% endfor %}
+
+{% else %}
+
+<div role="alert" class="alert alert-info bg-sky-400">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-6 w-6 shrink-0 stroke-current">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <span>Команды не найдены, свою команду или присоеденитесь</span>
+    <button onclick="team_modal.showModal();">Создайте</button>
+</div>
+
+<script>
+    const team_modal = document.querySelector('#add_team_modal');
+</script>
+{% endif %}

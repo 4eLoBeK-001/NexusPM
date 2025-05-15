@@ -21,84 +21,84 @@
 	
 	<header class="bg-white">
 		<nav class="mx-auto flex items-center justify-between p-[18px] lg:px-8" aria-label="Global">
-		  <div class="flex lg:flex-1">
-			<a href="#" class="-m-1.5 p-1.5">
-			  <img class="h-8 w-auto" src="" alt="">
-			</a>
-		  </div>
-		  <div class="flex lg:hidden">
-			<button type="button" id="menu-open" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
-			  <span class="sr-only">Open main menu</span>
-			  <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-			  </svg>
-			</button>
-		  </div>
-		  <div class="hidden lg:flex lg:gap-x-6 bg-gray-200 rounded-xl">
-			<a href="#" class="btn btn-neutral btn-outline text-xl font-semibold text-zinc-950 border-none">О возможностях</a>
-			<a href="{% url 'projects:home' %}" class="btn btn-neutral btn-outline text-xl font-semibold text-zinc-950 border-none">На главную</a>
-			<a href="#" class="btn btn-neutral btn-outline text-xl font-semibold text-zinc-950 border-none">Обратная связь</a>
-		  </div>
-		  <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-            {% if user.is_authenticated %}
-				<a href="#" class="btn btn-primary text-xl font-semibold text-white mr-6">Профиль</a>
-				<a href="{% url 'users:logout' %}" class="btn btn-primary text-xl font-semibold text-white">Выйти</a>
-			{% else %}
-				<a href="{% url 'users:login' %}" class="btn btn-primary text-xl font-semibold text-white mr-6">Войти</a>
-				<a href="{% url 'users:register' %}" class="btn btn-primary text-xl font-semibold text-white">Зарегистрироваться</a>
-			{% endif %}
-		  </div>
+			<div class="flex lg:flex-1">
+				<a href="#" class="-m-1.5 p-1.5">
+				<img class="h-8 w-auto" src="" alt="">
+				</a>
+			</div>
+			<div class="flex lg:hidden">
+				<button type="button" id="menu-open" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+				<span class="sr-only">Open main menu</span>
+				<svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+				</svg>
+				</button>
+			</div>
+			<div class="hidden lg:flex lg:gap-x-6 bg-gray-200 rounded-xl">
+				<a href="#" class="btn btn-neutral btn-outline text-xl font-semibold text-zinc-950 border-none">О возможностях</a>
+				<a href="{% url 'projects:home' %}" class="btn btn-neutral btn-outline text-xl font-semibold text-zinc-950 border-none">На главную</a>
+				<a href="#" class="btn btn-neutral btn-outline text-xl font-semibold text-zinc-950 border-none">Обратная связь</a>
+			</div>
+			<div class="hidden lg:flex lg:flex-1 lg:justify-end">
+				{% if user.is_authenticated %}
+					<a href="#" class="btn btn-primary text-xl font-semibold text-white mr-6">Профиль</a>
+					<a href="{% url 'users:logout' %}" class="btn btn-primary text-xl font-semibold text-white">Выйти</a>
+				{% else %}
+					<a href="{% url 'users:login' %}" class="btn btn-primary text-xl font-semibold text-white mr-6">Войти</a>
+					<a href="{% url 'users:register' %}" class="btn btn-primary text-xl font-semibold text-white">Зарегистрироваться</a>
+				{% endif %}
+			</div>
 		</nav>
 		<!-- Mobile menu, show/hide based on menu open state. -->
 		<div id="mobile-menu" class="hidden lg:hidden" role="dialog" aria-modal="true">
-		  <!-- Background backdrop, show/hide based on slide-over state. -->
-		  <div class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-			<div class="flex items-center justify-between">
-			  <a href="#" class="-m-1.5 p-1.5">
-				<span class="sr-only">Your Company</span>
-				<img class="h-8 w-auto" src="" alt="">
-			  </a>
-			  <button type="button" id="menu-close" class="-m-2.5 rounded-md p-2.5 text-gray-700">
-				<span class="sr-only">Close menu</span>
-				<svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
-				  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-				</svg>
-			  </button>
-			</div>
-			<div class="mt-6 flow-root">
-			  <div class="-my-6 divide-y divide-gray-500/10">
-				<div class="space-y-2 py-6">
-				  <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Начать</a>
-				  <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">О возможностях</a>
-				  <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Обратная связь</a>
+			<!-- Background backdrop, show/hide based on slide-over state. -->
+			<div class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+				<div class="flex items-center justify-between">
+					<a href="#" class="-m-1.5 p-1.5">
+						<span class="sr-only">Your Company</span>
+						<img class="h-8 w-auto" src="" alt="">
+					</a>
+					<button type="button" id="menu-close" class="-m-2.5 rounded-md p-2.5 text-gray-700">
+						<span class="sr-only">Close menu</span>
+						<svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+						</svg>
+					</button>
 				</div>
-				<div class="py-6">
-				  <a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Войти</a>
-				  <a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Зарегистрироваться</a>
+				<div class="mt-6 flow-root">
+					<div class="-my-6 divide-y divide-gray-500/10">
+						<div class="space-y-2 py-6">
+							<a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Начать</a>
+							<a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">О возможностях</a>
+							<a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Обратная связь</a>
+						</div>
+						<div class="py-6">
+							<a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Войти</a>
+							<a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Зарегистрироваться</a>
+						</div>
+					</div>
 				</div>
-			  </div>
 			</div>
-		  </div>
 		</div>
-	  </header>
+	</header>
 
-      <div class="flex min-h-[91vh] bg-gray-100">
+    	<div class="flex min-h-[91vh] bg-gray-100">
 
-		{% if messages %}
-		{% include 'includes/messages.html' %}
-		{% endif %}
+			{% if messages %}
+			{% include 'includes/messages.html' %}
+			{% endif %}
 
-        <!-- Sidebar -->
-        {% include 'includes/sidebar.html' %}
+			<!-- Sidebar -->
+			{% include 'includes/sidebar.html' %}
 
-		<main class="h-[100%]">
-			<!-- Main content -->
-			{% block content %}
+			<main class="h-[91vh] w-full">
+				<!-- Main content -->
+				{% block content %}
 
-			{% endblock content %}
-		</main>
+				{% endblock content %}
+			</main>
 
-      </div>
+    	</div>
 
 	  <script src="{% static 'script/index.js' %}"></script>
 </body>
