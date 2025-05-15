@@ -41,7 +41,7 @@
             name="search"
             placeholder="Поиск..." 
             class="w-full pl-8 pr-4 py-2 text-slate-800 border bg-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500"
-            hx-get="{% url 'teams:search_team' %}"
+            hx-get="{% url 'teams:sidebar_search_team' %}"
             hx-target="#team_list"
             hx-trigger="keyup delay:200ms"
           >

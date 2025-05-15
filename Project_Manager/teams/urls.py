@@ -10,4 +10,5 @@ urlpatterns = [
     path('create/', views.create_team, name='create_team'),
     path('update/<int:pk>/', views.update_team, name='update_team'),
     path('search/', views.search_team, name='search_team'),
+    path('ssearch/', views.sidebar_search_team, name='sidebar_search_team'),
 ]
