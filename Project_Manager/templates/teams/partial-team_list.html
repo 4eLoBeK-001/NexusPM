@@ -2,7 +2,7 @@
 
 {% if teams %}
     {% for team in teams %}
-        <div id="card_{{team.id}}" class="shadow-lg relative self-start card w-80 border border-solid border-gray-200 rounded-2xl mx-4 p-4 mb-6 transition-all duration-500 col-span-12  xl:p-6  lg:col-span-3 md:col-span-6 ">
+        <div id="card_{{team.id}}" class="shadow-lg relative self-start card w-[22rem] border border-solid border-gray-200 rounded-2xl mx-4 p-4 mb-6 transition-all duration-500 col-span-12  xl:p-6  lg:col-span-3 md:col-span-6 ">
             <div class="relative mb-6">
                 <a href="">
                     <svg width="46" height="46" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -54,8 +54,8 @@
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-6 w-6 shrink-0 stroke-current">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
     </svg>
-    <span>Команды не найдены, свою команду или присоеденитесь</span>
-    <button onclick="team_modal.showModal();">Создайте</button>
+    <span>Команды не найдены, <a class="underline text-white font-semibold hover:text-rose-500 transition-colors duration-200 cursor-pointer" onclick="team_modal.showModal();">
+        создайте</a> свою или присоеденитесь к существующей</span>
 </div>
 
 <script>
