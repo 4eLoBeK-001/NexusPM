@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 
@@ -58,3 +58,10 @@ def sidebar_search_team(request):
     search = request.GET.get('search', '')
     queryset = Team.objects.filter(name__icontains=search)
     return render(request, 'includes/team_list.html', {'context_teams': queryset})
+
+
+def delete_team(request, pk):
+    team = get_object_or_404(Team, pk=pk)
+    team.delete()
+    return redirect(request.META.get('HTTP_REFERER'))
+    

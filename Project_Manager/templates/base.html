@@ -17,7 +17,7 @@
 	<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
 
 </head>
-<body>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 	
 	<header class="bg-white">
 		<nav class="mx-auto flex items-center justify-between p-[18px] lg:px-8" aria-label="Global">
