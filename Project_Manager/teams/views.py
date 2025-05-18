@@ -36,14 +36,18 @@ def create_team(request):
     return redirect(request.META.get('HTTP_REFERER'))
 
 # @require_http_methods(['PUT', 'PATCH'])
+from django.shortcuts import get_object_or_404, redirect
+
 def update_team(request, pk):
-    team = Team.objects.get(pk=pk)
+    team = get_object_or_404(Team, pk=pk)
     if request.method == 'POST':
-        form = AddTeamForm(request.POST, instance=team)
+        form = AddTeamForm(request.POST, request.FILES, instance=team)
+        print(request.FILES)
         if form.is_valid():
             form.save()
-            return redirect(request.META.get('HTTP_REFERER'))
-    return redirect(request.META.get('HTTP_REFERER'))
+            return redirect(request.META.get('HTTP_REFERER', 'fallback_url'))
+    
+    return redirect(request.META.get('HTTP_REFERER', 'fallback_url'))
 
 @require_http_methods(['GET'])
 def search_team(request):

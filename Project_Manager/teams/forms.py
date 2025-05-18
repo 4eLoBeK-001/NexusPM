@@ -11,6 +11,7 @@ class AddTeamForm(forms.ModelForm):
             'id': 'id_name'})
     )
 
+
     class Meta:
         model = Team
-        fields = ('name',)
+        fields = ('image', 'name')

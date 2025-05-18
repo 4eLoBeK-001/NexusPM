@@ -3,21 +3,38 @@
     <div class="modal-box bg-gray-100 max-w-md p-6 rounded-lg shadow-xl">
         <button class="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition-colors" onclick="document.getElementById('update_team_modal_{{ team.id }}').close();">✕</button>
       <h3 class="text-2xl font-bold text-gray-800 mb-4">Изменение команды</h3>
-      <form action="{% url 'teams:update_team' team.id %}" method="post">
+      <form action="{% url 'teams:update_team' team.id %}" enctype="multipart/form-data" method="post" id="upload_form_{{ team.id }}">
         {% csrf_token %}
         
         <div class="flex flex-col gap-4">
-            {% for field in form %}
-              <div class="form-control w-full">
-                <label class="label" for="{{ field.id_for_label }}">
-                  <span class="text-base label-text text-gray-700 font-medium">{{ field.label }}</span>
-                </label>
-                {{ field }}
-                {% if field.errors %}
-                  <div class="text-red-600 text-sm mt-1">{{ field.errors }}</div>
-                {% endif %}
+
+          <div id="tte_{{team.id}}" class="w-14 cursor-pointer">
+            {% if team.image %}
+            <img class="w-14 h-14 rounded-xl" src="{{ team.image.url }}" alt="">
+            {% else %}
+              <div class="w-14 h-14 bg-{{ team.color }}-400 rounded-xl flex items-center justify-center font-bold text-white">
               </div>
+            {% endif %}
+            <input type="file" name="image" id="id_image_{{team.id}}" class="hidden">
+
+          </div>
+            
+
+
+            {% for field in form %}
+              {% if field.name != 'image' %}
+                <div class="form-control w-full">
+                  <label class="label" for="{{ field.id_for_label }}">
+                    <span class="text-base label-text text-gray-700 font-medium">{{ field.label }}</span>
+                  </label>
+                  {{ field }}
+                  {% if field.errors %}
+                    <div class="text-red-600 text-sm mt-1">{{ field.errors }}</div>
+                  {% endif %}
+                </div>
+              {% endif %}
             {% endfor %}
+
           </div>
           
 
@@ -26,4 +43,14 @@
         </div>
       </form>
     </div>
+  
+
 </dialog>
+<script>
+  document.getElementById('tte_{{team.id}}').addEventListener('click', () => {
+    document.getElementById('id_image_{{team.id}}').click();
+  });
+  document.getElementById('id_image_{{team.id}}').addEventListener('change', () => {
+    document.getElementById('upload_form_{{team.id}}').submit();
+  });
+</script>

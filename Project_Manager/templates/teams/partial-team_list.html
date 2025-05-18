@@ -5,13 +5,11 @@
         <div id="card_{{team.id}}" class="shadow-lg relative self-start card w-[22rem] border border-solid border-gray-200 rounded-2xl mx-4 p-4 mb-6 transition-all duration-500 col-span-12  xl:p-6  lg:col-span-3 md:col-span-6 ">
             <div class="relative mb-6">
                 {% if team.image %}
-                <div class="w-14 h-14 bg-{{ team.color }}-400 rounded-xl flex items-center justify-center font-bold text-white">
-                    Чикибамбони
-                </div>
+                    <img class="w-14 h-14 rounded-xl" src="{{ team.image.url }}" alt="">
                 {% else %}
-                <div class="w-14 h-14 bg-{{ team.color }}-400 rounded-xl flex items-center justify-center font-bold text-white">
-                    {{ team.short_name }}
-                </div>
+                    <div class="w-14 h-14 bg-{{ team.color }}-400 rounded-xl flex items-center justify-center font-bold text-white">
+                        {{ team.short_name }}
+                    </div>
                 {% endif %}
 
                 <div class="dropdown dropdown-end absolute top-0 right-0 w-[30px] h-auto rounded-md hover:bg-gray-300">
