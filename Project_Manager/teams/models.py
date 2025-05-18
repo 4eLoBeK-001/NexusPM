@@ -4,8 +4,11 @@ from django.db import models
 from django.contrib.auth import get_user_model
 # Create your models here.
 
+def get_colors():
+    return ['sky', 'blue', 'red', 'orange', 'lime', 'teal', 'violet', 'zinc']
+
 def get_random_color():
-    return random.choice(['sky', 'blue', 'red', 'orange', 'lime', 'teal', 'violet', 'zinc'])
+    return random.choice(get_colors())
 
 class Team(models.Model):
     name = models.CharField(max_length=150)

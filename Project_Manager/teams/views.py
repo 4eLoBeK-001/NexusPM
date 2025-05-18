@@ -7,8 +7,8 @@ from .models import Team
 
 
 def workplace(request):
-    
     return render(request, 'teams/workplace.html')
+
 
 def team_list(request):
     teams = Team.objects.all()
@@ -35,9 +35,8 @@ def create_team(request):
         )
     return redirect(request.META.get('HTTP_REFERER'))
 
-# @require_http_methods(['PUT', 'PATCH'])
-from django.shortcuts import get_object_or_404, redirect
 
+# @require_http_methods(['PUT', 'PATCH'])
 def update_team(request, pk):
     team = get_object_or_404(Team, pk=pk)
     if request.method == 'POST':
@@ -49,6 +48,7 @@ def update_team(request, pk):
     
     return redirect(request.META.get('HTTP_REFERER', 'fallback_url'))
 
+
 @require_http_methods(['GET'])
 def search_team(request):
     search = request.GET.get('search', '')
@@ -56,6 +56,7 @@ def search_team(request):
     team_forms = {team.id: AddTeamForm(instance=team) for team in queryset}
 
     return render(request, 'teams/partial-team_list.html', {'teams': queryset, 'team_forms': team_forms})
+
 
 @require_http_methods(['GET'])
 def sidebar_search_team(request):

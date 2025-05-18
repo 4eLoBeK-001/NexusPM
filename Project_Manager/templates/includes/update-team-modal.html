@@ -6,8 +6,7 @@
       <form action="{% url 'teams:update_team' team.id %}" enctype="multipart/form-data" method="post" id="upload_form_{{ team.id }}">
         {% csrf_token %}
         
-        <div class="flex flex-col gap-4">
-
+        <div  class="flex flex-col gap-4">
           <div id="tte_{{team.id}}" class="w-14 cursor-pointer">
             {% if team.image %}
             <img class="w-14 h-14 rounded-xl" src="{{ team.image.url }}" alt="">
@@ -16,10 +15,8 @@
               </div>
             {% endif %}
             <input type="file" name="image" id="id_image_{{team.id}}" class="hidden">
-
           </div>
             
-
 
             {% for field in form %}
               {% if field.name != 'image' %}
