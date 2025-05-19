@@ -2,7 +2,7 @@ from django import forms
 
 from .models import Team
 
-class AddTeamForm(forms.ModelForm):
+class AddModalTeamForm(forms.ModelForm):
     name = forms.CharField(
         label='Название команды', 
         widget=forms.TextInput(

@@ -8,6 +8,7 @@ urlpatterns = [
     path('team/', include('projects.urls', namespace='projects')),
 
     path('', views.workplace, name='workplace'),
+    path('<int:pk>/conf/', views.team_conf, name='team_conf'),
     path('teams/', views.team_list, name='team_list'),
     path('create/', views.create_team, name='create_team'),
     path('update/<int:pk>/', views.update_team, name='update_team'),

@@ -1,5 +1,5 @@
 from .models import Team
-from .forms import AddTeamForm
+from .forms import AddModalTeamForm
 
 def all_teams_processor(request):
     return {
@@ -8,4 +8,4 @@ def all_teams_processor(request):
 
 
 def project_form_processor(request):
-    return {'context_form': AddTeamForm()}
+    return {'context_form': AddModalTeamForm()}
