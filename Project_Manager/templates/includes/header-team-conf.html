@@ -16,10 +16,10 @@
         </button>
         
         <!-- Кнопка "Конфигурация" -->
-        <button class="btn btn-outline btn-sm flex items-center">
+        <a href="{% url 'teams:team_conf' team.id %}" class="btn btn-outline btn-sm flex items-center">
             <i class="fas fa-cog mr-2"></i>
             Конфигурация
-        </button>
+        </a>
         
         <!-- Выпадающее меню "Прочее" -->
         <div class="dropdown dropdown-end">
