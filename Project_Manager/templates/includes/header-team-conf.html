@@ -10,10 +10,10 @@
     <!-- Правая часть шапки - элементы управления -->
     <div class="flex items-center space-x-4">
         <!-- Кнопка "Участники" -->
-        <button class="btn btn-outline btn-sm flex items-center">
+        <a href="{% url 'teams:team_members' team.id %}" class="btn btn-outline btn-sm flex items-center">
             <i class="fas fa-users mr-2"></i>
             Участники
-        </button>
+        </a>
         
         <!-- Кнопка "Конфигурация" -->
         <a href="{% url 'teams:team_conf' team.id %}" class="btn btn-outline btn-sm flex items-center">

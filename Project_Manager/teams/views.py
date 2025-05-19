@@ -35,6 +35,12 @@ def team_conf(request, pk):
     }
     return render(request, 'teams/includes/setting.html', context)
 
+def team_members(request, pk):
+    team = Team.objects.get(pk=pk)
+    context = {
+        'team': team,
+    }
+    return render(request, 'teams/includes/team_members.html', context)
 
 @require_http_methods(['POST'])
 def create_team(request):
