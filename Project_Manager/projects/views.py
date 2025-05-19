@@ -5,16 +5,28 @@ from teams.models import Team
 
 # Create your views here.
 
-def main_page(request):
-    return render(request, 'home-page.html')
+
 
 def project_list(request, pk):
     team = get_object_or_404(Team, pk=pk)
     projects = Project.objects.filter(team=team)
     context = {
-        'projects': projects
+        'team': team,
+        'projects': projects,
     }
     return render(request, 'projects/project_list.html', context)
+
+def search_team(request, pk):
+    team = get_object_or_404(Team, pk=pk)
+    search = request.GET.get('search1', '')
+    projects = Project.objects.filter(team=team, name__icontains=search)
+    # if request.method == 'POST':
+    #     ...
+    context = {
+        'projects': projects
+    }
+    return render(request, 'projects/s.html', context)
+
 
 def project_list_t(request):
     return render(request, 'projects/temp/project_list.html')
