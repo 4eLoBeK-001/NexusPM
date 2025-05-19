@@ -22,7 +22,13 @@ def team_list(request):
 
 def team_conf(request, pk):
     team = Team.objects.get(pk=pk)
-    form = AddTeamForm(instance=team)
+    if request.method == 'POST':
+        form = AddTeamForm(request.POST, instance=team)
+        if form.is_valid():
+            form.save()
+            return redirect(request.META.get('HTTP_REFERER'))
+    else:
+        form = AddTeamForm(instance=team)
     context = {
         'team': team,
         'form': form
