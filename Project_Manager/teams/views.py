@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 
-from .forms import AddModalTeamForm
+from .forms import AddModalTeamForm, AddTeamForm
 from .models import Team
 
 
@@ -22,10 +22,12 @@ def team_list(request):
 
 def team_conf(request, pk):
     team = Team.objects.get(pk=pk)
+    form = AddTeamForm()
     context = {
-        'team': team
+        'team': team,
+        'form': form
     }
-    return render(request, 'teams/team-conf.html', context)
+    return render(request, 'teams/includes/setting.html', context)
 
 
 @require_http_methods(['POST'])

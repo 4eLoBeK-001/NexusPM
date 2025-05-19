@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load static custom_filters %}
 
 {% block content %}
 
@@ -7,7 +6,8 @@
 {% include 'includes/header-team-conf.html'  %}
 
 <div class="p-6">
-    <!-- Основной контент -->
+    {% block configuration_content %}
+    {% endblock configuration_content %}
 </div>
 
 {% endblock content %}

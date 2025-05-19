@@ -1,0 +1,10 @@
+{% extends 'teams/team-conf.html' %}
+
+{% block configuration_content %}
+
+<form action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+</form>
+
+{% endblock configuration_content %}

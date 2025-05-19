@@ -15,3 +15,10 @@ class AddModalTeamForm(forms.ModelForm):
     class Meta:
         model = Team
         fields = ('image', 'name')
+
+
+class AddTeamForm(forms.ModelForm):
+
+    class Meta:
+        model = Team
+        fields = ('name', 'description', 'team_member')
