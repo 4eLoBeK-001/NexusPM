@@ -36,7 +36,7 @@
             <div class="h-[100px]">
                 <h4 class="text-base font-semibold text-gray-900 mb-2 capitalize transition-all duration-500 ">{{ team.name }}</h4>
             </div>
-            <button class="px-5 py-2 text-xs font-semibold text-white bg-indigo-600 rounded-full shadow-sm">Перейти</button>
+            <a href="{% url 'teams:projects:project_list' team.id %}" class="px-5 py-2 text-xs font-semibold text-white text-center bg-indigo-600 rounded-full shadow-sm">Перейти</a>
             
             <!-- Footer -->
             <div class="mt-[15px] flex cursor-pointer group relative max-w-max">

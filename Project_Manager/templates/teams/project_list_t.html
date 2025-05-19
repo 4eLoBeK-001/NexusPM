@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div id="content" class="p-6">
+    <!-- Заголовок и кнопка добавления -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-gray-800">Мои проекты</h2>
+      <button class="btn btn-primary gap-2">
+        <i class="fas fa-plus"></i>
+        Добавить проект
+      </button>
+    </div>
+  
+    <!-- Сетка карточек -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <!-- Пример карточки (этот блок будет повторяться в цикле) -->
+      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
+        <figure class="px-4 pt-4">
+          <img src="https://placehold.co/600x400?text=Project+Image" alt="Project" class="rounded-xl h-40 w-full object-cover">
+        </figure>
+        <div class="card-body p-4">
+          <div class="flex justify-between items-start">
+            <h3 class="card-title text-lg">Название проекта</h3>
+            <div class="badge badge-primary badge-outline py-3">Активный</div>
+          </div>
+          <p class="text-gray-600 line-clamp-2">Краткое описание проекта. Здесь будет несколько строк текста, которые описывают проект...</p>
+          <div class="mt-3">
+            <div class="flex items-center text-sm text-gray-500 mb-2">
+              <i class="fas fa-users mr-2"></i>
+              <span>Команда: Разработчики</span>
+            </div>
+            <div class="flex items-center text-sm text-gray-500">
+              <i class="far fa-calendar-alt mr-2"></i>
+              <span>Создан: 12.05.2024</span>
+            </div>
+          </div>
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-sm btn-outline btn-primary">Открыть</button>
+            <button class="btn btn-sm btn-outline btn-error">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Конец примера карточки -->
+  
+      <!-- Еще примеры карточек (для демонстрации) -->
+      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
+        <figure class="px-4 pt-4">
+          <div class="bg-blue-100 h-40 w-full rounded-xl flex items-center justify-center">
+            <i class="fas fa-project-diagram text-4xl text-blue-500"></i>
+          </div>
+        </figure>
+        <div class="card-body p-4">
+          <h3 class="card-title text-lg">Веб-приложение</h3>
+          <p class="text-gray-600 line-clamp-2">Разработка современного веб-приложения с использованием React и Django</p>
+          <div class="mt-3">
+            <div class="flex items-center text-sm text-gray-500">
+              <i class="fas fa-users mr-2"></i>
+              <span>Команда: Фронтенд</span>
+            </div>
+          </div>
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-sm btn-outline btn-primary">Открыть</button>
+          </div>
+        </div>
+      </div>
+  
+      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
+        <figure class="px-4 pt-4">
+          <img src="https://placehold.co/600x400?text=Mobile+App" alt="Mobile App" class="rounded-xl h-40 w-full object-cover">
+        </figure>
+        <div class="card-body p-4">
+          <h3 class="card-title text-lg">Мобильное приложение</h3>
+          <p class="text-gray-600 line-clamp-2">Кроссплатформенное приложение для iOS и Android</p>
+          <div class="mt-3">
+            <div class="flex items-center text-sm text-gray-500">
+              <i class="fas fa-users mr-2"></i>
+              <span>Команда: Мобильные разработчики</span>
+            </div>
+          </div>
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-sm btn-outline btn-primary">Открыть</button>
+          </div>
+        </div>
+      </div>
+  
+      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
+        <figure class="px-4 pt-4">
+          <div class="bg-purple-100 h-40 w-full rounded-xl flex items-center justify-center">
+            <i class="fas fa-chart-line text-4xl text-purple-500"></i>
+          </div>
+        </figure>
+        <div class="card-body p-4">
+          <h3 class="card-title text-lg">Аналитика данных</h3>
+          <p class="text-gray-600 line-clamp-2">Анализ больших данных и машинное обучение</p>
+          <div class="mt-3">
+            <div class="flex items-center text-sm text-gray-500">
+              <i class="fas fa-users mr-2"></i>
+              <span>Команда: Data Science</span>
+            </div>
+          </div>
+          <div class="card-actions justify-end mt-4">
+            <button class="btn btn-sm btn-outline btn-primary">Открыть</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
