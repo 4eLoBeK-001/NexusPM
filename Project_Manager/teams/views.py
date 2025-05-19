@@ -22,7 +22,7 @@ def team_list(request):
 
 def team_conf(request, pk):
     team = Team.objects.get(pk=pk)
-    form = AddTeamForm()
+    form = AddTeamForm(instance=team)
     context = {
         'team': team,
         'form': form
