@@ -23,7 +23,7 @@ class Project(models.Model):
     image = models.ImageField(upload_to='project_avatars/', blank=True, null=True)
     status = models.CharField(max_length=20, choices=StatusChoices.choices, default=StatusChoices.IN_WORK)
     color = models.CharField(max_length=10, default=get_random_color)
-    team = models.ForeignKey(Team, on_delete=models.SET_NULL, related_name='projects', null=True)
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='projects', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
