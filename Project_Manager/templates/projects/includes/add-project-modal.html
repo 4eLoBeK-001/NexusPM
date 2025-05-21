@@ -1,0 +1,57 @@
+
+
+<dialog id="add_project_modal" class="modal">
+    <div class="modal-box bg-gray-100 max-w-md p-6 rounded-lg shadow-xl">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition-colors" onclick="add_project_modal.close();">✕</button>
+      <h3 class="text-2xl font-bold text-gray-800 mb-4">Создание проекта</h3>
+      <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {% for field in form %}
+        <div class="flex flex-col gap-4">
+            <div class="form-control w-full">
+                <label class="label" for="{{ field.id_for_label }}">
+                    <span class="text-base label-text text-gray-700 font-medium">{{ field.label }}</span>
+                </label>
+                {{ field }}
+            </div>
+        </div>
+        {% endfor %}
+        <div id="image-preview-container" class="mt-2">
+            <img id="image-preview" src="#" alt="Предпросмотр изображения" class="hidden w-32 h-32 border rounded" />
+        </div>
+        <div class="modal-action mt-6">
+          <button class="btn btn-primary text-sm text-white" type="submit">Создать проект</button>
+        </div>
+
+      </form>
+    </div>
+    
+</dialog>
+<script>
+    const modal = document.getElementById('add_project_modal');
+
+    modal.addEventListener('click', function () {
+        const fileInput = modal.querySelector('input[name="image"]');
+        const previewImage = modal.querySelector('#image-preview');
+
+        // Убедимся, что не вешаем обработчик дважды
+        if (!fileInput.hasAttribute('data-bound')) {
+            fileInput.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        previewImage.src = event.target.result;
+                        previewImage.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    previewImage.src = '#';
+                    previewImage.classList.add('hidden');
+                }
+            });
+            fileInput.setAttribute('data-bound', 'true'); // Отметим, что обработчик уже привязан
+        }
+    });
+</script>
