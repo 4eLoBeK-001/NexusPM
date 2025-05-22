@@ -31,5 +31,9 @@ class Project(models.Model):
         return self.name
     
     @property
+    def get_random_color(self):
+        return self.color
+    
+    @property
     def short_name(self):
         return self.name[:2].upper()
