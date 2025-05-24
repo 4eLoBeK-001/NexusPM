@@ -2,6 +2,10 @@
 
     {% for project in projects %}
     <div id="card_{{project.id}}" class="bg-gray-50 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors">
+      <form action="{% url 'teams:projects:project_status_changes' project.id %}" method="post" id="statusForm_{{project.id}}">
+        {% csrf_token %}
+        <input type="hidden" name="status" id="statusInput_{{project.id}}">
+      </form>
       <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4">
         <!-- Изображение/иконка -->
           {% if project.image %}
@@ -22,28 +26,25 @@
               <p class="text-gray-500 text-sm line-clamp-1">{{ project.description }}</p>
             </div>
             
-            <form action="{% url 'teams:projects:project_status_changes' project.id %}" method="post" id="statusForm">
-              {% csrf_token %}
-              <input type="hidden" name="status" id="statusInput">
-            </form>
+
 
             <div class="dropdown">
               <div tabindex="0" role="button" class="px-3 py-1 rounded-lg {{project.status_text}} text-sm font-medium {{project.status_color}} border border-gray-400">{{ project.status }} <i class='fas fa-angle-down mt-1'></i></div>
               <ul tabindex="0" class="dropdown-content menu text-gray-600 bg-white border border-gray-300 rounded-box z-[1] w-48 p-2 shadow-sm">
                 <li>
-                  <a onclick="changeStatus('{{status_choices.IN_WORK}}')" class="flex items-center gap-2">
+                  <a onclick="changeStatus('{{status_choices.IN_WORK}}', '{{project.id}}')" class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
                     {{ status_choices.IN_WORK }}
                   </a>
                 </li>
                 <li>
-                  <a onclick="changeStatus('{{status_choices.STOPPED}}')" class="flex items-center gap-2">
+                  <a onclick="changeStatus('{{status_choices.STOPPED}}', '{{project.id}}')" class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
                     {{ status_choices.STOPPED }}
                   </a>
                 </li>
                 <li>
-                  <a onclick="changeStatus('{{status_choices.COMPLETED}}')" class="flex items-center gap-2">
+                  <a onclick="changeStatus('{{status_choices.COMPLETED}}', '{{project.id}}')" class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-red-400"></span>
                     {{ status_choices.COMPLETED }}
                   </a>
@@ -52,9 +53,9 @@
             </div>
           </div>
           <script>
-            function changeStatus(status){
-              const form = document.getElementById('statusForm')
-              const input = document.getElementById('statusInput')
+            function changeStatus(status, projectId){
+              const form = document.getElementById(`statusForm_${projectId}`)
+              const input = document.getElementById(`statusInput_${projectId}`)
               input.value = status
               form.submit();
             };
