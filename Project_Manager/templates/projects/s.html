@@ -4,9 +4,15 @@
     <div class="bg-gray-50 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors">
       <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4">
         <!-- Изображение/иконка -->
-        <div class="w-14 h-14 rounded-lg bg-{{project.color}}-400 flex items-center justify-center text-white text-xl font-medium">
-        {{ project.short_name }}
-        </div>
+          {% if project.image %}
+            <div>
+              <img class="w-14 h-14 rounded-xl" src="{{ project.image.url }}" alt="">
+            </div>
+          {% else %}
+            <div class="w-14 h-14 rounded-lg bg-{{project.color}}-400 flex items-center justify-center text-white text-xl font-medium">
+            {{ project.short_name }}
+            </div>
+          {% endif %}
         
         <!-- Основное содержимое -->
         <div class="flex-1 min-w-0">

@@ -21,6 +21,7 @@ def project_list(request, pk):
     }
     return render(request, 'projects/project_list.html', context)
 
+
 def search_team(request, pk):
     team = get_object_or_404(Team, pk=pk)
     search = request.GET.get('search1', '')
@@ -29,6 +30,7 @@ def search_team(request, pk):
         'projects': projects
     }
     return render(request, 'projects/s.html', context)
+
 
 @require_http_methods(['POST'])
 def create_project(request):
@@ -41,6 +43,7 @@ def create_project(request):
             form.save()
             return redirect(request.META.get('HTTP_REFERER'))
     return redirect(request.META.get('HTTP_REFERER'))
+
 
 def project_list_t(request):
     return render(request, 'projects/temp/project_list.html')
