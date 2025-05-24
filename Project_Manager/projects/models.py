@@ -19,7 +19,7 @@ class Project(models.Model):
         COMPLETED = 'Завершён'
 
     name = models.CharField(max_length=150)
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True, default='')
     image = models.ImageField(upload_to='project_avatars/', blank=True, null=True)
     status = models.CharField(max_length=20, choices=StatusChoices.choices, default=StatusChoices.IN_WORK)
     color = models.CharField(max_length=10, default=get_random_color)
@@ -29,7 +29,24 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
-    
+
+    @property
+    def status_color(self):
+        return {
+            self.StatusChoices.IN_WORK: 'bg-green-100',
+            self.StatusChoices.STOPPED: 'bg-yellow-100',
+            self.StatusChoices.COMPLETED: 'bg-red-100',
+        }.get(self.status, 'bg-sky-100')
+
+    @property
+    def status_text(self):
+        return {
+            self.StatusChoices.IN_WORK: 'text-green-600',
+            self.StatusChoices.STOPPED: 'text-yellow-600',
+            self.StatusChoices.COMPLETED: 'text-red-600',
+        }.get(self.status, 'text-sky-700')
+
+
     @property
     def get_random_color(self):
         return self.color

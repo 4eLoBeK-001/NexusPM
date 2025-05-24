@@ -16,6 +16,7 @@ def project_list(request, pk):
     context = {
         'team': team,
         'projects': projects,
+        'status_choices': Project.StatusChoices,
         'form': form
     }
     return render(request, 'projects/project_list.html', context)
