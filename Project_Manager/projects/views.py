@@ -45,6 +45,11 @@ def create_project(request):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+def delete_project(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    project.delete()
+    return redirect(request.META.get('HTTP_REFERER'))
+
 def project_list_t(request):
     return render(request, 'projects/temp/project_list.html')
 
