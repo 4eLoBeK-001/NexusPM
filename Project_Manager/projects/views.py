@@ -53,7 +53,10 @@ def delete_project(request, pk):
 
 def project_status_changes(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    ...
+    status = request.POST.get('status')
+    project.status = status
+    project.save()
+    return redirect(request.META.get('HTTP_REFERER'))
 
 def project_list_t(request):
     return render(request, 'projects/temp/project_list.html')
