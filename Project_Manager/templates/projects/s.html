@@ -26,13 +26,13 @@
               <div tabindex="0" role="button" class="px-3 py-1 rounded-lg {{project.status_text}} text-sm font-medium {{project.status_color}} border border-gray-400">{{ project.status }} <i class='fas fa-angle-down mt-1'></i></div>
               <ul tabindex="0" class="dropdown-content menu text-gray-600 bg-white border border-gray-300 rounded-box z-[1] w-48 p-2 shadow-sm">
                 <li>
-                  <a class="flex items-center gap-2">
+                  <a href="{% url 'teams:projects:project_status_changes' project.id %}" name="{{ status_choices.IN_WORK }}" value="{{ status_choices.IN_WORK }}" class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
                     {{ status_choices.IN_WORK }}
                   </a>
                 </li>
                 <li>
-                  <a class="flex items-center gap-2">
+                  <a href="{% url 'teams:projects:project_status_changes' project.id %}" name="{{ status_choices.STOPPED }}" value="{{ status_choices.STOPPED }}" class="flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
                     {{ status_choices.STOPPED }}
                   </a>

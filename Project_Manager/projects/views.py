@@ -50,6 +50,11 @@ def delete_project(request, pk):
     project.delete()
     return redirect(request.META.get('HTTP_REFERER'))
 
+
+def project_status_changes(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    ...
+
 def project_list_t(request):
     return render(request, 'projects/temp/project_list.html')
 
