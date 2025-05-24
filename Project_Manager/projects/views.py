@@ -1,4 +1,5 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_http_methods
 
 from projects.forms import AddModalProjectForm
 from projects.models import Project
@@ -28,14 +29,17 @@ def search_team(request, pk):
     }
     return render(request, 'projects/s.html', context)
 
-
+@require_http_methods(['POST'])
 def create_project(request):
     if request.method == 'POST':
-        form = AddModalProjectForm(request.POST)
+        form = AddModalProjectForm(request.POST, request.FILES)
         if form.is_valid():
+            project = form.save(commit=False)
+            team_id = request.POST.get('team_id')
+            project.team = get_object_or_404(Team, id=team_id)
             form.save()
-            return render(request.META.get('HTTP_REFERER'))
-    return render(request.META.get('HTTP_REFERER'))
+            return redirect(request.META.get('HTTP_REFERER'))
+    return redirect(request.META.get('HTTP_REFERER'))
 
 def project_list_t(request):
     return render(request, 'projects/temp/project_list.html')
