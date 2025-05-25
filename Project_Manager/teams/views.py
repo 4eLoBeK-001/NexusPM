@@ -44,7 +44,7 @@ def team_members(request, pk):
 
 @require_http_methods(['POST'])
 def create_team(request):
-    form = AddModalTeamForm(request.POST)
+    form = AddModalTeamForm(request.POST, request.FILES)
     if form.is_valid():
         team = form.save(commit=False)
         team.author = request.user
@@ -54,6 +54,7 @@ def create_team(request):
             message=f'Команда {team.name} успешно создана',
             extra_tags=team.id
         )
+        return redirect(request.META.get('HTTP_REFERER'))
     return redirect(request.META.get('HTTP_REFERER'))
 
 
@@ -62,7 +63,6 @@ def update_team(request, pk):
     team = get_object_or_404(Team, pk=pk)
     if request.method == 'POST':
         form = AddModalTeamForm(request.POST, request.FILES, instance=team)
-        print(request.FILES)
         if form.is_valid():
             form.save()
             return redirect(request.META.get('HTTP_REFERER', 'fallback_url'))

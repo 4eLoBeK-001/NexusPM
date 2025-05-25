@@ -4,17 +4,17 @@
     <div class="modal-box bg-gray-100 max-w-md p-6 rounded-lg shadow-xl">
         <button class="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition-colors" onclick="add_team_modal.close();">✕</button>
       <h3 class="text-2xl font-bold text-gray-800 mb-4">Создание команды</h3>
-      <form action="{% url 'teams:create_team' %}" method="post">
+      <form action="{% url 'teams:create_team' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         
         {% for field in context_form %}
         <div class="flex flex-col gap-4">
           <div class="form-control w-full">
-            <label class="label" for="id_name">
+            <label class="label" for="{{ field.id_for_label }}">
               <span class="text-base label-text text-gray-700 font-medium">{{ field.label }}</span>
             </label>
             {{ field }}
-        </div>
+          </div>
         </div>
         {% endfor %}
 
@@ -25,3 +25,30 @@
       </form>
     </div>
 </dialog>
+
+<script>
+  const modal = document.getElementById('add_team_modal');
+
+  modal.addEventListener('click', function () {
+      const fileInput = modal.querySelector('input[name="image"]');
+      const previewImage = modal.querySelector('#image-preview');
+
+      if (!fileInput.hasAttribute('data-bound')) {
+          fileInput.addEventListener('change', function (e) {
+              const file = e.target.files[0];
+              if (file && file.type.startsWith('image/')) {
+                  const reader = new FileReader();
+                  reader.onload = function (event) {
+                      previewImage.src = event.target.result;
+                      previewImage.classList.remove('hidden');
+                  };
+                  reader.readAsDataURL(file);
+              } else {
+                  previewImage.src = '#';
+                  previewImage.classList.add('hidden');
+              }
+          });
+          fileInput.setAttribute('data-bound', 'true');
+      }
+  });
+</script>

@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
+
+from projects.widgets import CustomImageField
 from .models import Team
 
 
@@ -12,10 +14,17 @@ class AddModalTeamForm(forms.ModelForm):
             'id': 'id_name'})
     )
 
-
     class Meta:
         model = Team
         fields = ('image', 'name')
+
+        widgets = {
+            'image': CustomImageField(attrs={'class': 'ms'})
+        }
+    
+        labels = {
+            'image': 'Изображение',
+        }
 
 
 class AddTeamForm(forms.ModelForm):
