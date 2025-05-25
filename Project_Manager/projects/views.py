@@ -56,7 +56,11 @@ def project_status_changes(request, pk):
     status = request.POST.get('status')
     project.status = status
     project.save()
-    return redirect(request.META.get('HTTP_REFERER'))
+    data = {
+        'project': project,
+        'status_choices': Project.StatusChoices,
+    }
+    return render(request, 'projects/includes/change-status.html', data)
 
 def project_list_t(request):
     return render(request, 'projects/temp/project_list.html')
