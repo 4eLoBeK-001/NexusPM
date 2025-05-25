@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.contrib import messages
+from django.utils.html import format_html
 
 from .forms import AddModalTeamForm, AddTeamForm
 from .models import Team
@@ -51,8 +53,11 @@ def create_team(request):
         team.save()
         messages.success(
             request, 
-            message=f'Команда {team.name} успешно создана',
-            extra_tags=team.id
+            message=format_html(
+                'Команда  <a id="mtl" href="{}">{}</a>  успешно создана',
+                reverse('teams:projects:project_list', args=[team.id]),
+                team.name
+            ),
         )
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect(request.META.get('HTTP_REFERER'))
