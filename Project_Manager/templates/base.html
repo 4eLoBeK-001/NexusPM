@@ -17,7 +17,7 @@
 	<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
 
 </head>
-<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+<body class="flex flex-col min-h-screen" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 	
 	<header class="bg-white">
 		<nav class="mx-auto flex items-center justify-between p-[18px] lg:px-8" aria-label="Global">
@@ -82,7 +82,7 @@
 		</div>
 	</header>
 
-    	<div class="flex min-h-[91vh] bg-gray-100">
+    	<div class="flex-1 flex bg-gray-100 overflow-hidden">
 
 			{% if messages %}
 			{% include 'includes/messages.html' %}
