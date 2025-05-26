@@ -43,11 +43,12 @@
                 <img class="w-[1.25rem] h-[1.30rem] mr-1.5 self-center grayscale-[100%] brightness-75" src="{% static 'teams/img/calendar.png' %}">
                 <p class="text-zinc-500">{{ team.created_at|date:"d.m.Y" }}</p>
                 <!-- Кастомный тултип -->
-                <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs text-center py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs text-center py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
                     Создано: {{ team.created_at|date:"d.m.Y" }} <br>
                     {{ team.author }}
                 </span>
             </div>
+                        
         </div>
     {% endfor %}
 
