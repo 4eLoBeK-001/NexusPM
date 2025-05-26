@@ -34,15 +34,17 @@ def search_team(request, pk):
 
 @require_http_methods(['POST'])
 def create_project(request):
-    if request.method == 'POST':
-        form = AddModalProjectForm(request.POST, request.FILES)
-        if form.is_valid():
-            project = form.save(commit=False)
-            team_id = request.POST.get('team_id')
-            project.team = get_object_or_404(Team, id=team_id)
-            form.save()
-            return redirect(request.META.get('HTTP_REFERER'))
-    return redirect(request.META.get('HTTP_REFERER'))
+    form = AddModalProjectForm(request.POST, request.FILES)
+    if form.is_valid():
+        team_id = request.POST.get('team_id')
+        team = get_object_or_404(Team, id=team_id)
+
+        project = form.save(commit=False)
+        project.team = team
+        project.save()
+        project.project_members.add(*team.team_member.all().values_list('id', flat=True))
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def delete_project(request, pk):
