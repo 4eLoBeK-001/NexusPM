@@ -2,29 +2,45 @@
 
 {% block configuration_content %}
 <div class="p-6 max-w-2xl mx-auto">
-    <form action="" method="post" class="space-y-6">
+    <form action="" method="post" class="space-y-6" enctype="multipart/form-data">
         {% csrf_token %}
-        
-        {% for field in form %}
-        <div class="form-control">
-            <label for="{{ field.id_for_label }}" class="label">
-                <span class="label-text text-gray-800 text-lg font-medium">{{ field.label }}</span>
+
+        <div class="flex flex-col gap-4">
+            <label for="img" class="label">
+                <span class="label-text text-gray-800 text-lg font-medium">Изображение проекта</span>
             </label>
-            
-            {{ field }}
-            
-            {% if field.help_text %}
-            <label class="label">
-                <span class="label-text-alt">{{ field.help_text }}</span>
-            </label>
-            {% endif %}
-            
-            {% if field.errors %}
-            <div class="text-error text-sm mt-1">
-                {{ field.errors }}
-            </div>
-            {% endif %}
+            <div id="image-div_{{team.id}}" class="cursor-pointer w-36 h-36 hover:opacity-65">
+                {% if team.image %}
+                    <img id="img" class="w-36 h-36 rounded-xl" src="{{ team.image.url }}">
+                {% else %}
+                    <div id="img" class="w-36 h-36 bg-{{ team.color }}-400 rounded-xl flex items-center justify-center font-bold text-white">
+                    </div>
+                {% endif %}
+            <input type="file" name="image" id="image-input_{{team.id}}" class="hidden">
         </div>
+
+        {% for field in form %}
+            {% if field.name != 'image' %}
+                <div class="form-control">
+                    <label for="{{ field.id_for_label }}" class="label">
+                        <span class="label-text text-gray-800 text-lg font-medium">{{ field.label }}</span>
+                    </label>
+                    
+                    {{ field }}
+                    
+                    {% if field.help_text %}
+                    <label class="label">
+                        <span class="label-text-alt">{{ field.help_text }}</span>
+                    </label>
+                    {% endif %}
+                    
+                    {% if field.errors %}
+                    <div class="text-error text-sm mt-1">
+                        {{ field.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            {% endif %}
         {% endfor %}
 
         <div class="flex justify-end space-x-4 pt-4">
@@ -33,4 +49,10 @@
         </div>
     </form>
 </div>
+
+<script>
+    document.getElementById('image-div_{{team.id}}').addEventListener('click', () => {
+        document.getElementById('image-input_{{team.id}}').click();
+    })
+</script>
 {% endblock configuration_content %}
