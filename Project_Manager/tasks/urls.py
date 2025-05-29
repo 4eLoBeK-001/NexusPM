@@ -5,6 +5,6 @@ from . import views
 app_name = 'tasks'
 
 urlpatterns = [
-    path('list/', views.task_list, name='task_list'),
+    path('<int:project_pk>/tasks/', views.task_list, name='task_list'),
 
 ]
