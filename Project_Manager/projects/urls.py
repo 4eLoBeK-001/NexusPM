@@ -1,10 +1,12 @@
-from django.urls import path
+from django.urls import include, path
 
 from . import views
 
 app_name = 'projects'
 
 urlpatterns = [
+    path('project/', include('tasks.urls', namespace='tasks')),
+
     path('list/<int:pk>/', views.project_list, name='project_list'),
     path('search/<int:pk>/', views.search_team, name='search_team'),
     path('create/', views.create_project, name='create_project'),
