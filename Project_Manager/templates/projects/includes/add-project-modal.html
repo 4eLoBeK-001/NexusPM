@@ -18,9 +18,14 @@
             </div>
         </div>
         {% endfor %}
-        <div id="image-preview-container" class="mt-2">
+        <div id="image-preview-container" class="mb-2">
             <img id="image-preview" src="#" alt="Предпросмотр изображения" class="hidden w-32 h-32 border rounded" />
         </div>
+        <label class="label" for="id_name">
+            <span class="text-base label-text text-gray-700 font-medium">Добавить всех участников?</span>
+          </label>
+        <input type="checkbox" name="all_practicants" class="ml-1 toggle toggle-info [--tglbg:#eff1f4] scale-[110%]"/>
+
         <div class="modal-action mt-6">
           <button class="btn btn-primary text-sm text-white" type="submit">Создать проект</button>
         </div>

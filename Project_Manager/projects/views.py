@@ -42,7 +42,12 @@ def create_project(request):
         project = form.save(commit=False)
         project.team = team
         project.save()
-        project.project_members.add(*team.team_member.all().values_list('id', flat=True))
+
+        all_practicants = request.POST.get('all_practicants', '')
+        if all_practicants:
+            project.project_members.add(*team.team_member.all().values_list('id', flat=True))
+        else:
+            ...
         return redirect(request.META.get('HTTP_REFERER', '/'))
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
