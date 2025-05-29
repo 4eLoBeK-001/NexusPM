@@ -7,7 +7,7 @@ from projects.models import Project
 
 class Task(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     creator = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, related_name='creator', null=True)
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, related_name='tasks', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
