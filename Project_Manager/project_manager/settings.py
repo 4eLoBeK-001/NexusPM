@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'projects',
     'users',
     'teams',
+    'tasks',
     'django_extensions',
 ]
 
