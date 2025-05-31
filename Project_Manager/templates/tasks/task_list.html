@@ -6,8 +6,7 @@
 
 <div class="max-w mx-auto p-4 space-y-4">
 
-  <!-- Заголовок -->
-  <div id="head" class="flex items-center bg-gray-100 shadow-sm rounded-2xl border border-gray-300 p-4">
+  <div id="head" class="flex items-center bg-gray-100 shadow-sm rounded-2xl border border-gray-300 p-2">
     <div class="w-1/12"></div> <!-- Пустой блок под аватар -->
     <div class="w-5/12">
       <h3 class="text-lg font-semibold text-black">Название</h3>
@@ -23,19 +22,20 @@
     </div>
   </div>
 
-  <!-- Задача 1 -->
+  <!-- Задача -->
+  {% for task in tasks %}
   <div class="flex items-center bg-gray-50 shadow-sm rounded-2xl border border-gray-300 p-4">
     <!-- Аватар -->
     <div class="w-1/12 flex justify-center">
       <div class="avatar">
-        <div class="w-12 h-12 bg-sky-500 rounded-full ring ring-primary ring-offset-1">
+        <div class="w-12 h-12 bg-{{task.color}}-500 rounded-full ring ring-{{task.color}}-300 ring-offset-1">
         </div>
       </div>
     </div>
 
     <!-- Название и теги -->
     <div class="w-5/12">
-      <h3 class="text-lg font-semibold text-black">Создать страницу авторизации</h3>
+      <h3 class="text-lg font-semibold text-black">{{ task.name }}</h3>
       <div class="flex gap-2 text-sm text-gray-400 mt-1 mb-1">
         <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-sm font-medium text-red-700 ring-1 ring-red-600/40 ring-inset">Badge</span>
         <span class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-sm font-medium text-yellow-800 ring-1 ring-yellow-600/40 ring-inset">Badge</span>
@@ -59,43 +59,7 @@
       <span class="badge badge-error text-[1.075rem] px-4 py-[0.75rem]">Высокий приоритет</span>
     </div>
   </div>
-
-  <!-- Задача 2 -->
-  <div class="flex items-center bg-gray-50 shadow-sm rounded-2xl border border-gray-300 p-4">
-    <!-- Аватар -->
-    <div class="w-1/12 flex justify-center">
-      <div class="avatar">
-        <div class="w-12 h-12 bg-sky-500 rounded-full ring ring-primary ring-offset-1">
-        </div>
-      </div>
-    </div>
-
-    <!-- Название и теги -->
-    <div class="w-5/12">
-      <h3 class="text-lg font-semibold text-black">Добавить дизайн на странице профиля</h3>
-      <div class="flex gap-2 text-sm text-gray-400 mt-1 mb-1">
-        <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-sm font-medium text-red-700 ring-1 ring-red-600/40 ring-inset">Badge</span>
-        <span class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-sm font-medium text-yellow-800 ring-1 ring-yellow-600/40 ring-inset">Badge</span>
-      </div>
-    </div>
-
-    <!-- Исполнители -->
-    <div class="w-2/12 flex justify-start">
-      <div class="avatar">
-        <div class="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"></div>
-      </div>
-    </div>
-
-    <!-- Статус -->
-    <div class="w-2/12">
-      <span class="badge badge-info text-[1.075rem] px-4 py-[0.75rem]">В процессе</span>
-    </div>
-
-    <!-- Приоритет -->
-    <div class="w-2/12">
-      <span class="badge badge-error text-[1.075rem] px-4 py-[0.75rem]">Низкий приоритет</span>
-    </div>
-  </div>
+  {% endfor %}
 
 </div>
 
