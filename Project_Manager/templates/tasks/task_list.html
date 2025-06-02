@@ -37,8 +37,9 @@
     <div class="w-5/12">
       <h3 class="text-lg font-semibold text-black">{{ task.name }}</h3>
       <div class="flex gap-2 text-sm text-gray-400 mt-1 mb-1">
-        <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-sm font-medium text-red-700 ring-1 ring-red-600/40 ring-inset">Badge</span>
-        <span class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-sm font-medium text-yellow-800 ring-1 ring-yellow-600/40 ring-inset">Badge</span>
+        {% for t in task.tag.all %}
+        <span class="inline-flex items-center rounded-md {{ t.color.bg_color }} px-2 py-1 text-sm font-medium border {{ t.color.border_color }} {{ t.color.text_color }}">{{ t.name }}</span>
+        {% endfor %}
       </div>
     </div>
 
