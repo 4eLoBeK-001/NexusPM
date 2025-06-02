@@ -1,9 +1,10 @@
 from django.contrib import admin
 
-from tasks.models import Task, Tag, TagColor
+from tasks.models import Task, Tag, Status, Color
 
 # Register your models here.
 
 admin.site.register(Task)
 admin.site.register(Tag)
-admin.site.register(TagColor)
+admin.site.register(Status)
+admin.site.register(Color)
