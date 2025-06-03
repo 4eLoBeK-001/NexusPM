@@ -3,13 +3,23 @@
 <div class="dropdown">
     <div tabindex="0" role="button" class="px-3 py-1 rounded-lg {{task.status.color.bg_color}} text-sm font-medium {{task.status.color.text_color}} border {{task.status.color.border_color}}">{{task.status}}<i class='fas fa-angle-down ml-1 mt-1'></i></div>
     <ul tabindex="0" class="dropdown-content menu text-gray-600 bg-white border border-gray-300 rounded-box z-[1] w-48 p-2 shadow-sm">
+    <form id="statusForm-{{task.pk}}" action="{% url 'teams:projects:tasks:change_status' task.project.team.pk task.project.pk task.pk %}" method="post">{% csrf_token %}
         {% for status in statuses %}
         <li>
-            <a class="flex items-center gap-2">
+            <a class="flex items-center gap-2" onclick="changeStatus('{{status.pk}}', '{{task.pk}}')">
             <span class="w-2.5 h-2.5 rounded-full bg-{{status.color.color_name}}-500"></span>
             {{ status }}
             </a>
         </li>
         {% endfor %}
-    </ul>            
+        <input type="hidden" name="selected_status" id="selected-status-{{task.pk}}">
+    </form>
+    </ul>
 </div>
+<script>
+    function changeStatus(status_id, task_id) {
+        const inp = document.getElementById('selected-status-' + task_id);
+        inp.value = status_id
+        document.getElementById('statusForm-' + task_id).submit();
+    }
+</script>
