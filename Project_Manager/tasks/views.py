@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
+from django.views.decorators.http import require_http_methods
 
 from projects.models import Project
 
@@ -16,13 +17,18 @@ def task_list(request, project_pk, team_pk):
     }
     return render(request, 'tasks/task_list.html', context)
 
-
-def change_status(request, team_pk, project_pk, task_pk):
+@require_http_methods(['POST'])
+def change_status(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
-    if request.method == 'POST':
-        status_id = int(request.POST.get('selected_status'))
-        status = get_object_or_404(Status, pk=status_id)
-        task.status = status
-        task.save()
-        return redirect(request.META.get('HTTP_REFERER'))
+    statuses = Status.objects.all()
+    
+    status_id = int(request.POST.get('status_id'))
+    status = get_object_or_404(Status, pk=status_id)
+    task.status = status
+    task.save()
+    data = {
+        'task': task, 
+        'statuses': statuses
+    }
+    return render(request, 'tasks/includes/change-status.html', data)
 
