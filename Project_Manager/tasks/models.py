@@ -2,6 +2,7 @@ import random
 
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 from projects.models import Project
 
@@ -22,6 +23,12 @@ class Task(models.Model):
     status = models.ForeignKey('Status', on_delete=models.CASCADE, related_name='statuses', default='Новая', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
+
+    def get_url(self, action_name):
+            return reverse(
+                f'teams:projects:tasks:{action_name}',
+                args = [self.project.team.pk, self.project.pk, self.pk]
+            )
     
     def __str__(self):
         return self.name

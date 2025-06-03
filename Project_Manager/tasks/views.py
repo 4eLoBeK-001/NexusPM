@@ -32,3 +32,7 @@ def change_status(request, task_pk, *args, **kwargs):
     }
     return render(request, 'tasks/includes/change-status.html', data)
 
+
+def task_detail(request, task_pk, *args, **kwargs):
+    task = get_object_or_404(Task, pk=task_pk)
+    return render(request, 'tasks/task-detail.html')
