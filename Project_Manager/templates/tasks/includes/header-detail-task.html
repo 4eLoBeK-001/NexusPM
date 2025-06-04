@@ -1,0 +1,36 @@
+{% extends 'tasks/includes/base-header-task.html' %}
+
+{% block content %}
+    
+<!-- Левый блок -->
+<div class="flex items-center ml-4 space-x-4">
+    <div class="text-xl font-semibold text-gray-800">
+      {{ task.name }}
+    </div>
+</div>
+
+<!-- Центральный блок -->
+<div class="flex-1 flex justify-center">
+    <a href="{% url 'teams:projects:tasks:task_list' task.project.team.pk task.project.pk %}" class="inline-block px-5 py-2 border-b-2 border-transparent text-[1.145rem] text-gray-600 hover:text-blue-600 hover:border-blue-400 transition-all duration-200 font-medium">
+      Обратно к задачам
+    </a>
+</div>
+
+<!-- Правый блок -->
+<div class="dropdown dropdown-end mr-4 ">
+    <div tabindex="0" role="button" class="btn btn-outline btn-sm flex items-center">
+        <i class="fas fa-cog mr-2"></i>
+        Меню задачи
+    </div>
+    <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-neutral-50 rounded-box w-52">
+        <li>
+            <a><i class="fas fa-history mr-2"></i>История изменений</a>
+        </li>
+        <li>
+            <a class="text-red-500 hover:text-white hover:bg-red-500">
+            <i class="fas fa-trash mr-2"></i>Удалить
+            </a>
+        </li>
+    </ul>
+</div>
+{% endblock content %}
