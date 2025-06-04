@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load task_url %}
 
 {% block content %}
 
@@ -35,7 +36,7 @@
 
     <!-- Название и теги -->
     <div class="w-5/12">
-      <h3 class="text-lg font-semibold text-black"><a href="{% url 'teams:projects:tasks:task_detail' task.project.team.pk task.project.pk task.pk %}">{{ task.name }}</a></h3>
+      <h3 class="text-lg font-semibold text-black"><a href="{% url_task task 'task_detail' %}">{{ task.name }}</a></h3>
       <div class="flex gap-2 text-sm text-gray-400 mt-1 mb-1">
         {% for t in task.tag.all %}
         <span class="inline-flex items-center rounded-md {{ t.color.bg_color }} px-2 py-1 text-sm font-medium border {{ t.color.border_color }} {{ t.color.text_color }}">{{ t.name }}</span>
