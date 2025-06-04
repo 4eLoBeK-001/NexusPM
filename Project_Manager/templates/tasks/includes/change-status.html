@@ -1,4 +1,5 @@
 
+{% load task_url %}
 
 <div class="dropdown">
     <div tabindex="0" role="button" class="px-3 py-1 rounded-lg {{task.status.color.bg_color}} text-sm font-medium {{task.status.color.text_color}} border {{task.status.color.border_color}}">{{task.status}}<i class='fas fa-angle-down ml-1 mt-1'></i></div>
@@ -6,9 +7,9 @@
         {% for status in statuses %}
         <li>
             <a class="flex items-center gap-2"
-            hx-post="{% url 'teams:projects:tasks:change_status' task.project.team.pk task.project.pk task.pk %}"
+            hx-post="{% url_task task 'change_status' %}"
             hx-vals='{"status_id": "{{ status.pk }}"}'
-            hx-target="#ysa-{{task.pk}}"
+            hx-target="#status-{{task.pk}}"
             >
             <span class="w-2.5 h-2.5 rounded-full bg-{{status.color.color_name}}-500"></span>
             {{ status }}
