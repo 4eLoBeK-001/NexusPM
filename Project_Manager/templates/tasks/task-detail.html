@@ -5,5 +5,91 @@
 
 {% include 'tasks/includes/header-detail-task.html' %}
 
+<div id="content" class="flex py-4">
+
+    <div class="w-4/5 bg-white border border-gray-300 rounded-md shadow-sm p-4 space-y-6">
+
+        <!-- Блок описания -->
+        <div>
+          <details open class="mb-4">
+            <summary class="cursor-pointer font-semibold text-gray-700 flex items-center">
+              <span class="mr-2">▼</span> Description
+              <span class="ml-2 text-blue-600 cursor-pointer">
+                <i class="fas fa-pen text-sm"></i>
+              </span>
+            </summary>
+            <textarea id="id_description" rows="6"
+              class="mt-2 w-full border border-gray-300 rounded-md p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-gray-100"
+            ></textarea>
+            <button
+              class="mt-2 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+            >Сохранить</button>
+          </details>
+        </div>
+    
+        <!-- Подзадачи -->
+        <div>
+          <details>
+            <summary class="cursor-pointer font-semibold text-gray-700 flex items-center">
+              <span class="mr-2">▶</span> Подзадачи
+              <button class="ml-2 text-white bg-gray-400 hover:bg-gray-500 text-sm rounded w-6 h-6 leading-4">+</button>
+            </summary>
+          </details>
+        </div>
+    
+        <!-- Вложения -->
+        <div>
+          <details>
+            <summary class="cursor-pointer font-semibold text-gray-700 flex items-center">
+              <span class="mr-2">▶</span> Вложения
+              <button class="ml-2 text-white bg-gray-400 hover:bg-gray-500 text-sm rounded w-6 h-6 leading-4">+</button>
+            </summary>
+          </details>
+        </div>
+    
+        <!-- Комментарии и изменения -->
+        <div>
+          <div class="flex space-x-4 mb-2">
+            <button class="px-3 py-1 bg-blue-500 text-white rounded">Комментарии</button>
+            <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded">Изменения</button>
+          </div>
+          <textarea
+            rows="4"
+            class="w-full border border-gray-300 rounded-md p-2 bg-gray-100 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+            placeholder="Введите комментарий..."
+          ></textarea>
+          <button class="mt-2 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+            Отправить
+          </button>
+          <p class="text-center text-gray-400 mt-2">Тут список комментариев</p>
+        </div>
+      </div>
+    
+      <!-- Сайдбар -->
+      <div class="w-1/5 bg-white border border-gray-300 rounded-md shadow-sm p-4 space-y-6">
+    
+        <div>
+          <h4 class="text-gray-500 text-sm mb-1">Исполнители</h4>
+          <p class="text-gray-700">Не заданы</p>
+        </div>
+    
+        <div>
+          <h4 class="text-gray-500 text-sm mb-1">Теги</h4>
+          <p class="text-gray-700">Не заданы</p>
+        </div>
+    
+        <div>
+          <h4 class="text-gray-500 text-sm mb-1">Приоритет</h4>
+          <p class="text-gray-700">Не задан</p>
+        </div>
+    
+        <div>
+          <h4 class="text-gray-500 text-sm mb-1">Автор</h4>
+          <p class="text-gray-700">Петровец</p>
+        </div>
+    
+      </div>
+
+</div>
 
 {% endblock content %}

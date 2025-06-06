@@ -4,6 +4,7 @@ from django.views.decorators.http import require_http_methods
 from projects.models import Project
 
 from tasks.models import Status, Task
+from tasks.forms import UpdateTaskForm
 
 
 
@@ -35,5 +36,9 @@ def change_status(request, task_pk, *args, **kwargs):
 
 def task_detail(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
-    data = {'task': task}
+    form = UpdateTaskForm()
+    data = {
+        'task': task,
+        'form': form
+    }
     return render(request, 'tasks/task-detail.html', data)
