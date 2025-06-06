@@ -5,9 +5,9 @@
 
 {% include 'tasks/includes/header-detail-task.html' %}
 
-<div id="content" class="flex py-4">
+<div id="content" class="flex">
 
-    <div class="w-4/5 bg-white border border-gray-300 rounded-md shadow-sm p-4 space-y-6">
+    <div class="w-4/5 bg-white border-l border-b border-gray-300 shadow-sm p-4 space-y-6">
 
         <!-- Блок описания -->
         <div>
@@ -36,6 +36,7 @@
             </div>
           </details>
         </div>
+        <hr>
     
         <!-- Подзадачи -->
         <div>
@@ -103,25 +104,27 @@
       </div>
     
       <!-- Сайдбар -->
-      <div class="w-1/5 bg-white border border-gray-300 rounded-md shadow-sm p-4 space-y-6">
+      <div class="w-1/5 h-[82vh] bg-white border-l border-b border-gray-300 shadow-sm p-4 space-y-6">
     
         <div>
-          <h4 class="text-gray-500 text-sm mb-1">Исполнители</h4>
+          <h3 class="text-gray-700 font-bold text-base mb-1">Исполнители</h3>
           <p class="text-gray-700">Не заданы</p>
         </div>
     
         <div>
-          <h4 class="text-gray-500 text-sm mb-1">Теги</h4>
-          <p class="text-gray-700">Не заданы</p>
+          <h3 class="text-gray-700 font-bold text-base mb-1">Теги</h3>
+          {% for t in task.tag.all %}
+          <span class="inline-flex items-center rounded-md {{ t.color.bg_color }} px-2 py-1 my-1 text-sm font-medium border {{ t.color.border_color }} {{ t.color.text_color }}">{{ t.name }}</span>
+          {% endfor %}
         </div>
     
         <div>
-          <h4 class="text-gray-500 text-sm mb-1">Приоритет</h4>
+          <h3 class="text-gray-700 font-bold text-base mb-1">Приоритет</h3>
           <p class="text-gray-700">Не задан</p>
         </div>
     
         <div>
-          <h4 class="text-gray-500 text-sm mb-1">Автор</h4>
+          <h3 class="text-gray-700 font-bold text-base mb-1">Автор</h3>
           <p class="text-gray-700">Петровец</p>
         </div>
     

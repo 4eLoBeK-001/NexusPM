@@ -24,11 +24,6 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
-    def get_url(self, action_name):
-            return reverse(
-                f'teams:projects:tasks:{action_name}',
-                args = [self.project.team.pk, self.project.pk, self.pk]
-            )
     
     def __str__(self):
         return self.name
