@@ -36,7 +36,7 @@ def change_status(request, task_pk, *args, **kwargs):
 
 def task_detail(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
-    form = UpdateTaskForm()
+    form = UpdateTaskForm(instance=task)
     data = {
         'task': task,
         'form': form
