@@ -113,10 +113,25 @@
     
         <div>
           <h3 class="text-gray-700 font-bold text-base mb-1">Теги</h3>
-          {% for t in task.tag.all %}
-          <span class="inline-flex items-center rounded-md {{ t.color.bg_color }} px-2 py-1 my-1 text-sm font-medium border {{ t.color.border_color }} {{ t.color.text_color }}">{{ t.name }}</span>
-          {% endfor %}
+        
+          <div class="group relative border border-gray-200 rounded-md p-2 min-h-[3rem]" title="Выберите или создайте новый тег">
+            
+            <!-- Теги -->
+            <div class="relative z-20 inline-flex flex-wrap gap-2 cursor-pointer">
+              {% for t in task.tag.all %}
+                <span class="inline-flex items-center rounded-md cursor-default {{ t.color.bg_color }} px-2 py-1 text-sm font-medium border {{ t.color.border_color }} {{ t.color.text_color }}">
+                  {{ t.name }}
+                  {{ t.name }}
+                </span>
+              {% endfor %}
+            </div>
+        
+            <!-- Фоновая зона, реагирующая на hover только свободной области -->
+            <div class="absolute inset-0 z-10 rounded-md bg-gray-200 opacity-0 group-hover:opacity-100"></div>
+        
+          </div>
         </div>
+        
     
         <div>
           <h3 class="text-gray-700 font-bold text-base mb-1">Приоритет</h3>
