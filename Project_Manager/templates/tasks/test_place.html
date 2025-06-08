@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<form action="" method="post">{% csrf_token %}
+    
+ <!-- Название -->
+ <div class="mb-4">
+    {{ form.name.label_tag }}
+    {{ form.name }}
+    {% if form.name.errors %}
+      <div class="text-red-600 text-sm mt-1">
+        {{ form.name.errors }}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Цвет (кастомное поле) -->
+  <div class="mb-4">
+    <label class="block font-medium mb-2">
+      {{ form.color.label_tag }}
+    </label>
+
+    <div class="flex flex-wrap gap-4">
+      {% for color in form.color.field.queryset %}
+        <label class="cursor-pointer">
+          <input
+            type="radio"
+            class="sr-only peer"
+            name="color"
+            value="{{ color.id }}"
+            id="color-{{ color.id }}"
+          >
+          <div class="w-16 h-16 rounded-full border-2 {{ color.bg_color }} {{ color.border_color }} peer-checked:ring-4 ring-offset-2 ring-blue-500 transition-all duration-200"></div>
+        </label>
+      {% endfor %}
+    </div>
+
+    {% if form.color.errors %}
+      <div class="text-red-600 text-sm mt-2">
+        {{ form.color.errors }}
+      </div>
+    {% endif %}
+  </div>
+
+<br>
+<br>
+<button class="btn btn-primary" type="submit">Сохранить</button>
+</form>
+
+{% endblock content %}

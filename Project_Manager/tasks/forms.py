@@ -27,4 +27,13 @@ class UpdateTaskForm(forms.ModelForm):
 class SidebarForm(forms.ModelForm):
     class Meta:
         model = Tag
-        fields = ('name',)
+        fields = ('name', 'color')
+
+        widgets = {
+            'color': forms.RadioSelect
+        }
+        labels = {
+            'name': 'Название',
+            'color': 'Цвет'
+        }
+    
