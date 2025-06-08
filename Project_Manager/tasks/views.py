@@ -3,7 +3,7 @@ from django.views.decorators.http import require_http_methods
 
 from projects.models import Project
 
-from tasks.models import Status, Task
+from tasks.models import Status, Tag, Task
 from tasks.forms import UpdateTaskForm
 
 
@@ -36,9 +36,17 @@ def change_status(request, task_pk, *args, **kwargs):
 
 def task_detail(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
-    form = UpdateTaskForm(instance=task)
+    project = task.project
+    tags = Tag.objects.filter(project=project)
+    form = UpdateTaskForm(instance=task, project=project)
+    if request.method == 'POST':
+        tag_list_ids = request.POST.getlist('tag')
+        tags_list = Tag.objects.filter(id__in=tag_list_ids)
+        task.tag.set(tags_list)
+        return redirect(request.META.get('HTTP_REFERER'))
     data = {
         'task': task,
+        'tags': tags,
         'form': form
     }
     return render(request, 'tasks/task-detail.html', data)

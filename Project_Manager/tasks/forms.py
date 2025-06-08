@@ -1,17 +1,30 @@
 from django import forms
 
-from .models import Task
+from .models import Tag, Task
 
 
 class UpdateTaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ('description',)
+        fields = ('description', 'tag')
 
         widgets = {
-            'description': forms.Textarea(attrs={'class': 'mt-2 w-full text-gray-700 border border-gray-300 rounded-md p-2 resize-none focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400 bg-gray-100', 'rows': '6'})
+            'description': forms.Textarea(attrs={'class': 'mt-2 w-full text-gray-700 border border-gray-300 rounded-md p-2 resize-none focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400 bg-gray-100', 'rows': '6'}),
+            'tag': forms.CheckboxSelectMultiple(),
         }
 
         labels = {
             'description': 'Описание'
         }
+    
+    def __init__(self, *args, **kwargs):
+        project = kwargs.pop('project', None)
+        super().__init__(*args, **kwargs)
+        if project:
+            self.fields['tag'].queryset = Tag.objects.filter(project=project)
+
+
+class SidebarForm(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = ('name',)
