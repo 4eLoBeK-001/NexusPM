@@ -9,5 +9,4 @@ urlpatterns = [
     path('<int:project_pk>/task/<int:task_pk>/', views.task_detail, name='task_detail'),
     path('<int:project_pk>/task/<int:task_pk>/change/', views.change_status, name='change_status'),
     
-    path('<int:project_pk>/<int:task_pk>/test/', views.test_tags, name='test_tags'),
 ]

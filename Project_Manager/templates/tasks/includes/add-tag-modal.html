@@ -1,0 +1,66 @@
+
+<dialog id="modal_create_tag" class="modal">
+    <div class="modal-box bg-gray-100 shadow-xl text-base-content rounded-lg">
+        <button onclick="this.closest('dialog').close();" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        <h3 class="text-2xl text-gray-600 font-bold">Создание тега</h3>
+        <form action="" method="post">{% csrf_token %}
+            
+            <!-- Название -->
+            <div class="mb-4">
+            
+            <label for="id_name" class="text-lg text-gray-400 font-medium mb-2">
+                <span>{{ tag_form.name.label }}</span>
+            </label>
+            {{ tag_form.name }}
+            {% if tag_form.name.errors %}
+                <div class="text-red-600 text-sm mt-1">
+                {{ tag_form.name.errors }}
+                </div>
+            {% endif %}
+            </div>
+        
+            <!-- Цвет (кастомное поле) -->
+            <div class="mb-4">
+            <label class="block text-lg text-gray-400 font-medium mb-2">
+                {{ tag_form.color.label }}
+            </label>
+        
+            <div class="flex flex-wrap gap-4">
+                {% for color in tag_form.color.field.queryset %}
+                <label class="cursor-pointer">
+                    <input
+                    type="radio"
+                    class="sr-only peer"
+                    name="color"
+                    value="{{ color.id }}"
+                    id="color-{{ color.id }}"
+                    >
+                    <div disabled class="w-10 h-10 rounded-full border-2 {{ color.bg_color }} {{ color.border_color }} peer-checked:ring-4 ring-offset-2 ring-blue-500 transition-all duration-200"></div>
+                </label>
+                {% endfor %}
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const colorInputs = document.querySelectorAll('input[name="color"]');
+                    const submitButton = document.querySelector('button[name="add_tag"]');
+                    
+                    colorInputs.forEach(input => {
+                        input.addEventListener('change', function() {
+                            const isColorSelected = Array.from(colorInputs).some(input => input.checked);
+                            submitButton.disabled = !isColorSelected;
+                        });
+                    });
+                });
+            </script>
+        
+            {% if tag_form.color.errors %}
+                <div class="text-red-600 text-sm mt-2">
+                    {{ tag_form.color.errors }}
+                </div>
+            {% endif %}
+            </div>
+        
+        <button class="btn btn-primary text-white" name="add_tag" type="submit" disabled>Сохранить</button>
+        </form>
+    </div>
+</dialog>

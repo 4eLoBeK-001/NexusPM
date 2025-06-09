@@ -30,6 +30,7 @@ class SidebarForm(forms.ModelForm):
         fields = ('name', 'color')
 
         widgets = {
+            'name': forms.TextInput(attrs={'class': 'input input-bordered input-primary text-lg text-gray-600 bg-gray-50 w-full'}),
             'color': forms.RadioSelect
         }
         labels = {

@@ -111,7 +111,13 @@
         </div>
     
         <div>
-          <h3 class="text-gray-700 font-bold text-base mb-1">Теги</h3>
+          <div class="flex items-center mb-2">
+            <h3 class="text-gray-700 font-bold text-base mb-0 leading-none">Теги</h3>
+            <a onclick="modal_create_tag.showModal();" class="ml-2 pb-1 w-8 h-8 border-2 border-dashed border-black bg-white text-black text-xl flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 rounded-lg cursor-pointer">
+              <span class="leading-none">+</span>
+            </a>
+          </div>
+          {% include 'tasks/includes/add-tag-modal.html' %}
         
           <div class="group relative border border-gray-200 rounded-md p-2 min-h-[3rem]" onclick="add_tag_modal.showModal();" title="Выберите или создайте новый тег">
             
@@ -141,7 +147,7 @@
 
                 <div class="flex flex-wrap gap-2">
                   {% for tag in form.tag.field.queryset %}
-                    <label class="cursor-pointer">
+                    <label class="cursor-pointer mb-2">
                       <input type="checkbox" name="tag" value="{{ tag.id }}"
                             {% if tag in form.initial.tag or tag in form.data.tag %}checked{% endif %}
                             class="hidden peer">
