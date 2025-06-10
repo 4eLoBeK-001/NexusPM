@@ -14,6 +14,14 @@ def get_random_color():
 
 
 class Task(models.Model):
+    class PriprityChoices(models.TextChoices):
+        HIGHEST = 'Самый высокий'
+        HIGH = 'Высокий'
+        MEDIUM = 'Средний'
+        LOW = 'Низкий'
+        LOWEST = 'Самый низкий'
+        NOT_SPECIFIED = 'Не указан'
+
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     color = models.CharField(max_length=10, default=get_random_color)
@@ -21,6 +29,7 @@ class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, related_name='tasks', null=True)
     tag = models.ManyToManyField('Tag', related_name='tags', null=True, blank=True)
     status = models.ForeignKey('Status', on_delete=models.CASCADE, related_name='statuses', default='Новая', null=True)
+    priority = models.CharField(max_length=20, choices=PriprityChoices.choices, default=PriprityChoices.NOT_SPECIFIED)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 

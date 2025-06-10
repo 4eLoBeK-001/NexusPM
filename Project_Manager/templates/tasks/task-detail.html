@@ -168,9 +168,8 @@
       </dialog>
         
     
-        <div>
-          <h3 class="text-gray-700 font-bold text-base mb-1">Приоритет</h3>
-          <p class="text-gray-700">Не задан</p>
+        <div id="priority-{{task.pk}}">
+          {% include 'tasks/includes/change-priority.html' %}
         </div>
     
         <div>

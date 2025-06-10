@@ -60,7 +60,19 @@ def task_detail(request, task_pk, *args, **kwargs):
         'task': task,
         'tags': tags,
         'form': form,
-        'tag_form': tag_form
+        'tag_form': tag_form,
+        'priorities': task.PriprityChoices
     }
     return render(request, 'tasks/task-detail.html', data)
 
+@require_http_methods(['POST'])
+def change_priority(request, task_pk, *args, **kwargs):
+    task = get_object_or_404(Task, pk=task_pk)
+    selected_priority = request.POST.get('priority', 'Не указан')
+    task.priority = selected_priority
+    task.save()
+    data = {
+        'task': task,
+        'priorities': task.PriprityChoices
+    }
+    return render(request, 'tasks/includes/change-priority.html', data)
