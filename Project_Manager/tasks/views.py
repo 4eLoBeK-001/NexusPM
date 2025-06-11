@@ -13,6 +13,7 @@ def task_list(request, project_pk, team_pk):
     tasks = Task.objects.filter(project=project)
     statuses = Status.objects.all()
     context = {
+        'project': project,
         'tasks': tasks,
         'statuses': statuses,
     }

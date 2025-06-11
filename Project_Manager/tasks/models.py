@@ -50,6 +50,7 @@ class Tag(models.Model):
 class Status(models.Model):
     name = models.CharField(max_length=25)
     color = models.ForeignKey('Color', on_delete=models.CASCADE, null=True)
+    is_completed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
