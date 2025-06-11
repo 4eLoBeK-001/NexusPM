@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Tag, Task
+from .models import Status, Tag, Task
 
 
 class UpdateTaskForm(forms.ModelForm):
@@ -38,3 +38,28 @@ class SidebarForm(forms.ModelForm):
             'color': 'Цвет'
         }
     
+
+class CreateStatusForm(forms.ModelForm):
+    is_completed = forms.TypedChoiceField(
+        label='Состояние задачи',
+        choices=[(False, 'Не завершена'), (True, 'Завершена')],
+        coerce=lambda x: x == 'True',
+        widget=forms.Select(attrs={
+            'class': 'select select-bordered w-full text-gray-600 bg-gray-50'
+        })
+    )
+
+    class Meta:
+        model = Status
+        fields = ('name', 'color', 'is_completed')
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'input input-bordered input-primary text-lg text-gray-600 bg-gray-50 w-full'
+            }),
+            'color': forms.RadioSelect,
+        }
+        labels = {
+            'name': 'Название',
+            'color': 'Цвет',
+            'is_completed': 'Состояние задачи'
+        }

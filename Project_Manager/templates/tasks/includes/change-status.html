@@ -1,20 +1,34 @@
 
 {% load task_url %}
 
-<div class="dropdown">
-    <div tabindex="0" role="button" class="px-3 py-1 rounded-lg {{task.status.color.bg_color}} text-sm font-medium {{task.status.color.text_color}} border {{task.status.color.border_color}}">{{task.status}}<i class='fas fa-angle-down ml-1 mt-1'></i></div>
-    <ul tabindex="0" class="dropdown-content menu text-gray-600 bg-white border border-gray-300 rounded-box z-[1] w-48 p-2 shadow-sm">
+<div class="dropdown" id="status-{{ task.pk }}">
+    <div tabindex="0" role="button" class="px-3 py-1 rounded-lg {{ task.status.color.bg_color }} text-sm font-medium {{ task.status.color.text_color }} border {{ task.status.color.border_color }}">
+        {{ task.status }}
+        <i class="fas fa-angle-down ml-1 mt-1"></i>
+    </div>
+    <ul tabindex="0" class="dropdown-content menu text-gray-600 bg-white border border-gray-300 rounded-box z-[1] w-60 p-2 shadow-sm">
         {% for status in statuses %}
         <li>
-            <a class="flex items-center gap-2"
-            hx-post="{% url_task task 'change_status' %}"
-            hx-vals='{"status_id": "{{ status.pk }}"}'
-            hx-target="#status-{{task.pk}}"
+            <a class="flex items-center justify-between"
+               hx-post="{% url_task task 'change_status' %}"
+               hx-vals='{"status_id": "{{ status.pk }}"}'
+               hx-target="#status-{{ task.pk }}"
             >
-            <span class="w-2.5 h-2.5 rounded-full bg-{{status.color.color_name}}-500"></span>
-            {{ status }}
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-{{ status.color.color_name }}-500"></span>
+                    {{ status }}
+                </div>
+                {% if task.status.pk == status.pk %}
+                    <i class="fas fa-check text-green-500 text-sm"></i>
+                {% endif %}
             </a>
         </li>
         {% endfor %}
+        <li>
+            <a onclick="modal_create_status.showModal();" class="flex items-center gap-2 text-sky-500 text-[0.95rem]">
+                <span class="font-bold text-base">+</span>
+                Добавить новый статус
+            </a>
+        </li>
     </ul>
 </div>

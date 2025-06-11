@@ -48,9 +48,10 @@ class Tag(models.Model):
 
 
 class Status(models.Model):
-    name = models.CharField(max_length=25)
-    color = models.ForeignKey('Color', on_delete=models.CASCADE, null=True)
-    is_completed = models.BooleanField(default=False)
+    name = models.CharField(max_length=25, blank=False)
+    color = models.ForeignKey('Color', on_delete=models.CASCADE, null=True, blank=False)
+    is_completed = models.BooleanField(default=False, blank=False)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='statuses', null=True)
 
     def __str__(self):
         return self.name
