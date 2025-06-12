@@ -69,6 +69,14 @@ def project_status_changes(request, pk):
     }
     return render(request, 'projects/includes/change-status.html', data)
 
+def project_settings(request, project_pk, *args, **kwargs):
+    project = get_object_or_404(Project, pk=project_pk)
+    data = {
+        'project': project
+    }
+    return render(request, 'projects/project-settings.html', data)
+
+
 def project_list_t(request):
     return render(request, 'projects/temp/project_list.html')
 

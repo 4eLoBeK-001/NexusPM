@@ -5,15 +5,15 @@
     <!-- Левая часть шапки - название/информация -->
     <div class="flex items-center space-x-4">
         <!-- Кнопка "Участники" -->
-        <a href="" class="btn btn-outline btn-sm flex items-center">
+        <a href="{% url 'teams:projects:tasks:task_list' project.team.pk project.pk %}" class="btn btn-outline btn-sm flex items-center">
             <i class="fa-solid fa-list-check"></i>
             Задачи
         </a>
         
         <!-- Кнопка "Конфигурация" -->
-        <a href="" class="btn btn-outline btn-sm flex items-center">
+        <a href="{% url 'teams:projects:project_settings' project.team.pk project.pk %}" class="btn btn-outline btn-sm flex items-center">
             <i class="fas fa-cog mr-2"></i>
-            Текст
+            Настройки проекта
         </a>
         
         <!-- Выпадающее меню "Прочее" -->
