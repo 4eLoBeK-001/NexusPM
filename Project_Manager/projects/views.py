@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.db.transaction import commit
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
@@ -121,12 +122,12 @@ def delete_tag(request, project_pk, *args, **kwargs):
 def search_tags(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     req = request.GET.get('input_search')
-    tags = project.tags.filter(name__icontains=req)
+    tags = project.tags.filter(Q(name__icontains=req) | Q(color__name__icontains=req))
     data = {
         'project': project,
         'tags': tags
     }
-    return render(request, 'projects/includes/taggs.html', data)
+    return render(request, 'projects/includes/tags_list_partial.html', data)
 
 
 def project_list_t(request):
