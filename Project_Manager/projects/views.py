@@ -1,7 +1,8 @@
+from django.db.transaction import commit
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 
-from projects.forms import AddModalProjectForm
+from projects.forms import AddModalProjectForm, UpdateProjectForm
 from projects.models import Project
 from teams.models import Team
 
@@ -69,12 +70,20 @@ def project_status_changes(request, pk):
     }
     return render(request, 'projects/includes/change-status.html', data)
 
+
 def project_settings(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
+    form = UpdateProjectForm(instance=project)
+    if request.method == 'POST':
+        form = UpdateProjectForm(request.POST, request.FILES, instance=project)
+        if form.is_valid():
+            form.save()
+            return redirect(request.META.get('HTTP_REFERER'))
     data = {
-        'project': project
+        'project': project,
+        'form': form
     }
-    return render(request, 'projects/project-settings.html', data)
+    return render(request, 'projects/includes/setting.html', data)
 
 
 def project_list_t(request):
