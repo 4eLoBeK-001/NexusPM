@@ -51,6 +51,7 @@ def create_team(request):
         team = form.save(commit=False)
         team.author = request.user
         team.save()
+        team.team_member.set([request.user.id])
         messages.success(
             request, 
             message=format_html(
