@@ -9,7 +9,7 @@
         title="Удалить тег"
         hx-post="{% url 'teams:projects:delete_tag' project.team.pk project.pk %}"
         hx-vals='{"tag_id": "{{ tag.pk }}"}'
-        hx-target="#st-{{ tag.pk }}"
+        hx-target="#row-{{ tag.pk }}"
         hx-swap="delete"
     >
         <i class="fa fa-trash"></i>

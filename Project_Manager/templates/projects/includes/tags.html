@@ -2,6 +2,48 @@
 
 {% block configuration_content %}
 
+<div class="flex items-center p-4 mb-1">
+    <!-- Левая часть: кнопка -->
+
+    <div class="flex items-center ml-2 gap-x-4 text-3xl font-semibold text-black">
+      <p>{{project.name}}</p>
+    </div>
+    <!-- Центральная часть: строка поиска по центру -->
+    <div class="flex-1 flex justify-center">
+        <div class="relative max-w-2xl w-full">
+            <input 
+                type="text" 
+                name="input_search"
+                placeholder="Поиск..." 
+                class="input input-bordered bg-gray-50 text-gray-700 border-gray-400 w-full pl-10 pr-6 focus:border-sky-600"
+                hx-get="{% url 'teams:projects:search_tags' project.team.pk project.pk %}"
+                hx-trigger="keyup"
+                hx-target="#tbs"
+            />
+            <svg 
+                class="absolute left-3 top-3 h-5 w-5 text-gray-400 pointer-events-none" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+            >
+                <path 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round" 
+                    stroke-width="2" 
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+                />
+            </svg>
+        </div>
+    </div>
+
+    <div class="flex-none">
+      <button class="btn btn-primary text-lg mx-4 text-white whitespace-nowrap" onclick="">
+          Создать тег
+      </button>
+    </div>
+
+  </div>
+
 <div class="p-6 mx-auto">
     <table id="tbl" class="table w-full">
         <thead class="bg-gray-50">
@@ -13,11 +55,7 @@
             </tr>
         </thead>
         <tbody id="tbs" class="text-gray-600 text-sm font-light">
-            {% for tag in tags %}
-            <tr id="st-{{tag.pk}}" class="border-b border-gray-200 hover:bg-gray-100 transition-colors {% cycle 'bg-white' 'bg-gray-50' %}">
-                {% include 'projects/includes/tag.html' %}
-            </tr>
-            {% endfor %}
+            {% include 'projects/includes/taggs.html' %}
         </tbody>
     </table>
 </div>
