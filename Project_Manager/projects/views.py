@@ -93,6 +93,17 @@ def project_members(request, project_pk, *args, **kwargs):
     }
     return render(request, 'projects/includes/members.html', data)
 
+
+def project_tags(request, project_pk, *args, **kwargs):
+    project = get_object_or_404(Project, pk=project_pk)
+    tags = project.tags.all()
+    data = {
+        'project': project,
+        'tags': tags
+    }
+    return render(request, 'projects/includes/tags.html', data)
+
+
 def project_list_t(request):
     return render(request, 'projects/temp/project_list.html')
 

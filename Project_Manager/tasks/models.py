@@ -41,7 +41,7 @@ class Task(models.Model):
 class Tag(models.Model):
     name = models.CharField(max_length=25)
     color = models.ForeignKey('Color', on_delete=models.CASCADE, null=True)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='tags', null=True)
 
     def __str__(self):
         return self.name
