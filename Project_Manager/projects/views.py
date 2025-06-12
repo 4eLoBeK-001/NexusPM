@@ -2,6 +2,7 @@ from django.db.transaction import commit
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 
+from tasks.models import Tag
 from projects.forms import AddModalProjectForm, UpdateProjectForm
 from projects.models import Project
 from teams.models import Team
@@ -102,6 +103,20 @@ def project_tags(request, project_pk, *args, **kwargs):
         'tags': tags
     }
     return render(request, 'projects/includes/tags.html', data)
+
+
+def delete_tag(request, project_pk, *args, **kwargs):
+    project = get_object_or_404(Project, pk=project_pk)
+    tags = project.tags.all()
+    if request.method == 'POST':
+        selected_tag = request.POST.get('tag_id')
+        tag = get_object_or_404(Tag, pk=int(selected_tag))
+        tag.delete()
+    data = {
+        'project': project,
+        'tags': tags
+    }
+    return render(request, 'projects/includes/tag.html', data)
 
 
 def project_list_t(request):
