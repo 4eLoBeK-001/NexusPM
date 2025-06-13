@@ -24,7 +24,7 @@
                 </li>
                 <li><a href="{% url 'teams:projects:project_members' project.team.pk project.pk %}"><i class="fas fa-users mr-2"></i>Участники</a></li>
                 <li><a href="{% url 'teams:projects:project_tags' project.team.pk project.pk %}" ><i class="fas fa-hashtag mr-2"></i>Теги</a></li>
-                <li><a><i class="fas fa-tasks mr-2"></i>Статусы</a></li>
+                <li><a href="{% url 'teams:projects:project_statuses' project.team.pk project.pk %}"><i class="fas fa-tasks mr-2"></i>Статусы</a></li>
                 <li><a><i class="fas fa-history mr-2"></i>История изменений</a></li>
                 <li><a class="text-red-500 hover:text-white hover:bg-red-500"><i class="fas fa-trash mr-2"></i>Удалить</a></li>
             </ul>

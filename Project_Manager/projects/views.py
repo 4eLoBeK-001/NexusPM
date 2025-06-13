@@ -144,6 +144,15 @@ def create_tag(request, project_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+def project_statuses(request, project_pk, *args, **kwargs):
+    project = get_object_or_404(Project, pk=project_pk)
+    statuses = project.statuses.all()
+    data = {
+        'project': project,
+        'statuses': statuses
+    }
+    return render(request, 'projects/includes/statuses.html', data)
+
 def project_list_t(request):
     return render(request, 'projects/temp/project_list.html')
 

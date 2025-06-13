@@ -6,7 +6,7 @@
     <!-- Левая часть: кнопка -->
 
     <div class="flex items-center ml-2 gap-x-4 text-3xl font-semibold text-black">
-      <p>Теги</p>
+      <p>Статусы</p>
     </div>
     <!-- Центральная часть: строка поиска по центру -->
     <div class="flex-1 flex justify-center">
@@ -37,10 +37,10 @@
     </div>
 
     <div class="flex-none">
-      <button class="btn btn-primary text-lg mx-4 text-white whitespace-nowrap" onclick="modal_create_tag.showModal();">
-          Создать тег
+      <button class="btn btn-primary text-lg mx-4 text-white whitespace-nowrap" onclick="">
+          Добавить статус
       </button>
-      {% include 'tasks/includes/add-tag-modal.html' %}
+      
     </div>
 
   </div>
@@ -50,13 +50,31 @@
         <thead class="bg-gray-50">
             <tr class="text-gray-600 uppercase text-sm leading-normal">
                 <th class="w-10 py-3 px-3 text-center font-semibold">#</th>
-                <th class="py-3 px-6 text-left font-semibold">Тег</th>
+                <th class="py-3 px-6 text-left font-semibold">Статус</th>
                 <th class="py-3 px-6 text-left font-semibold">Цвет</th>
+                <th class="py-3 px-6 text-left font-semibold">
+                    Завершён?
+                    <i class="far fa-circle-question rounded-full w-4 h-4 inline-flex items-center text-base text-gray-600 hover:bg-gray-600 hover:text-gray-50" title="Если 'Да', то задача считается выполненной"></i>
+                </th>
+                
+                </th>
                 <th class="w-10 py-3 px-6 text-left font-semibold"></th>
             </tr>
         </thead>
-        <tbody id="tag-list" class="text-gray-600 text-sm font-light">
-            {% include 'projects/includes/tags_list_partial.html' %}
+        <tbody id="status-list" class="text-gray-600 text-sm font-light">
+            {% for status in statuses %}
+            <tr class="border-b border-gray-200 hover:bg-gray-100 transition-colors {% cycle 'bg-white' 'bg-gray-50' %}">
+                <td class="w-10 py-3 px-3 text-center whitespace-nowrap text-base">{{forloop.counter}}</td>
+                <td class="py-3 px-6 text-left font-bold text-base"><span class="inline-flex items-center rounded-md {{ status.color.bg_color }} px-2 py-1 text-sm font-medium border {{ status.color.border_color }} {{ status.color.text_color }}">{{ status.name }}</span></td>
+                <td class="py-3 px-6 text-left font-bold text-base">{{status.color}}</td>
+                <td class="py-3 px-6 text-left font-bold text-base">{{status.is_completed|yesno:"Да,Нет"}}</td>
+                <td class="py-1 px-4 text-left">
+                    <a class="block text-red-600 hover:bg-red-500 hover:text-white rounded-xl px-5 py-4 cursor-pointer transition" title="Удалить статус">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
