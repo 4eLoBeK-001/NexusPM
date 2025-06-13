@@ -4,7 +4,7 @@ from django.views.decorators.http import require_http_methods
 from projects.models import Project
 
 from tasks.models import Status, Tag, Task
-from tasks.forms import CreateStatusForm, SidebarForm, UpdateTaskForm
+from tasks.forms import CreateStatusForm, CreateTagForm, UpdateTaskForm
 
 
 
@@ -54,31 +54,25 @@ def task_detail(request, task_pk, *args, **kwargs):
     project = task.project
     tags = Tag.objects.filter(project=project)
     form = UpdateTaskForm(instance=task, project=project)
-    tag_form = SidebarForm()
+    tag_form = CreateTagForm()
     if request.method == 'POST':
 
-        if 'add_tag' in request.POST:
-            tag_form = SidebarForm(request.POST)
-            if tag_form.is_valid():
-                tag = tag_form.save(commit=False)
-                tag.project = project
-                tag.save()
-                return redirect(request.META.get('HTTP_REFERER'))
-        else:
-            tag_list_ids = request.POST.getlist('tag')
-            tags_list = Tag.objects.filter(id__in=tag_list_ids)
-            task.tag.set(tags_list)
-            return redirect(request.META.get('HTTP_REFERER'))
+        tag_list_ids = request.POST.getlist('tag')
+        tags_list = Tag.objects.filter(id__in=tag_list_ids)
+        task.tag.set(tags_list)
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
     data = {
         'task': task,
+        'project': project,
         'tags': tags,
         'form': form,
         'tag_form': tag_form,
         'priorities': task.PriprityChoices
     }
     return render(request, 'tasks/task-detail.html', data)
+
 
 @require_http_methods(['POST'])
 def change_priority(request, task_pk, *args, **kwargs):

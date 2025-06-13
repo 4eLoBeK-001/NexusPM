@@ -37,9 +37,10 @@
     </div>
 
     <div class="flex-none">
-      <button class="btn btn-primary text-lg mx-4 text-white whitespace-nowrap" onclick="">
+      <button class="btn btn-primary text-lg mx-4 text-white whitespace-nowrap" onclick="modal_create_tag.showModal();">
           Создать тег
       </button>
+      {% include 'tasks/includes/add-tag-modal.html' %}
     </div>
 
   </div>

@@ -24,7 +24,7 @@ class UpdateTaskForm(forms.ModelForm):
             self.fields['tag'].queryset = Tag.objects.filter(project=project)
 
 
-class SidebarForm(forms.ModelForm):
+class CreateTagForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = ('name', 'color')
