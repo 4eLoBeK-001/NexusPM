@@ -1,0 +1,7 @@
+
+
+{% for status in statuses %}
+<tr id="status-row-{{status.pk}}" class="border-b border-gray-200 hover:bg-gray-100 transition-colors {% cycle 'bg-white' 'bg-gray-50' %}">
+    {% include 'projects/includes/status.html' %}
+</tr>
+{% endfor %}

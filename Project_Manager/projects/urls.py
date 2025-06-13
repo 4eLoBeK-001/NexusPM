@@ -19,6 +19,8 @@ urlpatterns = [
     
     path('<int:pk>/project/<int:project_pk>/statuses/', views.project_statuses, name='project_statuses'),
     path('<int:pk>/project/<int:project_pk>/statuses/create/', views.create_status, name='create_status'),
+    path('<int:pk>/project/<int:project_pk>/statuses/search/', views.search_status, name='search_status'),
+    path('<int:pk>/project/<int:project_pk>/statuses/delete/', views.delete_status, name='delete_status'),
 
     path('create/', views.create_project, name='create_project'),
     path('delete/<int:pk>/', views.delete_project, name='delete_project'),

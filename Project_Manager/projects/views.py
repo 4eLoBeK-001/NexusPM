@@ -3,7 +3,7 @@ from django.db.transaction import commit
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 
-from tasks.models import Tag
+from tasks.models import Status, Tag
 from projects.forms import AddModalProjectForm, UpdateProjectForm
 from tasks.forms import CreateStatusForm, CreateTagForm
 from projects.models import Project
@@ -156,6 +156,7 @@ def project_statuses(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/statuses.html', data)
 
 
+@require_http_methods(['POST'])
 def create_status(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     form = CreateStatusForm(request.POST)
@@ -164,6 +165,29 @@ def create_status(request, project_pk, *args, **kwargs):
         status.project = project
         status.save()
     return redirect(request.META.get('HTTP_REFERER'))
+
+def search_status(request, project_pk, *args, **kwargs):
+    project = get_object_or_404(Project, pk=project_pk)
+    req = request.GET.get('input_search')
+    statuses = Status.objects.filter(Q(name__icontains=req) | Q(color__name__icontains=req))
+    data = {
+        'project': project,
+        'statuses': statuses,
+    }
+    return render(request, 'projects/includes/status-list.html', data)
+
+def delete_status(request, project_pk, *args, **kwargs):
+    project = get_object_or_404(Project, pk=project_pk)
+    statuses = project.statuses.all()
+    if request.method == 'POST':
+        status_id = request.POST.get('status_id')
+        status = get_object_or_404(Status, pk=int(status_id))
+        status.delete()
+    data = {
+        'project': project,
+        'statuses': statuses,
+    }
+    return render(request, 'projects/includes/status.html', data)
 
 
 def project_list_t(request):

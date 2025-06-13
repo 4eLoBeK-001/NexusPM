@@ -1,0 +1,18 @@
+
+
+<td class="w-10 py-3 px-3 text-center whitespace-nowrap text-base">{{forloop.counter}}</td>
+<td class="py-3 px-6 text-left font-bold text-base"><span class="inline-flex items-center rounded-md {{ status.color.bg_color }} px-2 py-1 text-sm font-medium border {{ status.color.border_color }} {{ status.color.text_color }}">{{ status.name }}</span></td>
+<td class="py-3 px-6 text-left font-bold text-base">{{status.color}}</td>
+<td class="py-3 px-6 text-left font-bold text-base">{{status.is_completed|yesno:"Да,Нет"}}</td>
+<td class="py-1 px-4 text-left">
+    <a 
+        class="block text-red-600 hover:bg-red-500 hover:text-white rounded-xl px-5 py-4 cursor-pointer transition" 
+        title="Удалить статус"
+        hx-post="{% url 'teams:projects:delete_status' project.team.pk project.pk %}"
+        hx-vals='{"status_id": "{{status.pk}}"}'
+        hx-target="#status-row-{{status.pk}}"
+        hx-swap="delete"
+    >
+        <i class="fa fa-trash"></i>
+    </a>
+</td>
