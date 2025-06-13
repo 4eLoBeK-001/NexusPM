@@ -5,7 +5,7 @@ from django.views.decorators.http import require_http_methods
 
 from tasks.models import Tag
 from projects.forms import AddModalProjectForm, UpdateProjectForm
-from tasks.forms import CreateTagForm
+from tasks.forms import CreateStatusForm, CreateTagForm
 from projects.models import Project
 from teams.models import Team
 
@@ -147,11 +147,24 @@ def create_tag(request, project_pk, *args, **kwargs):
 def project_statuses(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     statuses = project.statuses.all()
+    form = CreateStatusForm()
     data = {
         'project': project,
-        'statuses': statuses
+        'statuses': statuses,
+        'form': form
     }
     return render(request, 'projects/includes/statuses.html', data)
+
+
+def create_status(request, project_pk, *args, **kwargs):
+    project = get_object_or_404(Project, pk=project_pk)
+    form = CreateStatusForm(request.POST)
+    if form.is_valid():
+        status = form.save(commit=False)
+        status.project = project
+        status.save()
+    return redirect(request.META.get('HTTP_REFERER'))
+
 
 def project_list_t(request):
     return render(request, 'projects/temp/project_list.html')

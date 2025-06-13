@@ -18,6 +18,7 @@ urlpatterns = [
     path('<int:pk>/project/<int:project_pk>/tag/create/', views.create_tag, name='create_tag'),
     
     path('<int:pk>/project/<int:project_pk>/statuses/', views.project_statuses, name='project_statuses'),
+    path('<int:pk>/project/<int:project_pk>/statuses/create/', views.create_status, name='create_status'),
 
     path('create/', views.create_project, name='create_project'),
     path('delete/<int:pk>/', views.delete_project, name='delete_project'),
