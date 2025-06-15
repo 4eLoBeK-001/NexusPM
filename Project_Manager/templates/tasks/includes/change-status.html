@@ -37,12 +37,26 @@
 
 function logs(statusLi){
     const taskDiv = statusLi.closest('[id^="taskDiv-"]');
-    const textTask = taskDiv.querySelector('h3[id^="textTask-"]');
+    const titleTask = taskDiv.querySelector('h3[id^="titleTask-"]');
+    const tagList = taskDiv.querySelector('[id^="tagList-"]');
+    const avatar = taskDiv.querySelector('[id^="avatar-"]');
+    const exAvatar = taskDiv.querySelector('[id^="exAvatar-"]');
+    const priority = taskDiv.querySelector('[id^="priority-"]');
+    
+    
 
     if (statusLi.id == 'status-True') {
-        textTask.classList.add('line-through', 'text-gray-500');
+        titleTask.classList.add('line-through', 'text-gray-500');
+        avatar.classList.add('grayscale');
+        tagList.classList.add('grayscale');
+        exAvatar.classList.add('grayscale');
+        priority.classList.add('grayscale');
     } else if (statusLi.id == 'status-False') {
-        textTask.classList.remove('line-through', 'text-gray-500');
+        titleTask.classList.remove('line-through', 'text-gray-500');
+        avatar.classList.remove('grayscale');
+        tagList.classList.remove('grayscale');
+        exAvatar.classList.remove('grayscale');
+        priority.classList.remove('grayscale');
     }
 }
 
