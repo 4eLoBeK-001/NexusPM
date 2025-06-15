@@ -1,6 +1,6 @@
 
 {% load task_url %}
-
+    
 <div class="dropdown" id="status-{{ task.pk }}">
     <div tabindex="0" role="button" class="px-3 py-1 rounded-lg {{ task.status.color.bg_color }} text-sm font-medium {{ task.status.color.text_color }} border {{ task.status.color.border_color }}">
         {{ task.status }}
@@ -8,7 +8,7 @@
     </div>
     <ul tabindex="0" class="dropdown-content menu text-gray-600 bg-white border border-gray-300 rounded-box z-[1] w-60 p-2 shadow-sm">
         {% for status in statuses %}
-        <li>
+        <li id="status-{{status.is_completed}}" onclick="logs(this);">
             <a class="flex items-center justify-between"
                hx-post="{% url_task task 'change_status' %}"
                hx-vals='{"status_id": "{{ status.pk }}"}'
@@ -32,3 +32,19 @@
         </li>
     </ul>
 </div>
+
+<script>
+
+function logs(statusLi){
+    const taskDiv = statusLi.closest('[id^="taskDiv-"]');
+    const textTask = taskDiv.querySelector('h3[id^="textTask-"]');
+
+    if (statusLi.id == 'status-True') {
+        textTask.classList.add('line-through', 'text-gray-500');
+    } else if (statusLi.id == 'status-False') {
+        textTask.classList.remove('line-through', 'text-gray-500');
+    }
+}
+
+
+</script>

@@ -25,8 +25,7 @@
 
   <!-- Задача -->
   {% for task in tasks %}
-  <div class="flex items-center bg-gray-50 shadow-sm rounded-2xl border border-gray-300 p-4 
-    {% if task.status.is_completed %}opacity-50 bg-gray-100{% endif %}">
+  <div id="taskDiv-{{task.pk}}" class="flex items-center bg-gray-50 shadow-sm rounded-2xl border border-gray-300 p-4">
   
     <!-- Аватар -->
     <div class="w-1/12 flex justify-center">
@@ -37,7 +36,7 @@
   
     <!-- Название и теги -->
     <div class="w-5/12">
-      <h3 class="text-lg font-semibold text-black 
+      <h3 id="textTask-{{task.pk}}" class="text-lg font-semibold text-black 
         {% if task.status.is_completed %}line-through text-gray-500{% endif %}">
         <a href="{% url_task task 'task_detail' %}">{{ task.name }}</a>
       </h3>
@@ -71,6 +70,6 @@
     {% include 'tasks/includes/add-status-modal.html' %}
 </div>
 
-  
-  
+
+
 {% endblock content %}
