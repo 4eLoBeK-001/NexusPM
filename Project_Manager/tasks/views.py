@@ -12,15 +12,22 @@ def task_list(request, project_pk, team_pk):
     project = get_object_or_404(Project, pk=project_pk)
     tasks = Task.objects.filter(project=project)
     statuses = Status.objects.filter(project=project)
+    tags = project.tags.all()
     form = CreateStatusForm()
+    if request.method == 'POST':
+        ...
     context = {
         'project': project,
         'tasks': tasks,
         'statuses': statuses,
+        'tags': tags,
         'form': form
     }
     return render(request, 'tasks/task_list.html', context)
 
+
+def render_form(request):
+    ...
  
 @require_http_methods(['POST'])
 def create_status(request, project_pk, *args, **kwargs):

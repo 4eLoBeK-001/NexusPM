@@ -6,14 +6,16 @@
 {% include 'tasks/includes/header-tasks.html' %}
 
 <div class="max-w mx-auto p-4 space-y-4">
-  <form method="get" class="w-full hidden" id="filterForm">
+  <form method="get" action="" class="w-full hidden" id="filterForm">
     <div class="flex gap-6 bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
       
       <div class="flex flex-col w-full sm:w-1/5 min-w-[140px]">
         <label class="text-sm text-gray-500 mb-1">Теги</label>
         <select name="tags" class="select select-bordered bg-gray-50 text-gray-700 focus:border-blue-500">
           <option value="">Все</option>
-          
+          {% for tag in tags %}
+          <option value="{{tag.color_name}}">{{tag.name}}</option>
+          {% endfor %}
         </select>
       </div>
   
@@ -21,7 +23,7 @@
         <label class="text-sm text-gray-500 mb-1">Статус</label>
         <select name="status" class="select select-bordered bg-gray-50 text-gray-700 focus:border-blue-500">
           <option value="">Все</option>
-          
+
         </select>
       </div>
   
