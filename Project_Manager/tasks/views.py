@@ -36,7 +36,23 @@ def task_search(request, project_pk, team_pk):
         'tasks': tasks
     }
     return render(request, 'tasks/includes/task.html', context)
- 
+
+def task_filter(request, project_pk, team_pk):
+    project = get_object_or_404(Project, pk=project_pk)
+    if request.method == 'GET':
+        ...
+
+    tasks = Task.objects.filter(project=project)
+    text = request.GET.get('tags')
+    tag = get_object_or_404(Tag, pk=int(text))
+    tasks = tasks.filter(tag=tag)
+
+    context = {
+        'tasks': tasks
+    }
+    return render(request, 'tasks/includes/task.html', context)
+
+
 @require_http_methods(['POST'])
 def create_status(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)

@@ -5,7 +5,13 @@
 {% include 'tasks/includes/header-tasks.html' %}
 
 <div class="max-w mx-auto p-4 space-y-4">
-  <form method="get" action="" class="w-full hidden" id="filterForm">
+  <form method="get"
+    class="w-full hidden" 
+    id="filterForm"
+    hx-get="{% url 'teams:projects:tasks:task_filter' project.team.pk project.pk %}"
+    hx-target="#task-list"
+    hx-push-url="true"
+    >
     <div class="flex gap-6 bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
       
       <div class="flex flex-col w-full sm:w-1/5 min-w-[140px]">
@@ -13,7 +19,7 @@
         <select name="tags" class="select select-bordered bg-gray-50 text-gray-700 focus:border-blue-500">
           <option value="">Все</option>
           {% for tag in tags %}
-          <option value="{{tag.color_name}}">{{tag.name}}</option>
+          <option value="{{tag.pk}}">{{tag.name}}</option>
           {% endfor %}
         </select>
       </div>
