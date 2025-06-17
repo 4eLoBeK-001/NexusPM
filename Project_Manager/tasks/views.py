@@ -26,8 +26,16 @@ def task_list(request, project_pk, team_pk):
     return render(request, 'tasks/task_list.html', context)
 
 
-def render_form(request):
-    ...
+def task_search(request, project_pk, team_pk):
+    project = get_object_or_404(Project, pk=project_pk)
+
+    text = request.GET.get('input_search')
+    tasks = Task.objects.filter(project=project, name__icontains=text)
+
+    context = {
+        'tasks': tasks
+    }
+    return render(request, 'tasks/includes/task.html', context)
  
 @require_http_methods(['POST'])
 def create_status(request, project_pk, *args, **kwargs):
