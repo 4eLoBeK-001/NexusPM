@@ -11,8 +11,9 @@ from tasks.forms import CreateStatusForm, CreateTagForm, UpdateTaskForm
 def task_list(request, project_pk, team_pk):
     project = get_object_or_404(Project, pk=project_pk)
     tasks = Task.objects.filter(project=project)
-    statuses = Status.objects.filter(project=project)
+    statuses = project.statuses.all()
     tags = project.tags.all()
+    priorities = Task.PriprityChoices
     form = CreateStatusForm()
 
     context = {
@@ -20,6 +21,7 @@ def task_list(request, project_pk, team_pk):
         'tasks': tasks,
         'statuses': statuses,
         'tags': tags,
+        'priorities': priorities,
         'form': form
     }
     return render(request, 'tasks/task_list.html', context)
@@ -38,13 +40,22 @@ def task_search(request, project_pk, team_pk):
 
 def task_filter(request, project_pk, team_pk):
     project = get_object_or_404(Project, pk=project_pk)
-    if request.method == 'GET':
-        ...
-
     tasks = Task.objects.filter(project=project)
-    text = request.GET.get('tags')
-    tag = get_object_or_404(Tag, pk=int(text))
-    tasks = tasks.filter(tag=tag)
+
+    tag = request.GET.get('tag')
+    if tag:
+        tag_id = request.GET.get('tag')
+        tasks = tasks.filter(tag__pk=tag_id)
+
+    status = request.GET.get('status')
+    if status:
+        status_id = request.GET.get('status')
+        tasks = tasks.filter(status__pk=status_id)
+
+    priority = request.GET.get('priority')
+    if priority:
+        priority = request.GET.get('priority')
+        tasks = tasks.filter(priority=priority)
 
     context = {
         'tasks': tasks

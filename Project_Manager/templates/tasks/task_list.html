@@ -15,7 +15,7 @@
       
       <div class="flex flex-col w-full sm:w-1/5 min-w-[140px]">
         <label class="text-sm text-gray-500 mb-1">Теги</label>
-        <select name="tags" class="select select-bordered bg-gray-50 text-gray-700 focus:border-blue-500">
+        <select name="tag" class="select select-bordered bg-gray-50 text-gray-700 focus:border-blue-500">
           <option value="">Все</option>
           {% for tag in tags %}
           <option value="{{tag.pk}}">{{tag.name}}</option>
@@ -27,7 +27,9 @@
         <label class="text-sm text-gray-500 mb-1">Статус</label>
         <select name="status" class="select select-bordered bg-gray-50 text-gray-700 focus:border-blue-500">
           <option value="">Все</option>
-
+          {% for status in statuses %}
+          <option value="{{status.pk}}">{{status.name}}</option>
+          {% endfor %}
         </select>
       </div>
   
@@ -35,7 +37,9 @@
         <label class="text-sm text-gray-500 mb-1">Приоритет</label>
         <select name="priority" class="select select-bordered bg-gray-50 text-gray-700 focus:border-blue-500">
           <option value="">Все</option>
-
+          {% for priority in priorities %}
+          <option value="{{priority}}">{{priority}}</option>
+          {% endfor %}
         </select>
       </div>
   
