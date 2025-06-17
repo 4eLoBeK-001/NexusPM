@@ -14,8 +14,7 @@ def task_list(request, project_pk, team_pk):
     statuses = Status.objects.filter(project=project)
     tags = project.tags.all()
     form = CreateStatusForm()
-    if request.method == 'POST':
-        ...
+
     context = {
         'project': project,
         'tasks': tasks,

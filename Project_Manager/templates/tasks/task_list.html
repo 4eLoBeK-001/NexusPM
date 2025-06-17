@@ -10,7 +10,6 @@
     id="filterForm"
     hx-get="{% url 'teams:projects:tasks:task_filter' project.team.pk project.pk %}"
     hx-target="#task-list"
-    hx-push-url="true"
     >
     <div class="flex gap-6 bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
       
