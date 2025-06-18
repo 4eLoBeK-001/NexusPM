@@ -1,0 +1,52 @@
+
+<dialog id="modal_create_task" class="modal">
+    <div class="modal-box bg-white shadow-xl text-base-content rounded-lg">
+        <button onclick="this.closest('dialog').close();" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+
+        <h3 class="text-2xl font-bold text-gray-700 mb-4">Создание задачи</h3>
+
+        <form action="{% url 'teams:projects:tasks:create_task' project.team.pk project.pk %}" method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <!-- Название задачи -->
+            <div>
+                <label for="id_name" class="block text-sm font-medium text-gray-600 mb-1">
+                    {{ task_form.name.label }}
+                </label>
+                {{ task_form.name }}
+                {% if task_form.name.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ task_form.name.errors }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Статус -->
+            <div>
+                <label for="id_status" class="block text-sm font-medium text-gray-600 mb-1">
+                    {{ task_form.status.label }}
+                </label>
+                {{ task_form.status }}
+                {% if task_form.status.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ task_form.status.errors }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Приоритет -->
+            <div>
+                <label for="id_priority" class="block text-sm font-medium text-gray-600 mb-1">
+                    {{ task_form.priority.label }}
+                </label>
+                {{ task_form.priority }}
+                {% if task_form.priority.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ task_form.priority.errors }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Отправка формы -->
+            <div class="pt-4">
+                <button class="btn btn-primary w-full text-white" name="add_task" type="submit">
+                    Сохранить
+                </button>
+            </div>
+        </form>
+    </div>
+</dialog>

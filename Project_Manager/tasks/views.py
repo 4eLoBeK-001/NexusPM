@@ -4,30 +4,43 @@ from django.views.decorators.http import require_http_methods
 from projects.models import Project
 
 from tasks.models import Status, Tag, Task
-from tasks.forms import CreateStatusForm, CreateTagForm, UpdateTaskForm
+from tasks.forms import CreateStatusForm, CreateTagForm, CreateTaskForm, UpdateTaskForm
 
 
 
-def task_list(request, project_pk, team_pk):
+def task_list(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     tasks = Task.objects.filter(project=project)
     statuses = project.statuses.all()
     tags = project.tags.all()
     priorities = Task.PriprityChoices
-    form = CreateStatusForm()
-
+    status_form = CreateStatusForm()
+    task_form = CreateTaskForm()
     context = {
         'project': project,
         'tasks': tasks,
         'statuses': statuses,
         'tags': tags,
         'priorities': priorities,
-        'form': form
+        'form': status_form,
+        'task_form': task_form
     }
     return render(request, 'tasks/task_list.html', context)
 
 
-def task_search(request, project_pk, team_pk):
+@require_http_methods(['POST'])
+def create_task(request, project_pk, *args, **kwargs):
+    project = get_object_or_404(Project, pk=project_pk)
+    task_form = CreateTaskForm(request.POST)
+    if task_form.is_valid():
+        task = task_form.save(commit=False)
+        task.project = project
+        task.creator = request.user
+        task.save()
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+def task_search(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
 
     text = request.GET.get('input_search')
@@ -38,7 +51,7 @@ def task_search(request, project_pk, team_pk):
     }
     return render(request, 'tasks/includes/task.html', context)
 
-def task_filter(request, project_pk, team_pk):
+def task_filter(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     tasks = Task.objects.filter(project=project)
 

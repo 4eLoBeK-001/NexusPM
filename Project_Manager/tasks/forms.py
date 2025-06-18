@@ -3,6 +3,50 @@ from django import forms
 from .models import Status, Tag, Task
 
 
+class CreateTaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ('name', 'status', 'priority')
+
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': (
+                    'input w-full bg-white text-gray-800 border border-gray-300 '
+                    'focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200'
+                ),
+                'placeholder': 'Введите название задачи'
+            }),
+            'status': forms.Select(attrs={
+                'class': (
+                    'select w-full bg-white text-gray-800 border border-gray-300 '
+                    'focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200'
+                )
+            }),
+            'priority': forms.Select(attrs={
+                'class': (
+                    'select w-full bg-white text-gray-800 border border-gray-300 '
+                    'focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200'
+                )
+            }),
+        }
+
+        labels = {
+            'name': 'Название',
+            'status': 'Статус',
+            'priority': 'Приоритет'
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Устанавливает отображение приоритетов label как value (вместо англ - русский)
+        self.fields['priority'].choices = [
+            (choice.value, choice.value) for choice in Task.PriprityChoices
+        ]
+
+
+
+
 class UpdateTaskForm(forms.ModelForm):
     class Meta:
         model = Task
