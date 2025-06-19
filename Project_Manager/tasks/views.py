@@ -1,5 +1,8 @@
 from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
 from django.views.decorators.http import require_http_methods
+from django.contrib import messages
+from django.utils.html import format_html
 
 from projects.models import Project
 
@@ -37,6 +40,13 @@ def create_task(request, project_pk, *args, **kwargs):
         task.project = project
         task.creator = request.user
         task.save()
+        messages.success(
+            request,
+            format_html('Задача <a id="mtl" href="{}">{}</a> успешно создана',
+                reverse('teams:projects:tasks:task_detail', args=[project.team.pk, project.pk, task.pk]),
+                task.name
+            )
+        )
     return redirect(request.META.get('HTTP_REFERER'))
 
 
