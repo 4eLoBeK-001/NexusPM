@@ -76,7 +76,7 @@
             placeholder="Поиск..." 
             class="input input-bordered bg-gray-50 text-gray-700 border-gray-400 w-full pl-10 pr-6 focus:border-sky-600"
             hx-get="{% url 'teams:projects:tasks:task_search' project.team.pk project.pk %}"
-            hx-trigger="keyup"
+            hx-trigger="keyup delay:250ms"
             hx-target="#task-list"
             />
         <svg 

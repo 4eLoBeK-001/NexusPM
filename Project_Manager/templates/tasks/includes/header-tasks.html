@@ -1,46 +1,70 @@
 {% extends 'tasks/includes/base-header-task.html' %}
 
 {% block content %}
-    
-    <!-- Левая часть шапки - название/информация -->
-    <div class="flex items-center space-x-4">
-        <!-- Кнопка "Участники" -->
-        <a href="{% url 'teams:projects:tasks:task_list' project.team.pk project.pk %}" class="btn btn-outline btn-sm flex items-center">
-            <i class="fa-solid fa-list-check"></i>
-            Задачи
-        </a>
-        
-        <!-- Выпадающее меню "Прочее" -->
-        <div class="dropdown dropdown-end">
-            <div tabindex="0" role="button" class="btn btn-outline btn-sm flex items-center">
-                <i class="fas fa-ellipsis-h mr-2"></i>
-                Конфигурация
-            </div>
-            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-neutral-50 rounded-box w-52">
-                <li><a href="{% url 'teams:projects:project_settings' project.team.pk project.pk %}" class="flex items-center">
-                    <i class="fas fa-cog mr-2"></i>
-                    Настройки проекта
-                    </a>
-                </li>
-                <li><a href="{% url 'teams:projects:project_members' project.team.pk project.pk %}"><i class="fas fa-users mr-2"></i>Участники</a></li>
-                <li><a href="{% url 'teams:projects:project_tags' project.team.pk project.pk %}" ><i class="fas fa-hashtag mr-2"></i>Теги</a></li>
-                <li><a href="{% url 'teams:projects:project_statuses' project.team.pk project.pk %}"><i class="fas fa-tasks mr-2"></i>Статусы</a></li>
-                <li><a><i class="fas fa-history mr-2"></i>История изменений</a></li>
-                <li><a class="text-red-500 hover:text-white hover:bg-red-500"><i class="fas fa-trash mr-2"></i>Удалить</a></li>
-            </ul>
-        </div>
-    </div>
-    
-    <div>
-        <a href="{% url 'teams:projects:project_list' project.team.pk %}" class="inline-block px-5 py-2 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-blue-300 transition-all duration-200 font-medium">
-            Назад к проектам
-        </a>
-    </div>
 
-    <!-- Правая часть шапки - элементы управления -->
-    <div class="flex items-center space-x-4">
-        <h2 class="text-xl font-semibold text-gray-800">Текст</h2>
-        <span class="text-sm text-gray-500">Текст</span>
+
+<!-- Левая часть -->
+<div class="flex items-center space-x-4">
+
+    <!-- Кнопка "Назад" -->
+    <a href="{% url 'teams:projects:project_list' project.team.pk %}" 
+    class="btn btn-ghost btn-sm text-gray-600 hover:text-blue-600 font-medium">
+        <i class="fas fa-arrow-left mr-1"></i> Назад
+    </a>
+
+    <!-- Кнопка "Задачи" -->
+    <a href="{% url 'teams:projects:tasks:task_list' project.team.pk project.pk %}" 
+    class="btn btn-outline btn-sm flex items-center font-semibold text-gray-800 hover:text-blue-600">
+        <i class="fa-solid fa-list-check mr-1"></i> Задачи
+    </a>
+</div>
+
+<!-- Центр — Название проекта -->
+<div class="text-center flex-1">
+    <h2 class="text-xl font-bold text-gray-900">{{ project.name }}</h2>
+</div>
+
+<!-- Правая часть -->
+<div class="flex items-center space-x-4">
+
+    <!-- Кнопка "Участники" -->
+    <a href="{% url 'teams:projects:project_members' project.team.pk project.pk %}" 
+    class="btn btn-outline btn-sm flex items-center font-semibold text-gray-800 hover:text-blue-600">
+        <i class="fas fa-users mr-1"></i> Участники
+    </a>
+
+    <!-- Выпадающее меню "Конфигурация" -->
+    <div class="dropdown dropdown-end">
+        <div tabindex="0" role="button" 
+            class="btn btn-outline btn-sm flex items-center font-semibold text-gray-800 hover:text-blue-600">
+            <i class="fas fa-sliders-h mr-1"></i> Конфигурация
+        </div>
+        <ul tabindex="0" 
+            class="dropdown-content z-[1] menu p-2 shadow bg-white rounded-box w-56 text-sm font-medium text-gray-800">
+            
+            <li><a href="{% url 'teams:projects:project_settings' project.team.pk project.pk %}">
+                <i class="fas fa-cog mr-2"></i> Настройки проекта
+            </a></li>
+            
+            <li><a href="{% url 'teams:projects:project_tags' project.team.pk project.pk %}">
+                <i class="fas fa-hashtag mr-2"></i> Теги
+            </a></li>
+            
+            <li><a href="{% url 'teams:projects:project_statuses' project.team.pk project.pk %}">
+                <i class="fas fa-tasks mr-2"></i> Статусы
+            </a></li>
+            
+            <li><a>
+                <i class="fas fa-history mr-2"></i> История изменений
+            </a></li>
+            
+            <li>
+                <a class="text-red-600 hover:text-white hover:bg-red-500 transition-colors duration-200">
+                    <i class="fas fa-trash mr-2"></i> Удалить проект
+                </a>
+            </li>
+        </ul>
     </div>
-    
+</div>
+
 {% endblock content %}
