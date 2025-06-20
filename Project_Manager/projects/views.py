@@ -91,10 +91,23 @@ def project_settings(request, project_pk, *args, **kwargs):
 
 def project_members(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
+    project_members = project.project_members.all()
     data = {
         'project': project,
+        'project_members': project_members,
     }
     return render(request, 'projects/includes/members.html', data)
+
+def search_members(request, project_pk, *args, **kwargs):
+    project = get_object_or_404(Project, pk=project_pk)
+    text = request.GET.get('input_search')
+    project_members = project.project_members.filter(username__icontains=text)
+
+    data = {
+        'project': project,
+        'project_members': project_members,
+    }
+    return render(request, 'projects/includes/member.html', data)
 
 
 def project_tags(request, project_pk, *args, **kwargs):
