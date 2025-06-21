@@ -130,9 +130,11 @@
 
   <!-- Задача -->
   <div id="task-list">
-  {% include 'tasks/includes/task.html' %}
-  </div>  
+    {% for task in tasks %}
+      {% include 'tasks/includes/task.html' %}
+    {% endfor %}
 
+  </div>  
     {% include 'tasks/includes/add-status-modal.html' %}
 </div>
 
