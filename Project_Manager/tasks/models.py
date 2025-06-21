@@ -32,7 +32,12 @@ class Task(models.Model):
     priority = models.CharField(max_length=20, choices=PriprityChoices.choices, default=PriprityChoices.NOT_SPECIFIED)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
+    parent_task = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subtasks')
 
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.parent_task and self.parent_task.parent_task:
+            raise ValidationError('Допустима только одна вложенность подзадач')
     
     def __str__(self):
         return self.name
