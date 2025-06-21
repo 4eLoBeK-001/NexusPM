@@ -1,13 +1,12 @@
 {% load task_url %}
 
 {% for task in tasks %}
-
-<div id="taskDiv-{{task.pk}}" class="flex items-center bg-gray-50 shadow-sm rounded-2xl border border-gray-300 p-4 mb-4 ">
-        
+<div id="taskDiv-{{task.pk}}" class="flex items-center bg-gray-50 shadow-sm rounded-2xl border border-gray-300 p-4 mb-4 relative">
+    
     <!-- Аватар -->
     <div class="w-1/12 flex justify-center">
         <div id="avatar-{{task.pk}}" class="avatar {% if task.status.is_completed %}grayscale{% endif %}">
-        <div class="w-12 h-12 bg-{{task.color}}-500 rounded-full ring ring-{{task.color}}-300 ring-offset-1"></div>
+            <div class="w-12 h-12 bg-{{task.color}}-500 rounded-full ring ring-{{task.color}}-300 ring-offset-1"></div>
         </div>
     </div>
 
@@ -15,20 +14,21 @@
     <div class="w-5/12">
         <h3 id="titleTask-{{task.pk}}" class="text-lg font-semibold text-black 
         {% if task.status.is_completed %}line-through text-gray-500{% endif %}">
-        <a href="{% url_task task 'task_detail' %}">{{ task.name }}</a>
+            <a href="{% url_task task 'task_detail' %}">{{ task.name }}</a>
         </h3>
         <div id="tagList-{{task.pk}}" class="flex gap-2 text-sm text-gray-400 mt-1 mb-1 {% if task.status.is_completed %}grayscale{% endif %}">
-        {% for t in task.tag.all %}
-        <span class="inline-flex items-center rounded-md px-2 py-1 text-sm font-medium border {{ t.color.bg_color }} {{ t.color.border_color }} {{ t.color.text_color }}"
-        >{{ t.name }}</span>
-        {% endfor %}
+            {% for t in task.tag.all %}
+                <span class="inline-flex items-center rounded-md px-2 py-1 text-sm font-medium border {{ t.color.bg_color }} {{ t.color.border_color }} {{ t.color.text_color }}">
+                    {{ t.name }}
+                </span>
+            {% endfor %}
         </div>
     </div>
 
     <!-- Исполнители -->
     <div class="w-2/12 flex justify-start">
         <div id="exAvatar-{{task.pk}}" class="avatar {% if task.status.is_completed %}grayscale{% endif %}">
-        <div class="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"></div>
+            <div class="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"></div>
         </div>
     </div>
 
@@ -41,6 +41,31 @@
     <div id="priority-{{task.pk}}" class="w-2/12 {% if task.status.is_completed %}grayscale{% endif %}">
         <span class="badge badge-error text-[1.075rem] px-4 py-[0.75rem]">{{task.priority}}</span>
     </div>
-</div>
 
+    <!-- Меню с тремя точками -->
+    <div class="">
+        <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button"
+                 class="btn btn-ghost btn-circle text-gray-600 hover:text-black hover:bg-gray-200">
+                <i class="fas fa-ellipsis-v text-lg"></i>
+            </div>
+            <ul tabindex="0"
+                class="dropdown-content z-[100] menu p-2 shadow bg-white rounded-box w-52 border border-gray-200 space-y-1">
+                <li>
+                    <a href="#" class="hover:bg-gray-100 flex items-center gap-2">
+                        <i class="fas fa-history text-gray-500"></i>
+                        История изменений
+                    </a>
+                </li>   
+                <li>
+                    <a class="text-red-600 hover:bg-red-500 hover:text-white flex items-center gap-2">
+                        <i class="fas fa-trash-alt"></i>
+                        Удалить
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+</div>
 {% endfor %}

@@ -102,7 +102,7 @@
     
     <!-- Кнопки справа -->
     <div class="flex items-center gap-2 mr-2">
-      <button onclick="document.getElementById('filterForm').style.display='block'" class="btn btn-outline border-gray-400 text-gray-700 hover:bg-gray-100">
+      <button onclick="showFilter(this);" class="btn btn-outline border-gray-400 text-gray-700 hover:bg-gray-100">
         Добавить фильтры
       </button>
       <button class="btn btn-primary text-lg text-white whitespace-nowrap" onclick="modal_create_task.showModal();">
@@ -136,6 +136,15 @@
     {% include 'tasks/includes/add-status-modal.html' %}
 </div>
 
+<script>
 
+  function showFilter(btn){
+    const filterForm = document.getElementById('filterForm');
+    const isHidden = filterForm.classList.toggle('hidden');
+
+    btn.innerText = isHidden ? 'Добавить фильтры': 'Скрыть фильтры'
+  }
+
+</script>
 
 {% endblock content %}
