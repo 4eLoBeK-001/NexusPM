@@ -26,7 +26,7 @@
           <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2 text-sm text-gray-500">
             <div class="flex items-center">
               <i class="fas fa-users mr-1.5 text-gray-400"></i>
-              <span>N человек</span>
+              <span>{{project.project_members.count}} человек</span>
             </div>
             <div class="flex items-center">
               <i class="far fa-calendar-alt mr-1.5 text-gray-400"></i>
@@ -34,7 +34,7 @@
             </div>
             <div class="flex items-center">
               <i class="fas fa-tasks mr-1.5 text-gray-400"></i>
-              <span>N задач</span>
+              <span>{{project.tasks.count }} задач</span>
             </div>
           </div>
         </div>

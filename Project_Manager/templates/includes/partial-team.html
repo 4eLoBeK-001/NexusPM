@@ -1,4 +1,4 @@
 
-<a href="#" class="block px-3 py-2 rounded hover:bg-gray-200 text-gray-800">
+<a href="{% url 'teams:projects:project_list' team.pk %}" class="block px-3 py-2 rounded hover:bg-gray-200 text-gray-800">
     {{ team.name }}
 </a>

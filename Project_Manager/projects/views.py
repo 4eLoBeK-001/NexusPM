@@ -51,7 +51,7 @@ def create_project(request):
         if all_practicants:
             project.project_members.add(*team.team_member.all().values_list('id', flat=True))
         else:
-            ...
+            project.project_members.add(request.user.id)
         return redirect(request.META.get('HTTP_REFERER', '/'))
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
