@@ -38,7 +38,11 @@
 
         <!-- Статус -->
         <div id="status-{{subtask.pk}}" class="w-2/12">
-            {% include 'tasks/includes/change-status.html' %}
+            <div class="dropdown" id="status-{{ task.pk }}">
+                <div tabindex="0" role="button" class="px-3 py-1 rounded-lg {{ task.status.color.bg_color }} text-sm font-medium {{ task.status.color.text_color }} border {{ task.status.color.border_color }}">
+                    {{ task.status }}
+                </div>
+            </div>
         </div>
 
         <!-- Приоритет -->

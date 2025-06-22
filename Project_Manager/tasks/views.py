@@ -13,7 +13,7 @@ from tasks.forms import CreateStatusForm, CreateTagForm, CreateTaskForm, UpdateT
 
 def task_list(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
-    tasks = Task.objects.filter(project=project)
+    tasks = Task.objects.filter(project=project, parent_task__isnull=True)
     statuses = project.statuses.all()
     tags = project.tags.all()
     priorities = Task.PriprityChoices

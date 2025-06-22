@@ -22,96 +22,97 @@
     }
 </script>
 
+{% for task in tasks %}
+    <!-- Основной блок задачи -->
+    <div class="mb-2 ">
+        <div id="taskDiv-{{task.pk}}" class="flex items-center bg-gray-50 shadow-sm rounded-2xl border border-gray-300 p-4 relative">
 
-<!-- Основной блок задачи -->
-<div class="mb-2 ">
-    <div id="taskDiv-{{task.pk}}" class="flex items-center bg-gray-50 shadow-sm rounded-2xl border border-gray-300 p-4 relative">
-
-        <!-- Кнопка-стрелка -->
-        <div class="mx-4">
-            {% if task.subtasks.exists %}
-            <button onclick="toggleSubtasks('{{ task.pk }}')" class="focus:outline-none">
-                <i id="arrow-{{ task.pk }}" class="fas fa-chevron-down text-gray-600 text-lg"></i>
-            </button>
-            {% else %}
-            <!-- Пустое место для выравнивания -->
-            <div class="w-4"></div>
-            {% endif %}
-        </div>
-
-        <!-- Аватар -->
-        <div class="w-1/12 flex justify-center">
-            <div id="avatar-{{task.pk}}" class="avatar {% if task.status.is_completed %}grayscale{% endif %}">
-                <div class="w-12 h-12 bg-{{task.color}}-500 rounded-full ring ring-{{task.color}}-300 ring-offset-1"></div>
+            <!-- Кнопка-стрелка -->
+            <div class="mx-4">
+                {% if task.subtasks.exists %}
+                <button onclick="toggleSubtasks('{{ task.pk }}')" class="focus:outline-none">
+                    <i id="arrow-{{ task.pk }}" class="fas fa-chevron-down text-gray-600 text-lg"></i>
+                </button>
+                {% else %}
+                <!-- Пустое место для выравнивания -->
+                <div class="w-4"></div>
+                {% endif %}
             </div>
-        </div>
 
-        <!-- Название и теги -->
-        <div class="w-5/12">
-            <h3 id="titleTask-{{task.pk}}" class="text-lg font-semibold text-black 
-            {% if task.status.is_completed %}line-through text-gray-500{% endif %}">
-                <a href="{% url_task task 'task_detail' %}">{{ task.name }}</a>
-            </h3>
-            <div id="tagList-{{task.pk}}" class="flex gap-2 text-sm text-gray-400 mt-1 mb-1 {% if task.status.is_completed %}grayscale{% endif %}">
-                {% for t in task.tag.all %}
-                    <span class="inline-flex items-center rounded-md px-2 py-1 text-sm font-medium border {{ t.color.bg_color }} {{ t.color.border_color }} {{ t.color.text_color }}">
-                        {{ t.name }}
-                    </span>
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Исполнители -->
-        <div class="w-2/12 flex justify-start">
-            <div id="exAvatar-{{task.pk}}" class="avatar {% if task.status.is_completed %}grayscale{% endif %}">
-                <div class="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"></div>
-            </div>
-        </div>
-
-        <!-- Статус -->
-        <div id="status-{{task.pk}}" class="w-2/12">
-            {% include 'tasks/includes/change-status.html' %}
-        </div>
-
-        <!-- Приоритет -->
-        <div id="priority-{{task.pk}}" class="w-2/12 {% if task.status.is_completed %}grayscale{% endif %}">
-            <span class="badge badge-error text-[1.075rem] px-4 py-[0.75rem]">{{task.priority}}</span>
-        </div>
-
-        <!-- Меню с тремя точками -->
-        <div class="">
-            <div class="dropdown dropdown-end">
-                <div tabindex="0" role="button"
-                    class="btn btn-ghost btn-circle text-gray-600 hover:text-black hover:bg-gray-200">
-                    <i class="fas fa-ellipsis-v text-lg"></i>
+            <!-- Аватар -->
+            <div class="w-1/12 flex justify-center">
+                <div id="avatar-{{task.pk}}" class="avatar {% if task.status.is_completed %}grayscale{% endif %}">
+                    <div class="w-12 h-12 bg-{{task.color}}-500 rounded-full ring ring-{{task.color}}-300 ring-offset-1"></div>
                 </div>
-                <ul tabindex="0"
-                    class="dropdown-content z-[100] menu p-2 shadow bg-white rounded-box w-52 border border-gray-200 space-y-1">
-                    <li>
-                        <a href="#" class="hover:bg-gray-100 flex items-center gap-2">
-                            <i class="fas fa-history text-gray-500"></i>
-                            История изменений
-                        </a>
-                    </li>   
-                    <li>
-                        <a class="text-red-600 hover:bg-red-500 hover:text-white flex items-center gap-2">
-                            <i class="fas fa-trash-alt"></i>
-                            Удалить
-                        </a>
-                    </li>
-                </ul>
+            </div>
+
+            <!-- Название и теги -->
+            <div class="w-5/12">
+                <h3 id="titleTask-{{task.pk}}" class="text-lg font-semibold text-black 
+                {% if task.status.is_completed %}line-through text-gray-500{% endif %}">
+                    <a href="{% url_task task 'task_detail' %}">{{ task.name }}</a>
+                </h3>
+                <div id="tagList-{{task.pk}}" class="flex gap-2 text-sm text-gray-400 mt-1 mb-1 {% if task.status.is_completed %}grayscale{% endif %}">
+                    {% for t in task.tag.all %}
+                        <span class="inline-flex items-center rounded-md px-2 py-1 text-sm font-medium border {{ t.color.bg_color }} {{ t.color.border_color }} {{ t.color.text_color }}">
+                            {{ t.name }}
+                        </span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Исполнители -->
+            <div class="w-2/12 flex justify-start">
+                <div id="exAvatar-{{task.pk}}" class="avatar {% if task.status.is_completed %}grayscale{% endif %}">
+                    <div class="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"></div>
+                </div>
+            </div>
+
+            <!-- Статус -->
+            <div id="status-{{task.pk}}" class="w-2/12">
+                {% include 'tasks/includes/change-status.html' %}
+            </div>
+
+            <!-- Приоритет -->
+            <div id="priority-{{task.pk}}" class="w-2/12 {% if task.status.is_completed %}grayscale{% endif %}">
+                <span class="badge badge-error text-[1.075rem] px-4 py-[0.75rem]">{{task.priority}}</span>
+            </div>
+
+            <!-- Меню с тремя точками -->
+            <div class="">
+                <div class="dropdown dropdown-end">
+                    <div tabindex="0" role="button"
+                        class="btn btn-ghost btn-circle text-gray-600 hover:text-black hover:bg-gray-200">
+                        <i class="fas fa-ellipsis-v text-lg"></i>
+                    </div>
+                    <ul tabindex="0"
+                        class="dropdown-content z-[100] menu p-2 shadow bg-white rounded-box w-52 border border-gray-200 space-y-1">
+                        <li>
+                            <a href="#" class="hover:bg-gray-100 flex items-center gap-2">
+                                <i class="fas fa-history text-gray-500"></i>
+                                История изменений
+                            </a>
+                        </li>   
+                        <li>
+                            <a class="text-red-600 hover:bg-red-500 hover:text-white flex items-center gap-2">
+                                <i class="fas fa-trash-alt"></i>
+                                Удалить
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Подзадачи -->
-    {% if task.subtasks.exists %}
-    <div id="subtasks-{{ task.pk }}"
-        class="ml-8 mt-2 overflow-hidden transition-all duration-500 ease-in-out max-h-0">
-        {% for subtask in task.subtasks.all %}
-            {% include 'tasks/includes/subtasks.html' with subtask=subtask %}
-        {% endfor %}
-    </div>
-    {% endif %}
+        <!-- Подзадачи -->
+        {% if task.subtasks.exists %}
+        <div id="subtasks-{{ task.pk }}"
+            class="ml-8 mt-2 overflow-hidden transition-all duration-500 ease-in-out max-h-0">
+            {% for subtask in task.subtasks.all %}
+                {% include 'tasks/includes/subtasks.html' %}
+            {% endfor %}
+        </div>
+        {% endif %}
 
-</div>
+    </div>
+{% endfor %}
