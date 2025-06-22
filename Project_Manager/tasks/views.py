@@ -139,19 +139,17 @@ def task_detail(request, task_pk, *args, **kwargs):
     return render(request, 'tasks/task-detail.html', data)
 
 
+@require_http_methods(['POST'])
 def task_delete(request, task_pk, *args, **kwargs):
+    task_pk = request.POST.get('task_pk') or request.POST.get('detail_task_pk')
+    task = get_object_or_404(Task, pk=task_pk)
+    task.delete()
 
     if 'detail_task_pk' in request.POST:
-        task_pk = request.POST.get('detail_task_pk')
-        task = get_object_or_404(Task, pk=task_pk)
-        task.delete()
         return reverse('task_list', args=[task.project.team.pk, task.project.pk, task.pk])
     else:
-        task_pk = request.POST.get('task_pk')
-        task = get_object_or_404(Task, pk=task_pk)
-        task.delete()
-
         return redirect(request.META.get('HTTP_REFERER'))
+
 
 @require_http_methods(['POST'])
 def change_priority(request, task_pk, *args, **kwargs):
