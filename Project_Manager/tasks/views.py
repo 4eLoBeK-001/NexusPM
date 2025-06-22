@@ -54,7 +54,7 @@ def task_search(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
 
     text = request.GET.get('input_search')
-    tasks = Task.objects.filter(project=project, name__icontains=text)
+    tasks = Task.objects.filter(project=project, parent_task__isnull=True, name__icontains=text)
 
     context = {
         'tasks': tasks
@@ -63,7 +63,7 @@ def task_search(request, project_pk, *args, **kwargs):
 
 def task_filter(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
-    tasks = Task.objects.filter(project=project)
+    tasks = Task.objects.filter(project=project, parent_task__isnull=True)
 
     tag = request.GET.get('tag')
     if tag:
