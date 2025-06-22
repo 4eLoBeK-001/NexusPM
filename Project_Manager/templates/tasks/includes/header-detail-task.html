@@ -1,4 +1,5 @@
 {% extends 'tasks/includes/base-header-task.html' %}
+{% load task_url %}
 
 {% block content %}
     
@@ -27,7 +28,12 @@
             <a><i class="fas fa-history mr-2"></i>История изменений</a>
         </li>
         <li>
-            <a class="text-red-500 hover:text-white hover:bg-red-500">
+            <a class="text-red-500 hover:text-white hover:bg-red-500"
+            hx-post="{% url_task task 'task_delete' %}"
+            hx-vals='{"detail_task_pk": "{{task.pk}}"}'
+			hx-on::after-request="window.location.href = '{% url 'teams:projects:tasks:task_list' task.project.team.pk task.project.pk %}'"
+
+            >
             <i class="fas fa-trash mr-2"></i>Удалить
             </a>
         </li>

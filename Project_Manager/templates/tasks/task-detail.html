@@ -102,7 +102,7 @@
         </div>
       </div>
     
-      <!-- Сайдбар -->
+      <!-- Правый сайдбар -->
       <div class="w-1/5 h-[82vh] bg-white border-l border-b border-gray-300 shadow-sm p-4 space-y-6">
     
         <div>
@@ -130,7 +130,7 @@
               {% endfor %}
             </div>
         
-            <!-- Фоновая зона, реагирующая на hover только свободной области -->
+            <!-- Фоновая зона, реагирующая на hover в свободной области -->
             <div class="absolute inset-0 z-10 rounded-md bg-gray-200 cursor-pointer opacity-0 group-hover:opacity-100"></div>
         
           </div>
@@ -142,7 +142,7 @@
               
               <a class="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition-colors" onclick="add_tag_modal.close();">✕</a>
               <h3 class="text-2xl font-bold text-gray-800 mb-4">Теги</h3>
-              <!--  -->
+
               <div>
 
                 <div class="flex flex-wrap gap-2">
@@ -159,14 +159,18 @@
                   {% endfor %}
                 </div>
               </div>
-              <!--  -->
+
               <div class="modal-action mt-6">
                 <button class="btn btn-primary text-sm text-white" name="tags" type="submit">Сохранить</button>
               </div>
             </form>
           </div>
-      </dialog>
+        </dialog>
         
+        <div id="status-{{task.pk}}">
+          <h2 class="text-gray-700 font-bold mb-2">Статус</h2>
+          {% include 'tasks/includes/change-status.html' %}
+        </div>
     
         <div id="priority-{{task.pk}}">
           {% include 'tasks/includes/change-priority.html' %}

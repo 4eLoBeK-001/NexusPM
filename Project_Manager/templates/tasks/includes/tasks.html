@@ -1,0 +1,32 @@
+{% load task_url %}
+
+
+<script>
+    function toggleSubtasks(taskId) {
+        const subtasksDiv = document.getElementById(`subtasks-${taskId}`);
+        const arrowIcon = document.getElementById(`arrow-${taskId}`);
+
+        const isCollapsed = subtasksDiv.classList.contains('max-h-0');
+
+        if (isCollapsed) {
+            subtasksDiv.classList.remove('max-h-0');
+            subtasksDiv.classList.add('max-h-[999px]');
+            arrowIcon.classList.remove('fa-chevron-down');
+            arrowIcon.classList.add('fa-chevron-up');
+        } else {
+            subtasksDiv.classList.add('max-h-0');
+            subtasksDiv.classList.remove('max-h-[999px]');
+            arrowIcon.classList.remove('fa-chevron-up');
+            arrowIcon.classList.add('fa-chevron-down');
+        }
+    }
+</script>
+
+{% for task in tasks %}
+    <!-- Основной блок задачи -->
+    <div class="mb-2 ">
+
+        {% include 'tasks/includes/task.html' %}
+
+    </div>
+{% endfor %}

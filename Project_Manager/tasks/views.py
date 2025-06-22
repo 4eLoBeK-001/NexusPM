@@ -59,7 +59,7 @@ def task_search(request, project_pk, *args, **kwargs):
     context = {
         'tasks': tasks
     }
-    return render(request, 'tasks/includes/task.html', context)
+    return render(request, 'tasks/includes/tasks.html', context)
 
 def task_filter(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
@@ -83,7 +83,7 @@ def task_filter(request, project_pk, *args, **kwargs):
     context = {
         'tasks': tasks
     }
-    return render(request, 'tasks/includes/task.html', context)
+    return render(request, 'tasks/includes/tasks.html', context)
 
 
 @require_http_methods(['POST'])
@@ -116,6 +116,7 @@ def change_status(request, task_pk, *args, **kwargs):
 def task_detail(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
     project = task.project
+    statuses = Status.objects.all()
     tags = Tag.objects.filter(project=project)
     form = UpdateTaskForm(instance=task, project=project)
     tag_form = CreateTagForm()
@@ -126,17 +127,31 @@ def task_detail(request, task_pk, *args, **kwargs):
         task.tag.set(tags_list)
         return redirect(request.META.get('HTTP_REFERER'))
 
-
     data = {
         'task': task,
         'project': project,
         'tags': tags,
+        'statuses': statuses,
         'form': form,
         'tag_form': tag_form,
         'priorities': task.PriprityChoices
     }
     return render(request, 'tasks/task-detail.html', data)
 
+
+def task_delete(request, task_pk, *args, **kwargs):
+
+    if 'detail_task_pk' in request.POST:
+        task_pk = request.POST.get('detail_task_pk')
+        task = get_object_or_404(Task, pk=task_pk)
+        task.delete()
+        return reverse('task_list', args=[task.project.team.pk, task.project.pk, task.pk])
+    else:
+        task_pk = request.POST.get('task_pk')
+        task = get_object_or_404(Task, pk=task_pk)
+        task.delete()
+
+        return redirect(request.META.get('HTTP_REFERER'))
 
 @require_http_methods(['POST'])
 def change_priority(request, task_pk, *args, **kwargs):
