@@ -38,9 +38,9 @@
 
         <!-- Статус -->
         <div id="status-{{subtask.pk}}" class="w-2/12">
-            <div class="dropdown" id="status-{{ task.pk }}">
-                <div tabindex="0" role="button" class="px-3 py-1 rounded-lg {{ task.status.color.bg_color }} text-sm font-medium {{ task.status.color.text_color }} border {{ task.status.color.border_color }}">
-                    {{ task.status }}
+            <div class="dropdown" id="status-{{ subtask.pk }}">
+                <div tabindex="0" role="button" class="px-3 py-1 rounded-lg {{ subtask.status.color.bg_color }} text-sm font-medium {{ subtask.status.color.text_color }} border {{ subtask.status.color.border_color }}">
+                    {{ subtask.status }}
                 </div>
             </div>
         </div>
