@@ -46,20 +46,37 @@ class CreateTaskForm(forms.ModelForm):
 
 
 
-
 class UpdateTaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ('description', 'tag')
+        fields = ('name', 'description')
 
         widgets = {
-            'description': forms.Textarea(attrs={'class': 'mt-2 w-full text-gray-700 border border-gray-300 rounded-md p-2 resize-none focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400 bg-gray-100', 'rows': '6'}),
-            'tag': forms.CheckboxSelectMultiple(),
+            'name': forms.TextInput(attrs={
+                'class': 'text-xl font-bold w-full border-none focus:ring-0 bg-transparent p-0',
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'mt-2 w-full text-gray-700 border border-gray-300 rounded-md p-2 resize-none focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400 bg-gray-100', 
+                'rows': '6'
+            }),
         }
 
         labels = {
+            'name': 'Название',
             'description': 'Описание'
         }
+
+
+
+class UpdateTagForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ('tag',)
+
+        widgets = {
+            'tag': forms.CheckboxSelectMultiple(),
+        }
+
     
     def __init__(self, *args, **kwargs):
         project = kwargs.pop('project', None)

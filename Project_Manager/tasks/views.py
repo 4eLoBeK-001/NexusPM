@@ -7,7 +7,7 @@ from django.utils.html import format_html
 from projects.models import Project
 
 from tasks.models import Status, Tag, Task
-from tasks.forms import CreateStatusForm, CreateTagForm, CreateTaskForm, UpdateTaskForm
+from tasks.forms import CreateStatusForm, CreateTagForm, CreateTaskForm, UpdateTagForm, UpdateTaskForm
 
 
 
@@ -118,22 +118,32 @@ def task_detail(request, task_pk, *args, **kwargs):
     project = task.project
     statuses = Status.objects.all()
     tags = Tag.objects.filter(project=project)
-    form = UpdateTaskForm(instance=task, project=project)
-    tag_form = CreateTagForm()
+    update_tag_form = UpdateTagForm(instance=task, project=project)
+    create_tag_form = CreateTagForm()
+    task_form = UpdateTaskForm(instance=task)
+    
     if request.method == 'POST':
+        
+        if 'update_task' in request.POST:
+            task_form = UpdateTaskForm(request.POST, instance=task)
+            if task_form.is_valid():
+                task_form.save()
+                return redirect(request.META.get('HTTP_REFERER'))
 
-        tag_list_ids = request.POST.getlist('tag')
-        tags_list = Tag.objects.filter(id__in=tag_list_ids)
-        task.tag.set(tags_list)
-        return redirect(request.META.get('HTTP_REFERER'))
+        if 'update_tags' in request.POST:
+            tag_list_ids = request.POST.getlist('tag')
+            tags_list = Tag.objects.filter(id__in=tag_list_ids)
+            task.tag.set(tags_list)
+            return redirect(request.META.get('HTTP_REFERER'))
 
     data = {
         'task': task,
         'project': project,
         'tags': tags,
         'statuses': statuses,
-        'form': form,
-        'tag_form': tag_form,
+        'update_tag_form': update_tag_form,
+        'create_tag_form': create_tag_form,
+        'task_form': task_form,
         'priorities': task.PriprityChoices
     }
     return render(request, 'tasks/task-detail.html', data)

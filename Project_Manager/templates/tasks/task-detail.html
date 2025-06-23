@@ -8,34 +8,38 @@
 <div id="content" class="flex">
 
     <div class="w-4/5 bg-white border-l border-b border-gray-300 shadow-sm p-4 space-y-6">
+
         <!-- Блок описания -->
         <div>
-          <details open class="group mb-4">
-            <summary class="cursor-pointer font-semibold text-gray-700 flex items-center">
-              <div class="flex items-center text-lg">
-                <!-- Стрелка -->
-                <div class="w-5 h-5 flex items-center justify-center transition-transform transform group-open:rotate-90 mr-2">
-                  <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
-                {{ form.description.label_tag }}
+          <form method="post">
+            <details open class="group mb-4">
+              <summary class="cursor-pointer font-semibold text-gray-700 flex items-center">
+                  <div class="flex items-center text-lg">
+                      <div class="w-5 h-5 flex items-center justify-center transition-transform transform group-open:rotate-90 mr-2">
+                          <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                          </svg>
+                      </div>
+                      {{ task_form.description.label_tag }}
+                  </div>
+                  <span class="ml-2 text-blue-600 cursor-pointer">
+                      <i class="fas fa-pen text-sm"></i>
+                  </span>
+              </summary>
+          
+              <!-- Контент блока -->
+              <div class="mt-2">
+                      {% csrf_token %}
+                      <p class="hidden">{{ task_form.name }}</p>
+                      {{ task_form.description }}
+                      <button name="update_task" type="submit" class="mt-2 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+                          Сохранить
+                      </button>
               </div>
-              <span class="ml-2 text-blue-600 cursor-pointer">
-                <i class="fas fa-pen text-sm"></i>
-              </span>
-            </summary>
-        
-            <!-- Контент блока -->
-            <div class="mt-2">
-              {{ form.description }}
-              <button
-                class="mt-2 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-              >Сохранить</button>
-            </div>
           </details>
-        </div>
-        <hr>
+        </form>
+      </div>
+      <hr>
     
         <!-- Подзадачи -->
         <div>
@@ -146,10 +150,10 @@
               <div>
 
                 <div class="flex flex-wrap gap-2">
-                  {% for tag in form.tag.field.queryset %}
+                  {% for tag in update_tag_form.tag.field.queryset %}
                     <label class="cursor-pointer mb-2">
                       <input type="checkbox" name="tag" value="{{ tag.id }}"
-                            {% if tag in form.initial.tag or tag in form.data.tag %}checked{% endif %}
+                            {% if tag in update_tag_form.initial.tag or tag in update_tag_form.data.tag %}checked{% endif %}
                             class="hidden peer">
                       <span class="peer-checked:{{tag.color.bg_color}} peer-checked:{{tag.color.text_color}} peer-checked:{{tag.color.border_color}}
                                   bg-gray-200 text-gray-700 px-3 py-1 border rounded-full transition-all duration-200">
@@ -161,7 +165,7 @@
               </div>
 
               <div class="modal-action mt-6">
-                <button class="btn btn-primary text-sm text-white" name="tags" type="submit">Сохранить</button>
+                <button class="btn btn-primary text-sm text-white" name="update_tags" type="submit">Сохранить</button>
               </div>
             </form>
           </div>

@@ -6,7 +6,16 @@
 <!-- Левый блок -->
 <div class="flex items-center ml-4 space-x-4">
     <div class="text-xl font-semibold text-gray-800">
-        {{ form.name.label_tag|default:"Название" }}
+        <form method="post">
+            {% csrf_token %}
+            <div class="flex items-center">
+                {{ task_form.name }}
+                <p class="hidden">{{ task_form.description }}</p>
+                <button name="update_task" type="submit" class="ml-2 text-blue-600 cursor-pointer">
+                    <i class="fas fa-check text-sm"></i>
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 

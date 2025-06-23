@@ -9,12 +9,12 @@
             <div class="mb-4">
             
             <label for="id_name" class="text-lg text-gray-400 font-medium mb-2">
-                <span>{{ tag_form.name.label }}</span>
+                <span>{{ create_tag_form.name.label }}</span>
             </label>
-            {{ tag_form.name }}
-            {% if tag_form.name.errors %}
+            {{ create_tag_form.name }}
+            {% if create_tag_form.name.errors %}
                 <div class="text-red-600 text-sm mt-1">
-                {{ tag_form.name.errors }}
+                {{ create_tag_form.name.errors }}
                 </div>
             {% endif %}
             </div>
@@ -22,11 +22,11 @@
             <!-- Цвет (кастомное поле) -->
             <div class="mb-4">
             <label class="block text-lg text-gray-400 font-medium mb-2">
-                {{ tag_form.color.label }}
+                {{ create_tag_form.color.label }}
             </label>
         
             <div class="flex flex-wrap gap-4">
-                {% for color in tag_form.color.field.queryset %}
+                {% for color in create_tag_form.color.field.queryset %}
                 <label class="cursor-pointer">
                     <input
                     type="radio"
@@ -53,9 +53,9 @@
                 });
             </script>
         
-            {% if tag_form.color.errors %}
+            {% if create_tag_form.color.errors %}
                 <div class="text-red-600 text-sm mt-2">
-                    {{ tag_form.color.errors }}
+                    {{ create_tag_form.color.errors }}
                 </div>
             {% endif %}
             </div>
