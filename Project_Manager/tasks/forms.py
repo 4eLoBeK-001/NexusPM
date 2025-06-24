@@ -53,7 +53,7 @@ class UpdateTaskForm(forms.ModelForm):
 
         widgets = {
             'name': forms.TextInput(attrs={
-                'class': 'text-xl font-bold w-full border-none focus:ring-0 bg-transparent p-0',
+                'class': 'text-xl font-semibold text-gray-800 w-full border-none focus:ring-0 bg-transparent p-0',
             }),
             'description': forms.Textarea(attrs={
                 'class': 'mt-2 w-full text-gray-700 border border-gray-300 rounded-md p-2 resize-none focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400 bg-gray-100', 

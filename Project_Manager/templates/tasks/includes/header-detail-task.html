@@ -5,20 +5,72 @@
     
 <!-- Левый блок -->
 <div class="flex items-center ml-4 space-x-4">
-    <div class="text-xl font-semibold text-gray-800">
-        <form method="post">
-            {% csrf_token %}
-            <div class="flex items-center">
-                {{ task_form.name }}
-                <p class="hidden">{{ task_form.description }}</p>
-                <button name="update_task" type="submit" class="ml-2 text-blue-600 cursor-pointer">
-                    <i class="fas fa-check text-sm"></i>
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
+    <div class="text-xl font-semibold text-gray-800 w-full">
+      <form method="post" id="edit-task-form">
+        {% csrf_token %}
+        <div class="flex items-center space-x-2 w-full">
 
+          <span id="task-name-text" class="text-xl font-semibold text-gray-800">{{ task.name }}</span>
+  
+          <div id="task-name-input" class="hidden w-full">
+            {{ task_form.name }}
+          </div>
+  
+          <!-- Кнопка редактирования -->
+          <button type="button" id="edit-button" class="text-blue-600">
+            <i class="fas fa-pen text-sm"></i>
+          </button>
+  
+          <!-- Кнопки подтверждения и отмены -->
+          <div id="edit-actions" class="hidden flex space-x-2">
+            <button type="submit" name="update_task" class="border border-green-500 text-green-500 hover:bg-green-100 transition duration-200 rounded-md w-8 h-8 flex items-center justify-center">
+              <i class="fas fa-check text-sm"></i>
+            </button>
+            <button type="button" id="cancel-button" class="border border-red-500 text-red-500 hover:bg-red-100 transition duration-200 rounded-md w-8 h-8 flex items-center justify-center">
+              <i class="fas fa-times text-sm"></i>
+            </button>
+          </div>
+          
+        </div>
+  
+        <p class="hidden">
+          {{ task_form.description }}
+        </p>
+      </form>
+    </div>
+  </div>
+  
+  <script>
+    const editBtn = document.getElementById('edit-button');
+    const cancelBtn = document.getElementById('cancel-button');
+    const taskNameText = document.getElementById('task-name-text');
+    const taskNameInput = document.getElementById('task-name-input');
+    const editActions = document.getElementById('edit-actions');
+  
+    let originalText = taskNameText.textContent.trim();
+  
+    editBtn.addEventListener('click', () => {
+      taskNameText.classList.add('hidden');
+      taskNameInput.classList.remove('hidden');
+      editBtn.classList.add('hidden');
+      editActions.classList.remove('hidden');
+  
+      const input = taskNameInput.querySelector('input');
+      if (input) input.focus();
+    });
+  
+    cancelBtn.addEventListener('click', () => {
+      // Восстановить текст, если что-то поменяли
+      const input = taskNameInput.querySelector('input');
+      if (input) input.value = originalText;
+  
+      taskNameText.classList.remove('hidden');
+      taskNameInput.classList.add('hidden');
+      editBtn.classList.remove('hidden');
+      editActions.classList.add('hidden');
+    });
+  </script>
+  
 <!-- Центральный блок -->
 <div class="flex-1 flex justify-center">
     <a href="{% url 'teams:projects:tasks:task_list' task.project.team.pk task.project.pk %}" class="inline-block px-5 py-2 border-b-2 border-transparent text-[1.145rem] text-gray-600 hover:text-blue-600 hover:border-blue-400 transition-all duration-200 font-medium">
