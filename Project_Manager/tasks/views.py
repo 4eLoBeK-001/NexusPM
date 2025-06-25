@@ -7,7 +7,7 @@ from django.utils.html import format_html
 from projects.models import Project
 
 from tasks.models import Status, Tag, Task
-from tasks.forms import CreateStatusForm, CreateTagForm, CreateTaskForm, UpdateTagForm, UpdateTaskForm
+from tasks.forms import CreateStatusForm, CreateSubtaskForm, CreateTagForm, CreateTaskForm, UpdateTagForm, UpdateTaskForm
 
 
 
@@ -115,6 +115,7 @@ def change_status(request, task_pk, *args, **kwargs):
 
 def task_detail(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
+    create_subtask_form = CreateSubtaskForm()
     project = task.project
     statuses = Status.objects.all()
     tags = Tag.objects.filter(project=project)
@@ -144,9 +145,23 @@ def task_detail(request, task_pk, *args, **kwargs):
         'update_tag_form': update_tag_form,
         'create_tag_form': create_tag_form,
         'task_form': task_form,
+        'create_subtask_form': create_subtask_form,
         'priorities': task.PriprityChoices
     }
     return render(request, 'tasks/task-detail.html', data)
+
+
+def create_subtask(request, task_pk, *args, **kwargs):
+    task = get_object_or_404(Task, pk=task_pk)
+    project = task.project
+    form = CreateSubtaskForm(request.POST)
+    if form.is_valid():
+        subtask = form.save(commit=False)
+        subtask.creator = request.user
+        subtask.project = project
+        subtask.parent_task = task
+        subtask.save()
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 @require_http_methods(['POST'])

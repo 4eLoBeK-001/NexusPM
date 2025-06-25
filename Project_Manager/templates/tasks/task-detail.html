@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load task_url %}
 
 
 {% block content %}
@@ -54,15 +55,25 @@
                 </div>
                 Подзадачи
               </div>
-              <button class="border-2 border-dashed border-gray-400 hover:border-sky-500 hover:text-sky-500 bg-white ml-2 p-2 px-3 text-base rounded-lg leading-4 transition-all duration-300 ease-in-out transform shadow-sm hover:shadow-md">
-                + добавить
-              </button>
+                {% if task.parent_task %}
+                  <!-- Пустота -->
+                {% else %}
+                <button onclick="modal_create_task.showModal();" class="border-2 border-dashed border-gray-400 hover:border-sky-500 hover:text-sky-500 bg-white ml-2 p-2 px-3 text-base rounded-lg leading-4 transition-all duration-300 ease-in-out transform shadow-sm hover:shadow-md">
+                  + добавить
+                </button>
+                {% include 'tasks/includes/create-subtask-modal.html' with task_form=create_subtask_form %}
+                {% endif %}
             </summary>
         
             <!-- Контент -->
             <div class="bg-gray-200 mt-2 py-2 px-6 text-gray-600 flex justify-center">
               <div class="w-full">
-                {% if task.subtasks.exists %}
+                {% if task.parent_task %}
+                  <p class="text-base font-bold italic text-center">
+                  У подзадачи не может быть подзадача <br>
+                  Родитель: <a class="text-violet-700 hover:text-red-400" href="{% url_task task.parent_task 'task_detail' %}">{{ task.parent_task.name }}</a>
+                  </p>
+                {% elif task.subtasks.exists %}
                   <div id="subtasks-{{ task.pk }}">
                     {% for subtask in task.subtasks.all %}
                       {% include 'tasks/includes/subtasks.html' %}
