@@ -2,7 +2,6 @@ import random
 
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 
 from projects.models import Project
 
@@ -31,8 +30,9 @@ class Task(models.Model):
     status = models.ForeignKey('Status', on_delete=models.SET_NULL, related_name='statuses', default='Новая', null=True)
     priority = models.CharField(max_length=20, choices=PriprityChoices.choices, default=PriprityChoices.NOT_SPECIFIED)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
     parent_task = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subtasks')
+    executor = models.ManyToManyField(get_user_model(), through='users.TaskExecutor', related_name='assigned_tasks', null=True, blank=True)
 
     def clean(self):
         from django.core.exceptions import ValidationError
