@@ -117,6 +117,7 @@ def task_detail(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
     create_subtask_form = CreateSubtaskForm()
     project = task.project
+    executors = task.executor.all()
     statuses = Status.objects.all()
     tags = Tag.objects.filter(project=project)
     update_tag_form = UpdateTagForm(instance=task, project=project)
@@ -142,6 +143,7 @@ def task_detail(request, task_pk, *args, **kwargs):
         'project': project,
         'tags': tags,
         'statuses': statuses,
+        'executors': executors,
         'update_tag_form': update_tag_form,
         'create_tag_form': create_tag_form,
         'task_form': task_form,
