@@ -10,6 +10,11 @@
         {% csrf_token %}
         <div class="flex items-center space-x-2 w-full">
 
+          <a onclick="window.history.back();"
+             class="btn btn-ghost btn-sm text-lg   min-h-[2.5rem] text-gray-600 hover:text-blue-600 font-medium">
+              <i class="fas fa-arrow-left mr-1"></i> Назад
+          </a>
+
           <span id="task-name-text" class="text-xl font-semibold text-gray-800">{{ task.name }}</span>
   
           <div id="task-name-input" class="hidden w-full">
