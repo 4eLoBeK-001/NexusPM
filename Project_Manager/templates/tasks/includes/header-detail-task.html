@@ -92,7 +92,11 @@
             <a class="text-red-500 hover:text-white hover:bg-red-500"
             hx-post="{% url_task task 'task_delete' %}"
             hx-vals='{"detail_task_pk": "{{task.pk}}"}'
-			hx-on::after-request="window.location.href = '{% url 'teams:projects:tasks:task_list' task.project.team.pk task.project.pk %}'"
+            {% if task.parent_task %}
+  			      hx-on::after-request="window.location.href = '{% url_task task.parent_task 'task_detail' %}'"
+            {% else %}
+  			      hx-on::after-request="window.location.href = '{% url 'teams:projects:tasks:task_list' task.project.team.pk task.project.pk %}'"
+            {% endif %}
 
             >
             <i class="fas fa-trash mr-2"></i>Удалить
