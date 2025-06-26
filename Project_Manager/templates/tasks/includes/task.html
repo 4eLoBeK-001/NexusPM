@@ -40,7 +40,10 @@
     <!-- Исполнители -->
     <div class="w-2/12 flex justify-start">
         <div id="exAvatar-{{task.pk}}" class="avatar {% if task.status.is_completed %}grayscale{% endif %}">
-            <div class="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"></div>
+            <!-- <div class="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"></div> -->
+            {% for executor in task.executor.all %}
+              <p class="text-gray-700 mr-2">{{executor}}</p>
+            {% endfor %}
         </div>
     </div>
 
