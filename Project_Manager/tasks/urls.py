@@ -20,6 +20,6 @@ urlpatterns = [
     path('<int:project_pk>/task/<int:task_pk>/pchange/', views.change_priority, name='change_priority'),
 
 
-    path('<int:project_pk>/task/<int:task_pk>/test/', views.test, name='test'),
+    path('<int:project_pk>/task/<int:task_pk>/test/', views.add_executors, name='add_executors'),
     
 ]

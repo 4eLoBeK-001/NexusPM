@@ -115,6 +115,8 @@ def change_status(request, task_pk, *args, **kwargs):
 
 def task_detail(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
+    project_members = task.project.project_members.all()
+    executor_ids = task.executor.values_list('id', flat=True)
     create_subtask_form = CreateSubtaskForm()
     project = task.project
     executors = task.executor.all()
@@ -147,10 +149,13 @@ def task_detail(request, task_pk, *args, **kwargs):
         'update_tag_form': update_tag_form,
         'create_tag_form': create_tag_form,
         'task_form': task_form,
+        'project_members': project_members,
+        'executor_ids': executor_ids,
         'create_subtask_form': create_subtask_form,
         'priorities': task.PriprityChoices
     }
     return render(request, 'tasks/task-detail.html', data)
+
 
 
 def create_subtask(request, task_pk, *args, **kwargs):
@@ -191,18 +196,9 @@ def change_priority(request, task_pk, *args, **kwargs):
     return render(request, 'tasks/includes/change-priority.html', data)
 
 
-def test(request, task_pk, *args, **kwargs):
+@require_http_methods(['POST'])
+def add_executors(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
-    project_members = task.project.project_members.all()
-    executor_ids = task.executor.values_list('id', flat=True)
-    if request.method == 'POST':
-        executors = request.POST.getlist('executor')
-
-        task.executor.set(executors)
-        return redirect(request.META.get('HTTP_REFERER'))
-    data = {
-        'task': task,
-        'project_members': project_members,
-        'executor_ids': executor_ids # Для оптимизации проверки
-    }
-    return render(request, 'tasks/test_place.html', data)
+    executors = request.POST.getlist('executor')
+    task.executor.set(executors)
+    return redirect(request.META.get('HTTP_REFERER'))
