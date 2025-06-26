@@ -7,7 +7,7 @@ from django.utils.html import format_html
 from projects.models import Project
 
 from tasks.models import Status, Tag, Task
-from tasks.forms import CreateStatusForm, CreateSubtaskForm, CreateTagForm, CreateTaskForm, UpdateTagForm, UpdateTaskForm
+from tasks.forms import ChangeExecutorForm, CreateStatusForm, CreateSubtaskForm, CreateTagForm, CreateTaskForm, UpdateTagForm, UpdateTaskForm
 
 
 
@@ -189,3 +189,9 @@ def change_priority(request, task_pk, *args, **kwargs):
         'priorities': task.PriprityChoices
     }
     return render(request, 'tasks/includes/change-priority.html', data)
+
+
+def test(request, task_pk, *args, **kwargs):
+    data = {
+    }
+    return render(request, 'tasks/test_place.html', data)

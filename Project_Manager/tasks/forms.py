@@ -1,5 +1,7 @@
 from django import forms
 
+from users.models import TaskExecutor
+
 from .models import Status, Tag, Task
 
 
@@ -106,6 +108,7 @@ class UpdateTaskForm(forms.ModelForm):
             'name': 'Название',
             'description': 'Описание'
         }
+
 
 
 

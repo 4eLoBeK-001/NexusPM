@@ -4,4 +4,42 @@
 {% block content %}
 
 
+
+
+    <div class="modal-box bg-gray-100 shadow-xl text-base-content rounded-lg">
+        <button onclick="this.closest('dialog').close();" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        <h3 class="text-2xl text-gray-600 font-bold">Исполнители</h3>
+        <form action="" method="post">{% csrf_token %}
+            
+            <!-- Название -->
+            <div class="mb-4">
+
+                <hr>
+                {% for executor in executors %}
+                <label class="cursor-pointer mb-2">
+                    <input type="checkbox" name="executor" value="{{ executor.id }}"
+                          {% if i in form.initial.i or tag in form.data.i %}checked{% endif %}
+                          class="hidden peer">
+                    <span class="peer-checked:bg-sky-300 peer-checked:text-white peer-checked:border-sky-600
+                                bg-gray-200 text-gray-700 px-3 py-1 border rounded-full transition-all duration-200">
+                      {{ executor }}
+                    </span>
+                  </label>
+                {% endfor %}
+                
+                <hr>
+                
+            
+            
+                {% if create_tag_form.color.errors %}
+                    <div class="text-red-600 text-sm mt-2">
+                        {{ create_tag_form.color.errors }}
+                    </div>
+                {% endif %}
+            </div>
+        
+        <button class="btn btn-primary text-white" name="add_tag" type="submit">Сохранить</button>
+        </form>
+    </div>
+
 {% endblock content %}

@@ -140,7 +140,7 @@
           
           <h3 class="text-gray-700 font-bold text-base mb-1">Исполнители</h3>
           {% if executors %}
-            <div class="group relative border border-gray-200 rounded-md p-2 flex flex-wrap">
+            <div onclick="change_executor_modal.showModal();" class="group relative border border-gray-200 rounded-md p-2 flex flex-wrap">
               {% for executor in executors %}
                 <p class="z-20 text-gray-700 mr-2">{{executor}}</p>
               {% endfor %}
@@ -149,7 +149,7 @@
             {% endif %}
             <div class="absolute inset-0 z-10 rounded-md bg-gray-200 cursor-pointer opacity-0 group-hover:opacity-100"></div>
           </div>
-          
+          {% include 'tasks/includes/change-executor-modal.html' %}
         </div>
         
         <div>
