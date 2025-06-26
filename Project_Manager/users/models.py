@@ -16,6 +16,12 @@ class TeamMember(models.Model):
     date_joining = models.DateTimeField(auto_now_add=True)
 
 
+class ProjectMember(models.Model):
+    project = models.ForeignKey('projects.Project', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date_joining = models.DateTimeField(auto_now_add=True)
+
+
 class TaskExecutor(models.Model):
     task = models.ForeignKey('tasks.Task', on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

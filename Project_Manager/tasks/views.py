@@ -7,7 +7,7 @@ from django.utils.html import format_html
 from projects.models import Project
 
 from tasks.models import Status, Tag, Task
-from tasks.forms import ChangeExecutorForm, CreateStatusForm, CreateSubtaskForm, CreateTagForm, CreateTaskForm, UpdateTagForm, UpdateTaskForm
+from tasks.forms import CreateStatusForm, CreateSubtaskForm, CreateTagForm, CreateTaskForm, UpdateTagForm, UpdateTaskForm
 
 
 

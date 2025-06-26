@@ -24,7 +24,7 @@ class Project(models.Model):
     status = models.CharField(max_length=20, choices=StatusChoices.choices, default=StatusChoices.IN_WORK)
     color = models.CharField(max_length=10, default=get_random_color)
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='projects', null=True)
-    project_members = models.ManyToManyField(get_user_model(), related_name='project_membership', blank=True)
+    project_members = models.ManyToManyField(get_user_model(), through='users.ProjectMember', related_name='project_membership', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 
