@@ -116,42 +116,77 @@
         <hr>
     
         <!-- Комментарии и изменения -->
+        {% with request.GET.tab as active_tab %}
         <div>
-          <div class="flex space-x-4 mb-2">
-            <button class="px-3 py-1 bg-blue-500 text-white rounded">Комментарии</button>
-            <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded">Изменения</button>
+          <!-- Переключатель вкладок -->
+          <div class="inline-block bg-gray-200 rounded-md p-2 mb-4">
+            <a href="?tab=comments"
+               class="px-3 py-1 rounded-l  
+                      {% if active_tab == 'comments' or not active_tab %}bg-blue-500 text-white{% else %}bg-gray-300 text-gray-700{% endif %}">
+              Комментарии
+            </a>
+            <a href="?tab=changes"
+               class="px-3 py-1 rounded-r 
+                      {% if active_tab == 'changes' %}bg-blue-500 text-white{% else %}bg-gray-300 text-gray-700{% endif %}">
+              Изменения
+            </a>
           </div>
-
-          <!-- Форма добавления комментария -->
-          <form action="{% url_task task 'add_comment' %}" method="post" class="my-6">{% csrf_token %}
-            {{ comment_form.content }}
-            <button type="submit" class="mt-2 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
-              Отправить
-            </button>
-          </form>
-
-          <!-- Список комментариев -->
-          {% if task.comments.exists %}
-            <div class="space-y-4 my-4">
-              {% for comment in task.comments.all|dictsortreversed:"created_at" %}
-                <div class="bg-white shadow-md p-4 rounded-lg border border-gray-200">
-                  <div class="flex items-center mb-2">
-                    <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold mr-3">
-                      {{ comment.author.username|slice:":1" }}{{ comment.author.last_name|default:""|slice:":1" }}
-                    </div>
-                    <div>
-                      <p class="text-sm font-medium text-gray-900">{{ comment.author }}</p>
-                      <p class="text-xs text-gray-500">{{ comment.created_at|date:"d.m.Y H:i" }}</p>
-                    </div>
-                  </div>
-                  <p class="text-gray-800 whitespace-pre-line">{{ comment.content }}</p>
-                </div>
-              {% endfor %}
+        
+          <!-- Комментарии -->
+          {% if active_tab == 'changes' %}
+            <div class="p-4 rounded-lg bg-yellow-50 border border-yellow-200">
+              <p class="text-gray-700">Здесь будет список изменений задачи.</p>
             </div>
           {% else %}
-            <p class="text-center text-gray-400 mt-4">Пока нет комментариев</p>
+            <!-- Форма добавления комментария -->
+            <form action="{% url_task task 'add_comment' %}" method="post" class="my-6">
+              {% csrf_token %}
+              {{ comment_form.content }}
+              <button type="submit"
+                      class="mt-2 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+                Отправить
+              </button>
+            </form>
+        
+            <!-- Список комментариев -->
+            {% if task.comments.exists %}
+              <div class="mt-4 p-6 rounded-xl bg-gray-50 border border-gray-300 shadow-inner">
+                <h2 class="text-lg font-semibold mb-4 text-gray-700">Комментарии</h2>
+                <div class="space-y-4">
+                  {% for comment in task.comments.all|dictsortreversed:"created_at" %}
+                    <div class="relative bg-white shadow p-4 rounded-lg border border-gray-200">
+                      
+                      <!-- Иконка удаления -->
+                      {% if comment.author == request.user %}
+                        <a href="" 
+                          class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition"
+                          title="Удалить комментарий">
+                          <i class="fas fa-trash"></i>
+                        </a>
+                      {% endif %}
+
+                      <!-- Содержимое комментария -->
+                      <div class="flex items-center mb-2">
+                        <div class="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white font-bold mr-3">
+                          {{ comment.author.username|slice:":1" }}{{ comment.author.last_name|default:""|slice:":1" }}
+                        </div>
+                        <div>
+                          <p class="text-sm font-medium text-gray-900">{{ comment.author }}</p>
+                          <p class="text-xs text-gray-500">{{ comment.created_at|date:"d.m.Y H:i" }}</p>
+                        </div>
+                      </div>
+                      <p class="text-gray-800 whitespace-pre-line">{{ comment.content }}</p>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% else %}
+              <p class="text-center text-gray-400 mt-4">Пока нет комментариев</p>
+            {% endif %}
           {% endif %}
         </div>
+        {% endwith %}
+        
 
       </div>
     
