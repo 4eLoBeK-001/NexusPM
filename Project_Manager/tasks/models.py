@@ -26,13 +26,13 @@ class Task(models.Model):
     color = models.CharField(max_length=10, default=get_random_color)
     creator = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, related_name='creator', null=True)
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, related_name='tasks', null=True)
-    tag = models.ManyToManyField('Tag', related_name='tags', null=True, blank=True)
+    tag = models.ManyToManyField('Tag', related_name='tags', blank=True)
     status = models.ForeignKey('Status', on_delete=models.SET_NULL, related_name='statuses', default='Новая', null=True)
     priority = models.CharField(max_length=20, choices=PriprityChoices.choices, default=PriprityChoices.NOT_SPECIFIED)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     parent_task = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subtasks')
-    executor = models.ManyToManyField(get_user_model(), through='users.TaskExecutor', related_name='assigned_tasks', null=True, blank=True)
+    executor = models.ManyToManyField(get_user_model(), through='users.TaskExecutor', related_name='assigned_tasks', blank=True)
 
     def clean(self):
         from django.core.exceptions import ValidationError
@@ -71,3 +71,13 @@ class Color(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Comment(models.Model):
+    content = models.TextField()
+    author = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, related_name='comcreator', null=True)
+    task = models.ForeignKey(Task, on_delete=models.SET_NULL, related_name='comments', null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Комментарий от {self.author} на {self.task}'
