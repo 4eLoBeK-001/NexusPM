@@ -177,7 +177,7 @@ class AddCommentForm(forms.ModelForm):
 
         widgets = {
             'content': forms.Textarea(attrs={
-                'class': 'w-full border border-gray-300 rounded-md p-2 bg-gray-100 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400',
+                'class': 'w-full text-gray-800 font-normal border border-gray-300 rounded-md p-2 bg-gray-100 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400',
                 'placeholder': 'Введите комментарий...',
                 'rows': 4,
             })
