@@ -7,7 +7,7 @@ from django.utils.html import format_html
 from projects.models import Project
 
 from tasks.models import Status, Tag, Task
-from tasks.forms import CreateStatusForm, CreateSubtaskForm, CreateTagForm, CreateTaskForm, UpdateTagForm, UpdateTaskForm
+from tasks.forms import AddCommentForm, CreateStatusForm, CreateSubtaskForm, CreateTagForm, CreateTaskForm, UpdateTagForm, UpdateTaskForm
 
 
 
@@ -124,6 +124,7 @@ def task_detail(request, task_pk, *args, **kwargs):
     tags = Tag.objects.filter(project=project)
     update_tag_form = UpdateTagForm(instance=task, project=project)
     create_tag_form = CreateTagForm()
+    comment_form = AddCommentForm()
     task_form = UpdateTaskForm(instance=task)
     
     if request.method == 'POST':
@@ -152,6 +153,7 @@ def task_detail(request, task_pk, *args, **kwargs):
         'project_members': project_members,
         'executor_ids': executor_ids,
         'create_subtask_form': create_subtask_form,
+        'comment_form': comment_form,
         'priorities': task.PriprityChoices
     }
     return render(request, 'tasks/task-detail.html', data)
@@ -201,4 +203,15 @@ def add_executors(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
     executors = request.POST.getlist('executor')
     task.executor.set(executors)
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+@require_http_methods(['POST'])
+def add_comment(request, task_pk, *args, **kwargs):
+    comment_form = AddCommentForm(request.POST)
+    if comment_form.is_valid():
+        comment = comment_form.save(commit=False)
+        comment.task_id = task_pk
+        comment.author = request.user
+        comment.save()
     return redirect(request.META.get('HTTP_REFERER'))

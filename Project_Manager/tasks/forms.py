@@ -2,7 +2,7 @@ from django import forms
 
 from users.models import TaskExecutor
 
-from .models import Status, Tag, Task
+from .models import Status, Tag, Task, Comment
 
 
 class CreateTaskForm(forms.ModelForm):
@@ -167,4 +167,18 @@ class CreateStatusForm(forms.ModelForm):
             'name': 'Название',
             'color': 'Цвет',
             'is_completed': 'Состояние задачи'
+        }
+
+
+class AddCommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('content',)
+
+        widgets = {
+            'content': forms.Textarea(attrs={
+                'class': 'w-full border border-gray-300 rounded-md p-2 bg-gray-100 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400',
+                'placeholder': 'Введите комментарий...',
+                'rows': 4,
+            })
         }

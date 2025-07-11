@@ -19,6 +19,7 @@ urlpatterns = [
 
     path('<int:project_pk>/task/<int:task_pk>/pchange/', views.change_priority, name='change_priority'),
 
+    path('<int:project_pk>/task/<int:task_pk>/comment/add/', views.add_comment, name='add_comment'),
 
     path('<int:project_pk>/task/<int:task_pk>/test/', views.add_executors, name='add_executors'),
     

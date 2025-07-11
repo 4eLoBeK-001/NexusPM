@@ -121,14 +121,17 @@
             <button class="px-3 py-1 bg-blue-500 text-white rounded">Комментарии</button>
             <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded">Изменения</button>
           </div>
-          <textarea
-            rows="4"
-            class="w-full border border-gray-300 rounded-md p-2 bg-gray-100 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
-            placeholder="Введите комментарий..."
-          ></textarea>
-          <button class="mt-2 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
-            Отправить
-          </button>
+
+          <form action="{% url_task task 'add_comment' %}" method="post">{% csrf_token %}
+
+            {{ comment_form.content }}
+
+            <button type="submit" class="mt-2 px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
+              Отправить
+            </button>
+            
+          </form>
+
           <p class="text-center text-gray-400 mt-2">Тут список комментариев</p>
         </div>
       </div>
