@@ -206,18 +206,10 @@ def add_executors(request, task_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-@require_http_methods(['POST'])
-def add_comment(request, task_pk, *args, **kwargs):
-    comment_form = AddCommentForm(request.POST)
-    if comment_form.is_valid():
-        comment = comment_form.save(commit=False)
-        comment.task_id = task_pk
-        comment.author = request.user
-        comment.save()
-    return redirect(request.META.get('HTTP_REFERER'))
+
 
 @require_http_methods(['POST'])
-def hxadd_comment(request, task_pk, project_pk, **kwargs):
+def add_comment(request, task_pk, project_pk, **kwargs):
     comment_form = AddCommentForm(request.POST)
     if comment_form.is_valid():
         comment = comment_form.save(commit=False)

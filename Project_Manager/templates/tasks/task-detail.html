@@ -140,7 +140,7 @@
           {% else %}
 
             <form   
-              hx-post="{% url_task task 'hxadd_comment' %}"
+              hx-post="{% url_task task 'add_comment' %}"
               hx-target="#commLst"
               hx-swap="afterbegin"
               hx-on::after-request="this.reset()"
@@ -156,8 +156,7 @@
             </form>
         
             <!-- Список комментариев -->
-                       
-                {% include 'tasks/includes/comments.html' %}
+            {% include 'tasks/includes/comments.html' %}
             
           {% endif %}
         </div>
