@@ -175,7 +175,8 @@
                           <p class="text-xs text-gray-500">{{ comment.created_at|date:"d.m.Y H:i" }}</p>
                         </div>
                       </div>
-                      <p class="text-gray-800 whitespace-pre-line">{{ comment.content }}</p>
+                      <p class="text-gray-800 break-all max-w-full overflow-x-auto">{{ comment.content }}</p>
+
                     </div>
                   {% endfor %}
                 </div>
