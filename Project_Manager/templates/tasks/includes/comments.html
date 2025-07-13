@@ -1,0 +1,17 @@
+
+
+<!-- Список комментариев -->
+{% if task.comments.exists %}
+    <div class="mt-4 p-6 rounded-xl bg-gray-50 border border-gray-300 shadow-inner">
+        <h2 class="text-lg font-semibold mb-4 text-gray-700">Комментарии</h2>
+        <div class="space-y-4">
+            {% for comment in task.comments.all|dictsortreversed:"created_at" %}
+            
+                {% include 'tasks/includes/comment.html' %}
+
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <p class="text-center text-gray-400 mt-4">Пока нет комментариев</p>
+{% endif %}

@@ -6,7 +6,7 @@ from django.utils.html import format_html
 
 from projects.models import Project
 
-from tasks.models import Status, Tag, Task
+from tasks.models import Comment, Status, Tag, Task
 from tasks.forms import AddCommentForm, CreateStatusForm, CreateSubtaskForm, CreateTagForm, CreateTaskForm, UpdateTagForm, UpdateTaskForm
 
 
@@ -215,3 +215,10 @@ def add_comment(request, task_pk, *args, **kwargs):
         comment.author = request.user
         comment.save()
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+def delete_comment(request, comm_pk, *args, **kwargs):
+    if request.method == 'POST':
+        comment = get_object_or_404(Comment, pk=comm_pk)
+        comment.delete()
+    return render(request, 'tasks/includes/comment.html')

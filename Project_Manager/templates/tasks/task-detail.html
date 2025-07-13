@@ -149,41 +149,8 @@
             </form>
         
             <!-- Список комментариев -->
-            {% if task.comments.exists %}
-              <div class="mt-4 p-6 rounded-xl bg-gray-50 border border-gray-300 shadow-inner">
-                <h2 class="text-lg font-semibold mb-4 text-gray-700">Комментарии</h2>
-                <div class="space-y-4">
-                  {% for comment in task.comments.all|dictsortreversed:"created_at" %}
-                    <div class="relative bg-white shadow p-4 rounded-lg border border-gray-200">
-                      
-                      <!-- Иконка удаления -->
-                      {% if comment.author == request.user %}
-                        <a href="" 
-                          class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition"
-                          title="Удалить комментарий">
-                          <i class="fas fa-trash"></i>
-                        </a>
-                      {% endif %}
-
-                      <!-- Содержимое комментария -->
-                      <div class="flex items-center mb-2">
-                        <div class="w-10 h-10 rounded-full bg-gray-400 flex items-center justify-center text-white font-bold mr-3">
-                          {{ comment.author.username|slice:":1" }}{{ comment.author.last_name|default:""|slice:":1" }}
-                        </div>
-                        <div>
-                          <p class="text-sm font-medium text-gray-900">{{ comment.author }}</p>
-                          <p class="text-xs text-gray-500">{{ comment.created_at|date:"d.m.Y H:i" }}</p>
-                        </div>
-                      </div>
-                      <p class="text-gray-800 break-all max-w-full overflow-x-auto">{{ comment.content }}</p>
-
-                    </div>
-                  {% endfor %}
-                </div>
-              </div>
-            {% else %}
-              <p class="text-center text-gray-400 mt-4">Пока нет комментариев</p>
-            {% endif %}
+             {% include 'tasks/includes/comments.html' %}
+            
           {% endif %}
         </div>
         {% endwith %}
