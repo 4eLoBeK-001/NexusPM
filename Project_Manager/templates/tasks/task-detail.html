@@ -138,8 +138,15 @@
               <p class="text-gray-700">Здесь будет список изменений задачи.</p>
             </div>
           {% else %}
-            <!-- Форма добавления комментария -->
-            <form action="{% url_task task 'add_comment' %}" method="post" class="my-6">
+
+            <form   
+              hx-post="{% url_task task 'hxadd_comment' %}"
+              hx-target="#commLst"
+              hx-swap="afterbegin"
+              hx-on::after-request="this.reset()"
+              method="post" 
+              class="my-6"
+            >
               {% csrf_token %}
               {{ comment_form.content }}
               <button type="submit"
@@ -149,7 +156,8 @@
             </form>
         
             <!-- Список комментариев -->
-             {% include 'tasks/includes/comments.html' %}
+                       
+                {% include 'tasks/includes/comments.html' %}
             
           {% endif %}
         </div>

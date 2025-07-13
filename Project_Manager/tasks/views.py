@@ -216,6 +216,22 @@ def add_comment(request, task_pk, *args, **kwargs):
         comment.save()
     return redirect(request.META.get('HTTP_REFERER'))
 
+@require_http_methods(['POST'])
+def hxadd_comment(request, task_pk, project_pk, **kwargs):
+    comment_form = AddCommentForm(request.POST)
+    if comment_form.is_valid():
+        comment = comment_form.save(commit=False)
+        comment.task_id = task_pk
+        comment.author = request.user
+        comment.save()
+    data = {
+        'project': get_object_or_404(Project, pk=project_pk),
+        'task': get_object_or_404(Task, pk=task_pk),
+        'comment': comment
+    }
+    return render(request, 'tasks/includes/comment.html', data)
+
+
 
 def delete_comment(request, comm_pk, *args, **kwargs):
     if request.method == 'POST':
