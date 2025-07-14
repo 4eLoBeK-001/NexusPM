@@ -92,11 +92,24 @@ def project_settings(request, project_pk, *args, **kwargs):
 def project_members(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     project_members = project.project_members.all()
+    team_members = project.team.team_member.all()
     data = {
         'project': project,
         'project_members': project_members,
+        'project_member_ids': project_members.values_list('id', flat=True),
+        'team_member': team_members,
     }
     return render(request, 'projects/includes/members.html', data)
+
+
+@require_http_methods(['POST'])
+def add_project_members(request, project_pk, *args, **kwargs):
+    project = get_object_or_404(Project, pk=project_pk)
+    members_ids = request.POST.getlist('member')
+    project.project_members.set(members_ids)
+
+    return redirect(request.META.get('HTTP_REFERER'))
+
 
 def search_members(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
