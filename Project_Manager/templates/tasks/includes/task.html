@@ -54,7 +54,7 @@
 
     <!-- Приоритет -->
     <div id="priority-{{task.pk}}" class="w-2/12 {% if task.status.is_completed %}grayscale{% endif %}">
-        <span class="badge badge-error text-[1.075rem] px-4 py-[0.75rem]">{{task.priority}}</span>
+        <span class="badge border {{task.get_priority_color}} text-[1.075rem] px-4 py-[0.75rem]">{{task.priority}}</span>
     </div>
 
     <!-- Меню с тремя точками -->

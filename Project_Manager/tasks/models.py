@@ -41,6 +41,17 @@ class Task(models.Model):
     
     def __str__(self):
         return self.name
+    
+    @property
+    def get_priority_color(self):
+        return {
+            self.PriprityChoices.HIGHEST: 'bg-red-600 text-red-950 border-rose-700',
+            self.PriprityChoices.HIGH: 'bg-red-500 text-red-900 border-red-800',
+            self.PriprityChoices.MEDIUM: 'bg-amber-500 text-orange-700 border-orange-700',
+            self.PriprityChoices.LOW: 'bg-green-500 text-green-900 border-green-800',
+            self.PriprityChoices.LOWEST: 'bg-emerald-400 text-emerald-800 border-emerald-700',
+            self.PriprityChoices.NOT_SPECIFIED: 'bg-indigo-300 text-slate-800 border-indigo-900',
+        }.get(self.priority)
 
 
 class Tag(models.Model):
