@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex flex-col lg:flex-row w-full p-6 gap-6">
+  
+  <!-- Sidebar/Profile Card -->
+  <aside class="bg-white shadow-lg rounded-lg p-6 w-full lg:w-1/4">
+    <div class="text-center">
+      <img src="" alt="Avatar" class="rounded-full mx-auto mb-4 bg-gray-800 w-32 h-32" />
+      <h2 class="text-xl font-bold">John Doe</h2>
+      <p class="text-sm text-gray-500">
+        Frontend Web Developer at
+        <a href="#" class="text-purple-500 hover:underline">Abc Company</a>
+      </p>
+      <button class="btn btn-primary btn-sm mt-4 w-full">Download Resume</button>
+    </div>
+    <div class="flex justify-center space-x-4 mt-4 text-purple-600 text-lg">
+      <a href="#"><i class="fab fa-facebook"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-linkedin"></i></a>
+    </div>
+    <div class="mt-6">
+      <h3 class="text-sm font-semibold mb-2 text-gray-800">ABOUT ME</h3>
+      <p class="text-sm text-gray-600">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed diam nonummy eirmod tempor
+        invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+      </p>
+    </div>
+  </aside>
+
+  <!-- Main Profile Content -->
+  <main class="flex-1">
+    
+    <!-- Tabs -->
+    <div role="tablist" class="tabs tabs-boxed mb-6">
+      <a role="tab" class="tab tab-active">About</a>
+      <a role="tab" class="tab">Services</a>
+      <a role="tab" class="tab">Works</a>
+      <a role="tab" class="tab">Blogs</a>
+      <a role="tab" class="tab">Contact</a>
+    </div>
+
+    <!-- About Section -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-2">Who am I?</h2>
+      <p class="text-gray-600 mb-2">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab minima amet accusantium provident,
+        dignissimos corporis reprehenderit numquam nobis ex dolore?
+      </p>
+      <p class="text-gray-600">
+        Maxime veritatis aliasum amet inventore recusandae nulla incidunt tenetur!
+      </p>
+    </section>
+
+    <!-- Skills Section -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">Skills</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Column 1 -->
+        <div>
+          <p class="font-semibold">HTML, CSS, SCSS <span class="float-right">95%</span></p>
+          <progress class="progress progress-primary w-full" value="95" max="100"></progress>
+
+          <p class="font-semibold mt-4">TailwindCSS <span class="float-right">90%</span></p>
+          <progress class="progress progress-primary w-full" value="90" max="100"></progress>
+
+          <p class="font-semibold mt-4">ReactJS <span class="float-right">70%</span></p>
+          <progress class="progress progress-primary w-full" value="70" max="100"></progress>
+
+          <p class="font-semibold mt-4">MongoDB <span class="float-right">50%</span></p>
+          <progress class="progress progress-primary w-full" value="50" max="100"></progress>
+        </div>
+
+        <!-- Column 2 -->
+        <div>
+          <p class="font-semibold">Bootstrap <span class="float-right">98%</span></p>
+          <progress class="progress progress-primary w-full" value="98" max="100"></progress>
+
+          <p class="font-semibold mt-4">JavaScript <span class="float-right">70%</span></p>
+          <progress class="progress progress-primary w-full" value="70" max="100"></progress>
+
+          <p class="font-semibold mt-4">ExpressJS <span class="float-right">60%</span></p>
+          <progress class="progress progress-primary w-full" value="60" max="100"></progress>
+
+          <p class="font-semibold mt-4">Git, GitHub <span class="float-right">80%</span></p>
+          <progress class="progress progress-primary w-full" value="80" max="100"></progress>
+        </div>
+        
+      </div>
+    </section>
+
+  </main>
+</div>
+{% endblock content %}

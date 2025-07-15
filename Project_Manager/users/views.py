@@ -40,3 +40,7 @@ def register_user(request):
         'form': form
     }
     return render(request, 'users/register.html', data)
+
+
+def profile_user(request):
+    return render(request, 'users/profile.html')
