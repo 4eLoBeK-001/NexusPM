@@ -21,6 +21,21 @@ class Tag(models.Model):
     name = models.CharField(max_length=25, blank=True, null=True)
 
 
+class SocialNetwork(models.Model):
+    TELEGRAM = 'Telegram'
+    VKONTAKTE = 'VK'
+    GITHUB = 'GitHub'
+
+    SOCIAL_CHOICES = [
+        (TELEGRAM, 'Telegram'),
+        (VKONTAKTE, 'VKontakte'),
+        (GITHUB, 'GitHub'),
+    ]
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='social_links')
+    network = models.CharField(max_length=20, choices=SOCIAL_CHOICES)
+    link = models.URLField(max_length=255)
+
+
 class TeamMember(models.Model):
     team = models.ForeignKey('teams.Team', on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
