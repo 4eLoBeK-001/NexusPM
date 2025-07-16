@@ -9,6 +9,14 @@ from project_manager import settings
 class User(AbstractUser):
     ...
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    tag = models.CharField(max_length=30)
+    description = models.TextField()
+    short_description = models.CharField(max_length=200)
+    phone_number = models.CharField(max_length=20)
+
+
 
 class TeamMember(models.Model):
     team = models.ForeignKey('teams.Team', on_delete=models.CASCADE)

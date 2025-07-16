@@ -2,8 +2,10 @@ from django.contrib import admin
 
 from django.contrib.auth import get_user_model
 
-from .models import TeamMember, TaskExecutor, ProjectMember
+from .models import TeamMember, TaskExecutor, ProjectMember, Profile
 # Register your models here.
+
+admin.site.register(Profile)
 
 @admin.register(get_user_model())
 class UserAdmin(admin.ModelAdmin):
