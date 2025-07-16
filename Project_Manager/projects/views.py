@@ -15,7 +15,7 @@ from teams.models import Team
 
 def project_list(request, pk):
     team = get_object_or_404(Team, pk=pk)
-    projects = Project.objects.filter(team=team)
+    projects = Project.objects.filter(team=team, project_members=request.user)
     form = AddModalProjectForm()
     context = {
         'team': team,

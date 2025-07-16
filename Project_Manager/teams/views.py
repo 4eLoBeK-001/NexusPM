@@ -13,7 +13,7 @@ def workplace(request):
 
 
 def team_list(request):
-    teams = Team.objects.all()
+    teams = Team.objects.filter(team_member=request.user)
     team_forms = {team.id: AddModalTeamForm(instance=team) for team in teams}
     context = {
         'teams': teams,
