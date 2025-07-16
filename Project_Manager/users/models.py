@@ -11,11 +11,14 @@ class User(AbstractUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    tag = models.CharField(max_length=30, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     short_description = models.CharField(max_length=200, blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
 
+
+class Tag(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name='tags')
+    name = models.CharField(max_length=25, blank=True, null=True)
 
 
 class TeamMember(models.Model):

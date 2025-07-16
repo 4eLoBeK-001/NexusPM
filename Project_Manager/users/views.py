@@ -44,7 +44,9 @@ def register_user(request):
 
 def profile_user(request):
     user = get_object_or_404(get_user_model(), pk=request.user.pk)
+    profile = user.profile
     data = {
-        'user': user
+        'user': user,
+        'profile': profile
     }
     return render(request, 'users/profile.html', data)
