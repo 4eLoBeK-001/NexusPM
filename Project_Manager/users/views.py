@@ -1,5 +1,5 @@
-from django.shortcuts import redirect, render
-from django.contrib.auth import login, authenticate, logout
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.urls import reverse
 from .forms import LoginUserForm, RegisterUserForm
 # Create your views here.
@@ -43,4 +43,8 @@ def register_user(request):
 
 
 def profile_user(request):
-    return render(request, 'users/profile.html')
+    user = get_object_or_404(get_user_model(), pk=request.user.pk)
+    data = {
+        'user': user
+    }
+    return render(request, 'users/profile.html', data)
