@@ -11,10 +11,10 @@ class User(AbstractUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    tag = models.CharField(max_length=30)
-    description = models.TextField()
-    short_description = models.CharField(max_length=200)
-    phone_number = models.CharField(max_length=20)
+    tag = models.CharField(max_length=30, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    short_description = models.CharField(max_length=200, blank=True, null=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
 
 
 
