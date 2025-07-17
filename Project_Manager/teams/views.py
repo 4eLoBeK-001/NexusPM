@@ -23,7 +23,7 @@ def team_list(request):
 
 
 def team_conf(request, pk):
-    team = Team.objects.get(pk=pk)
+    team = Team.objects.get(pk=pk, team_member=request.user)
     if request.method == 'POST':
         form = AddTeamForm(request.POST, request.FILES, instance=team)
         if form.is_valid():
@@ -38,7 +38,7 @@ def team_conf(request, pk):
     return render(request, 'teams/includes/setting.html', context)
 
 def team_members(request, pk):
-    team = Team.objects.get(pk=pk)
+    team = Team.objects.get(pk=pk, team_member=request.user)
     context = {
         'team': team,
     }
@@ -79,7 +79,7 @@ def update_team(request, pk):
 @require_http_methods(['GET'])
 def search_team(request):
     search = request.GET.get('search', '')
-    queryset = Team.objects.filter(name__icontains=search)
+    queryset = Team.objects.filter(team_member=request.user, name__icontains=search)
     team_forms = {team.id: AddModalTeamForm(instance=team) for team in queryset}
 
     return render(request, 'teams/partial-team_list.html', {'teams': queryset, 'team_forms': team_forms})
@@ -93,7 +93,7 @@ def sidebar_search_team(request):
 
 
 def delete_team(request, pk):
-    team = get_object_or_404(Team, pk=pk)
+    team = get_object_or_404(Team, pk=pk, team_member=request.user)
     team.delete()
     return redirect(request.META.get('HTTP_REFERER'))
     
