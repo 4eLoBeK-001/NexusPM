@@ -6,6 +6,7 @@ from django.utils.html import format_html
 
 from projects.models import Project
 
+from tasks.utils.decorators import require_project_member
 from tasks.models import Comment, Status, Tag, Task
 from tasks.forms import AddCommentForm, CreateStatusForm, CreateSubtaskForm, CreateTagForm, CreateTaskForm, UpdateTagForm, UpdateTaskForm
 

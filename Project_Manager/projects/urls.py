@@ -1,11 +1,14 @@
 from django.urls import include, path
 
+from decorator_include import decorator_include
+
+from tasks.utils.decorators import require_project_member
 from . import views
 
 app_name = 'projects'
 
 urlpatterns = [
-    path('<int:team_pk>/project/', include('tasks.urls', namespace='tasks')),
+    path('<int:team_pk>/project/', decorator_include(require_project_member, 'tasks.urls', namespace='tasks')),
 
     path('<int:pk>/projects/', views.project_list, name='project_list'),
     path('<int:pk>/search/', views.search_team, name='search_team'),
