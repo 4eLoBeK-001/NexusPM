@@ -29,10 +29,11 @@ def project_list(request, pk):
     return render(request, 'projects/project_list.html', context)
 
 
-def search_team(request, pk):
+
+def search_projects(request, pk):
     team = get_object_or_404(Team, pk=pk)
     search = request.GET.get('search1', '')
-    projects = Project.objects.filter(team=team, name__icontains=search)
+    projects = Project.objects.filter(team=team, name__icontains=search, project_members=request.user)
     context = {
         'projects': projects
     }
