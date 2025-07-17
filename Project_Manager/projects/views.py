@@ -3,13 +3,16 @@ from django.db.transaction import commit
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods
 
-from tasks.models import Status, Tag
-from projects.forms import AddModalProjectForm, UpdateProjectForm
-from tasks.forms import CreateStatusForm, CreateTagForm
 from projects.models import Project
+from projects.forms import AddModalProjectForm, UpdateProjectForm
+
+from tasks.models import Status, Tag
+from tasks.forms import CreateStatusForm, CreateTagForm
+from tasks.utils.decorators import require_project_member
+
 from teams.models import Team
 
-# Create your views here.
+
 
 
 
@@ -56,14 +59,16 @@ def create_project(request):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
-def delete_project(request, pk):
-    project = get_object_or_404(Project, pk=pk)
+@require_project_member
+def delete_project(request, project_pk):
+    project = get_object_or_404(Project, pk=project_pk)
     project.delete()
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-def project_status_changes(request, pk):
-    project = get_object_or_404(Project, pk=pk)
+@require_project_member
+def project_status_changes(request, project_pk):
+    project = get_object_or_404(Project, pk=project_pk)
     status = request.POST.get('status')
     project.status = status
     project.save()
@@ -73,7 +78,7 @@ def project_status_changes(request, pk):
     }
     return render(request, 'projects/includes/change-status.html', data)
 
-
+@require_project_member
 def project_settings(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     form = UpdateProjectForm(instance=project)
@@ -89,6 +94,7 @@ def project_settings(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/setting.html', data)
 
 
+@require_project_member
 def project_members(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     project_members = project.project_members.all()
@@ -103,6 +109,7 @@ def project_members(request, project_pk, *args, **kwargs):
 
 
 @require_http_methods(['POST'])
+@require_project_member
 def add_project_members(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     members_ids = request.POST.getlist('member')
@@ -111,6 +118,7 @@ def add_project_members(request, project_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+@require_project_member
 def search_members(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     text = request.GET.get('input_search')
@@ -123,6 +131,7 @@ def search_members(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/member.html', data)
 
 
+@require_project_member
 def project_tags(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     tags = project.tags.all()
@@ -135,6 +144,7 @@ def project_tags(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/tags.html', data)
 
 
+@require_project_member
 def delete_tag(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     tags = project.tags.all()
@@ -148,6 +158,8 @@ def delete_tag(request, project_pk, *args, **kwargs):
     }
     return render(request, 'projects/includes/tag.html', data)
 
+
+@require_project_member
 def search_tags(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     req = request.GET.get('input_search')
@@ -160,6 +172,7 @@ def search_tags(request, project_pk, *args, **kwargs):
 
 
 @require_http_methods(['POST'])
+@require_project_member
 def create_tag(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     form = CreateTagForm(request.POST)
@@ -170,6 +183,7 @@ def create_tag(request, project_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+@require_project_member
 def project_statuses(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     statuses = project.statuses.all()
@@ -183,6 +197,7 @@ def project_statuses(request, project_pk, *args, **kwargs):
 
 
 @require_http_methods(['POST'])
+@require_project_member
 def create_status(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     form = CreateStatusForm(request.POST)
@@ -192,6 +207,8 @@ def create_status(request, project_pk, *args, **kwargs):
         status.save()
     return redirect(request.META.get('HTTP_REFERER'))
 
+
+@require_project_member
 def search_status(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     req = request.GET.get('input_search')
@@ -202,6 +219,8 @@ def search_status(request, project_pk, *args, **kwargs):
     }
     return render(request, 'projects/includes/status-list.html', data)
 
+
+@require_project_member
 def delete_status(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     statuses = project.statuses.all()

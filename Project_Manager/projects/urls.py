@@ -29,8 +29,8 @@ urlpatterns = [
     path('<int:pk>/project/<int:project_pk>/statuses/delete/', views.delete_status, name='delete_status'),
 
     path('create/', views.create_project, name='create_project'),
-    path('delete/<int:pk>/', views.delete_project, name='delete_project'),
-    path('change_status/<int:pk>/', views.project_status_changes, name='project_status_changes'),
+    path('delete/<int:project_pk>/', views.delete_project, name='delete_project'),
+    path('change_status/<int:project_pk>/', views.project_status_changes, name='project_status_changes'),
 
     path('list/', views.project_list_t, name='project_list_t'),
     path('lst/', views.project_lst, name='project_lst'),
