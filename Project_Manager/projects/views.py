@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.db.transaction import commit
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
 from projects.models import Project
@@ -62,9 +63,12 @@ def create_project(request):
 
 @require_project_member
 def delete_project(request, project_pk):
+    response = redirect(request.META.get('HTTP_REFERER'))
     project = get_object_or_404(Project, pk=project_pk)
+    if request.GET.get('trigger') == 'detail':
+        response = redirect(reverse('teams:projects:project_list', args=[project.team.pk]))
     project.delete()
-    return redirect(request.META.get('HTTP_REFERER'))
+    return response
 
 
 @require_project_member

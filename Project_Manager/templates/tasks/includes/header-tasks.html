@@ -59,7 +59,7 @@
             </a></li>
             
             <li>
-                <a class="text-red-600 hover:text-white hover:bg-red-500 transition-colors duration-200">
+                <a href="{% url 'teams:projects:delete_project' project.pk %}?trigger=detail" class="text-red-600 hover:text-white hover:bg-red-500 transition-colors duration-200">
                     <i class="fas fa-trash mr-2"></i> Удалить проект
                 </a>
             </li>
