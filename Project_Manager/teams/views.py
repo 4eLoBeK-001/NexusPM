@@ -93,7 +93,10 @@ def sidebar_search_team(request):
 
 
 def delete_team(request, pk):
+    response = redirect(request.META.get('HTTP_REFERER'))
     team = get_object_or_404(Team, pk=pk, team_member=request.user)
+    if request.GET.get('trigger') == 'detail':
+        response = redirect('teams:team_list')
     team.delete()
-    return redirect(request.META.get('HTTP_REFERER'))
+    return response
     

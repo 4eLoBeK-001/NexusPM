@@ -25,7 +25,7 @@
                     <!-- Выпадающее меню -->
                     <ul tabindex="0" class="dropdown-content menu bg-gray-100 border border-gray-400 shadow-md rounded-lg z-10 w-52 p-2">
                         <li><a class="rounded text-gray-600 hover:bg-gray-200"  onclick="document.getElementById('update_team_modal_{{ team.id }}').showModal()">Редактировать</a></li>
-                        <li><a class="rounded text-red-500 hover:bg-red-500 hover:text-white" hx-delete="{% url 'teams:delete_team' team.id %}" hx-target="#card_{{team.id}}" hx-swap="delete">Удалить</a></li>
+                        <li><a class="rounded text-red-500 hover:bg-red-500 hover:text-white" hx-post="{% url 'teams:delete_team' team.id %}" hx-target="#card_{{team.id}}" hx-swap="delete">Удалить</a></li>
                         {% with form=team_forms|dictkey:team.id %}
                             {% include 'includes/update-team-modal.html' %}
                         {% endwith %}
