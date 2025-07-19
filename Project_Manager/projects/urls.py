@@ -17,6 +17,7 @@ urlpatterns = [
     path('<int:pk>/project/<int:project_pk>/members/', views.project_members, name='project_members'),
     path('<int:pk>/project/<int:project_pk>/members/add/', views.add_project_members, name='add_project_members'),
     path('<int:pk>/project/<int:project_pk>/members/search/', views.search_members, name='search_members'),
+    path('<int:pk>/project/<int:project_pk>/member/<int:member_pk>/delete/', views.delete_project_members, name='delete_project_members'),
     
     path('<int:pk>/project/<int:project_pk>/tags/', views.project_tags, name='project_tags'),
     path('<int:pk>/project/<int:project_pk>/tag/delete/', views.delete_tag, name='delete_tag'),

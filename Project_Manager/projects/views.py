@@ -114,6 +114,14 @@ def project_members(request, project_pk, *args, **kwargs):
 
 @require_http_methods(['POST'])
 @require_project_member
+def delete_project_members(request, project_pk, member_pk, *args, **kwargs):
+    project = get_object_or_404(Project, pk=project_pk)
+    project.project_members.remove(member_pk)
+
+    return render(request, 'projects/includes/member.html')
+
+@require_http_methods(['POST'])
+@require_project_member
 def add_project_members(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     members_ids = request.POST.getlist('member')

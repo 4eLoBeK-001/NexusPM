@@ -7,7 +7,7 @@
     <!-- Левая часть: кнопка -->
 
     <div class="flex items-center gap-x-4 text-3xl font-semibold text-black">
-      <a onclick="window.history.back();" class="p-2 rounded hover:bg-gray-200 text-gray-800 cursor-pointer">
+      <a href="{% url 'teams:team_list' %}" class="p-2 rounded hover:bg-gray-200 text-gray-800 cursor-pointer">
         <i class="fas fa-reply text-gray-700"></i>
       </a>
       <a href="{% url 'teams:team_conf' team.id %}" class="p-2 rounded hover:bg-gray-200 text-gray-800">

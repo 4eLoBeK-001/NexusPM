@@ -1,10 +1,10 @@
 
 
-{% for user in project_members %}
-    <tr class="border-b border-gray-200 hover:bg-gray-100 transition-colors {% cycle 'bg-white' 'bg-gray-50' %}">
+{% for member in project_members %}
+    <tr id="pp-{{member.pk}}" class="border-b border-gray-200 hover:bg-gray-100 transition-colors {% cycle 'bg-white' 'bg-gray-50' %}">
         <td class="w-10 py-1 px-3 text-center whitespace-nowrap">{{ forloop.counter }}</td>
-        <td class="py-1 px-6 text-left font-bold">{{ user.username }}</td>
-        <td class="py-1 px-6 text-left">{{ user.email|default:"---" }}</td>
+        <td class="py-1 px-6 text-left font-bold">{{ member.username }}</td>
+        <td class="py-1 px-6 text-left">{{ member.email|default:"---" }}</td>
         <td class="py-1 px-6 text-left">Кол-во проектов</td>
         <td class="py-1 px-6 text-left">
             <div class="dropdown">
@@ -16,8 +16,14 @@
             </div>
         </td>
         <td class="py-1 px-6 text-left">Дата</td>
-        <td class="py-1 px-6 text-left rounded-xl hover:bg-red-500 hover:text-white" title="Исключить из команды">
-            <i class="fa fa-trash"></i>
+        <td class="" title="Исключить из проекта">
+            <a 
+            hx-post="{% url 'teams:projects:delete_project_members' project.team.pk project.pk member.pk %}"
+            hx-target="#pp-{{member.pk}}"
+            hx-swap="delete"
+            class="py-5 px-6 rounded-xl hover:bg-red-500 cursor-pointer hover:text-white group-hover:text-white">
+                <i class="fa fa-trash"></i>
+            </a>
         </td>
     </tr>
 {% endfor %}

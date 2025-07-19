@@ -1,60 +1,60 @@
 
 
-    {% for project in projects %}
-    <div id="card_{{project.id}}" class="bg-gray-50 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors">
+{% for project in projects %}
+<div id="card_{{project.id}}" class="bg-gray-50 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors">
 
-      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4">
-        <!-- Изображение/иконка -->
-          {% if project.image %}
-            <div>
-              <img class="w-14 h-14 rounded-xl" src="{{ project.image.url }}" alt="">
-            </div>
-          {% else %}
-            <div class="w-14 h-14 rounded-lg bg-{{project.color}}-400 flex items-center justify-center text-white text-xl font-medium">
-            {{ project.short_name }}
-            </div>
-          {% endif %}
-        
-        <!-- Основное содержимое -->
-        <div class="flex-1 min-w-0">
-
-          <div>
-            <h3 class="text-lg font-semibold text-gray-800 truncate">{{ project.name }}</h3>
-            <p class="text-gray-500 text-sm line-clamp-1">{{ project.description }}</p>
-          </div>
-
-          <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2 text-sm text-gray-500">
-            <div class="flex items-center">
-              <i class="fas fa-users mr-1.5 text-gray-400"></i>
-              <span>{{project.project_members.count}} человек</span>
-            </div>
-            <div class="flex items-center">
-              <i class="far fa-calendar-alt mr-1.5 text-gray-400"></i>
-              <span title="Дата создания">{{ project.created_at|date:"d.m.Y" }}</span>
-            </div>
-            <div class="flex items-center">
-              <i class="fas fa-tasks mr-1.5 text-gray-400"></i>
-              <span>{{project.tasks.count }} задач</span>
-            </div>
-          </div>
+  <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4">
+    <!-- Изображение/иконка -->
+      {% if project.image %}
+        <div>
+          <img class="w-14 h-14 rounded-xl" src="{{ project.image.url }}" alt="">
         </div>
-
-        <div id="status-container-{{project.id}}" class="flex flex-col justify-between sm:flex-row sm:items-center  gap-2">
-
-          {% include 'projects/includes/change-status.html' %}
-
+      {% else %}
+        <div class="w-14 h-14 rounded-lg bg-{{project.color}}-400 flex items-center justify-center text-white text-xl font-medium">
+        {{ project.short_name }}
         </div>
-        
-        <!-- Кнопки действий -->
-        <div class="flex gap-4 sm:ml-auto mt-2 sm:mt-0">
-          <a href="{% url 'teams:projects:tasks:task_list' project.team.id project.id  %}" class="px-4 py-1.5 text-sm font-medium rounded-md border border-blue-600 text-blue-600 hover:bg-blue-100 transition-colors cursor-pointer">
-            Открыть
-          </a>
-          <a hx-delete="{% url 'teams:projects:delete_project' project.id %}" hx-target="#card_{{project.id}}" hx-swap="delete" class="p-1.5 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors cursor-pointer">
-            <i class="fas fa-trash-alt"></i>
-          </a>
-        </div>
+      {% endif %}
     
+    <!-- Основное содержимое -->
+    <div class="flex-1 min-w-0">
+
+      <div>
+        <h3 class="text-lg font-semibold text-gray-800 truncate"><a href="{% url 'teams:projects:tasks:task_list' project.team.id project.id  %}">{{ project.name }}</a></h3>
+        <p class="text-gray-500 text-sm line-clamp-1">{{ project.description }}</p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2 text-sm text-gray-500">
+        <div class="flex items-center">
+          <i class="fas fa-users mr-1.5 text-gray-400"></i>
+          <span>{{project.project_members.count}} человек</span>
+        </div>
+        <div class="flex items-center">
+          <i class="far fa-calendar-alt mr-1.5 text-gray-400"></i>
+          <span title="Дата создания">{{ project.created_at|date:"d.m.Y" }}</span>
+        </div>
+        <div class="flex items-center">
+          <i class="fas fa-tasks mr-1.5 text-gray-400"></i>
+          <span>{{project.tasks.count }} задач</span>
+        </div>
       </div>
     </div>
-    {% endfor %}
+
+    <div id="status-container-{{project.id}}" class="flex flex-col justify-between sm:flex-row sm:items-center  gap-2">
+
+      {% include 'projects/includes/change-status.html' %}
+
+    </div>
+    
+    <!-- Кнопки действий -->
+    <div class="flex gap-4 sm:ml-auto mt-2 sm:mt-0">
+      <a href="{% url 'teams:projects:tasks:task_list' project.team.id project.id  %}" class="px-4 py-1.5 text-sm font-medium rounded-md border border-blue-600 text-blue-600 hover:bg-blue-100 transition-colors cursor-pointer">
+        Открыть
+      </a>
+      <a hx-delete="{% url 'teams:projects:delete_project' project.id %}" hx-target="#card_{{project.id}}" hx-swap="delete" class="p-1.5 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors cursor-pointer">
+        <i class="fas fa-trash-alt"></i>
+      </a>
+    </div>
+
+  </div>
+</div>
+{% endfor %}

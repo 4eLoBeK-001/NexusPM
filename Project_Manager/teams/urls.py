@@ -10,6 +10,7 @@ urlpatterns = [
     path('', views.workplace, name='workplace'),
     path('team/<int:pk>/conf/', views.team_conf, name='team_conf'),
     path('team/<int:pk>/members/', views.team_members, name='team_members'),
+    path('team/<int:pk>/member/<int:member_pk>/delete/', views.deleting_team_members, name='deleting_team_members'),
     
     path('teams/', views.team_list, name='team_list'),
     path('create/', views.create_team, name='create_team'),

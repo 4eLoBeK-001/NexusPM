@@ -44,6 +44,14 @@ def team_members(request, pk):
     }
     return render(request, 'teams/includes/team_members.html', context)
 
+
+@require_http_methods(['POST'])
+def deleting_team_members(request, pk, member_pk):
+    team = Team.objects.get(pk=pk, team_member=request.user)
+    team.team_member.remove(member_pk)
+    return render(request, 'teams/includes/team_members_list.html')
+
+
 @require_http_methods(['POST'])
 def create_team(request):
     form = AddModalTeamForm(request.POST, request.FILES)
