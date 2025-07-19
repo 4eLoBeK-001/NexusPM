@@ -4,15 +4,14 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
+from teams.models import Team
+
 from projects.models import Project
 from projects.forms import AddModalProjectForm, UpdateProjectForm
 
 from tasks.models import Status, Tag
 from tasks.forms import CreateStatusForm, CreateTagForm
 from tasks.utils.decorators import require_project_member
-
-from teams.models import Team
-
 
 
 
@@ -239,12 +238,3 @@ def delete_status(request, project_pk, *args, **kwargs):
     }
     return render(request, 'projects/includes/status.html', data)
 
-
-def project_list_t(request):
-    return render(request, 'projects/temp/project_list.html')
-
-def project_lst(request):
-    return render(request, 'projects/temp/project_list_lst.html')
-
-def project_card(request):
-    return render(request, 'projects/temp/project_list_t.html')

@@ -32,7 +32,4 @@ urlpatterns = [
     path('delete/<int:project_pk>/', views.delete_project, name='delete_project'),
     path('change_status/<int:project_pk>/', views.project_status_changes, name='project_status_changes'),
 
-    path('list/', views.project_list_t, name='project_list_t'),
-    path('lst/', views.project_lst, name='project_lst'),
-    path('card/', views.project_card, name='project_card'),
 ]
