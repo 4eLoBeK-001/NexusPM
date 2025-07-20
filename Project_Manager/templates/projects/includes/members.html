@@ -41,25 +41,25 @@
         {% include 'projects/includes/add-members-modal.html' %}
     </div>
 
-    </div>
-
-    <div class="p-6 mx-auto">
-        <table class="table w-full">
-            <thead class="bg-gray-50">
-                <tr class="text-gray-600 uppercase text-sm leading-normal">
-                    <th class="w-10 py-3 px-3 text-center font-semibold">#</th>
-                    <th class="py-3 px-6 text-left font-semibold">Пользователь</th>
-                    <th class="py-3 px-6 text-left font-semibold">Почта</th>
-                    <th class="py-3 px-6 text-left font-semibold">Учасвтсвует в проектах</th>
-                    <th class="py-3 px-6 text-left font-semibold">Роль</th>
-                    <th class="py-3 px-6 text-left font-semibold">Дата присоединения</th>
-                    <th class="w-10 py-3 px-6 text-left font-semibold"></th>
-                </tr>
-            </thead>
-            <tbody id="member-list" class="text-gray-600 text-sm font-light">
-                {% include 'projects/includes/member.html' %}
-            </tbody>
-        </table>
-    </div>
 </div>
+
+<div class="p-6 mx-auto">
+    <table class="table w-full">
+        <thead class="bg-gray-50">
+            <tr class="text-gray-600 uppercase text-sm leading-normal">
+                <th class="w-10 py-3 px-3 text-center font-semibold">#</th>
+                <th class="py-3 px-6 text-left font-semibold">Пользователь</th>
+                <th class="py-3 px-6 text-left font-semibold">Почта</th>
+                <th class="py-3 px-6 text-left font-semibold">Учасвтсвует в проектах</th>
+                <th class="py-3 px-6 text-left font-semibold">Роль</th>
+                <th class="py-3 px-6 text-left font-semibold">Дата присоединения</th>
+                <th class="w-10 py-3 px-6 text-left font-semibold"></th>
+            </tr>
+        </thead>
+        <tbody id="member-list" class="text-gray-600 text-sm font-light">
+            {% include 'projects/includes/member.html' %}
+        </tbody>
+    </table>
+</div>
+
 {% endblock configuration_content %}

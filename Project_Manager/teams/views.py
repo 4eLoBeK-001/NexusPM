@@ -47,7 +47,11 @@ def team_members(request, pk):
 
 @require_http_methods(['POST'])
 def deleting_team_members(request, pk, member_pk):
+    # Удаляет сначала участника из всех проектов, а потом уже из команды
     team = Team.objects.get(pk=pk, team_member=request.user)
+    for project in team.projects.all():
+        if member_pk in project.project_members.values_list('id', flat=True):
+            project.project_members.remove(member_pk)
     team.team_member.remove(member_pk)
     return render(request, 'teams/includes/team_members_list.html')
 
