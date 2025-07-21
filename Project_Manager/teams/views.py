@@ -1,8 +1,12 @@
+from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
+
+from users.models import User
 
 from .forms import AddModalTeamForm, AddTeamForm, AddTeamMemberModalForm
 from .models import Team
@@ -46,15 +50,32 @@ def team_members(request, pk):
     }
     return render(request, 'teams/includes/team_members.html', context)
 
-
+@require_http_methods(['POST'])
 def add_team_member(request, pk):
     team = Team.objects.get(pk=pk, team_member=request.user)
-    if request.method == 'POST':
-        form = AddTeamMemberModalForm(request.POST)
-        if form.is_valid():
-            ...
-        else:
+
+    form = AddTeamMemberModalForm(request.POST)
+
+    if form.is_valid():
+        emails = form.cleaned_data['email']
+        not_fould_emails = []
+
+        for email in emails:
+            user = get_user_model().objects.filter(email=email).first()
+            if user:
+                team.team_member.add(user.pk)
+            else:
+                not_fould_emails.append(email)
+            
+        if not_fould_emails:
+            form.add_error(
+                'email', 
+                mark_safe(f'Пользователи с адресами: <strong>{', '.join(not_fould_emails)}</strong> не найдены')
+            )
             return render(request, 'teams/includes/team_members.html', {'team': team, 'form': form})
+
+    else:
+        return render(request, 'teams/includes/team_members.html', {'team': team, 'form': form})
     return redirect(request.META.get('HTTP_REFERER'))
 
 
