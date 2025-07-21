@@ -17,6 +17,14 @@
                 {{ form.email }}
             </div>
 
+            {% if form.email.errors %}
+            <ul class="text-sm text-red-600 mt-1">
+                {% for error in form.email.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
             <div class="mt-6">
                 <button class="btn btn-primary text-white" name="choice_executor" type="submit">Добавить</button>
             </div>
@@ -25,3 +33,14 @@
     </div>
 </dialog>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const hasErrors = {{ form.errors|yesno:"true,false" }};
+      if (hasErrors) {
+          const modal = document.getElementById('add_team_member_modal');
+          if (modal) {
+              modal.showModal();
+          }
+      }
+    });
+</script>

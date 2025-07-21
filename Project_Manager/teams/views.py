@@ -53,8 +53,9 @@ def add_team_member(request, pk):
         form = AddTeamMemberModalForm(request.POST)
         if form.is_valid():
             ...
+        else:
+            return render(request, 'teams/includes/team_members.html', {'team': team, 'form': form})
     return redirect(request.META.get('HTTP_REFERER'))
-# <ul class="errorlist"><li>email<ul class="errorlist" id="id_email_error"><li>Введите правильный адрес электронной почты.</li></ul></li></ul>
 
 
 @require_http_methods(['POST'])

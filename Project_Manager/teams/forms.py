@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 from projects.widgets import CustomImageField
 from .models import Team
@@ -75,14 +76,17 @@ class AddTeamMemberModalForm(forms.Form):
     )
 
     def clean_email(self):
-        emails = self.cleaned_data['email'].split(',')
+        data = self.cleaned_data['email']
+        emails = [email.strip() for email in data.split(',')]
         invalid_emails = []
 
-        if len(emails) == 1:
-            validate_email(emails[0])
-
-        else:
-            for email in emails:
-                validate_email(email.strip())
+        for email in emails:
+            try:
+                validate_email(email)
+            except ValidationError:
+                invalid_emails.append(email)
+        
+        if invalid_emails:
+            raise ValidationError(f'Неверные адреса: {', '.join(invalid_emails)}')
         
         return emails
