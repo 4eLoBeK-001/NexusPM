@@ -37,12 +37,13 @@
         </div>
 
         <div class="flex-none">
-            <button class="btn btn-primary text-lg mx-4 text-white whitespace-nowrap" onclick="">
+            <button class="btn btn-primary text-lg mx-4 text-white whitespace-nowrap" onclick="add_team_member_modal.showModal();">
                 Добавить участников
             </button>
+            {% include 'teams/includes/add-team-member.html' %}
         </div>
     </div>
-    
+
     <div class="p-6 mx-auto">
         <table class="table w-full">
             <thead class="bg-gray-50">

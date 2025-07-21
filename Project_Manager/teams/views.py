@@ -4,7 +4,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.utils.html import format_html
 
-from .forms import AddModalTeamForm, AddTeamForm
+from .forms import AddModalTeamForm, AddTeamForm, AddTeamMemberModalForm
 from .models import Team
 
 
@@ -39,10 +39,22 @@ def team_conf(request, pk):
 
 def team_members(request, pk):
     team = Team.objects.get(pk=pk, team_member=request.user)
+    form = AddTeamMemberModalForm()
     context = {
         'team': team,
+        'form': form
     }
     return render(request, 'teams/includes/team_members.html', context)
+
+
+def add_team_member(request, pk):
+    team = Team.objects.get(pk=pk, team_member=request.user)
+    if request.method == 'POST':
+        form = AddTeamMemberModalForm(request.POST)
+        if form.is_valid():
+            ...
+    return redirect(request.META.get('HTTP_REFERER'))
+# <ul class="errorlist"><li>email<ul class="errorlist" id="id_email_error"><li>Введите правильный адрес электронной почты.</li></ul></li></ul>
 
 
 @require_http_methods(['POST'])

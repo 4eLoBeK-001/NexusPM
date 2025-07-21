@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from django.core.validators import validate_email
 
 from projects.widgets import CustomImageField
 from .models import Team
@@ -63,3 +64,25 @@ class AddTeamForm(forms.ModelForm):
         model = Team
         fields = ('image', 'name', 'description')
         
+
+class AddTeamMemberModalForm(forms.Form):
+    email = forms.CharField(
+        label='Введите почту или несколько почт, разделяя их запятой.', 
+        widget=forms.Textarea(attrs={
+            'class': 'w-full h-[100px] p-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900 resize-y',
+            'placeholder': 'Введите email'
+        })
+    )
+
+    def clean_email(self):
+        emails = self.cleaned_data['email'].split(',')
+        invalid_emails = []
+
+        if len(emails) == 1:
+            validate_email(emails[0])
+
+        else:
+            for email in emails:
+                validate_email(email.strip())
+        
+        return emails
