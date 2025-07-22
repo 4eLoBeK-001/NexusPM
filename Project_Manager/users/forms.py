@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 
-from .models import Profile, User
+from .models import Profile, Tag, User
 
 CLASS_FOR_FIELDS = 'w-full px-4 py-3 text-slate-200 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition'
 
@@ -161,3 +161,10 @@ class ChangeProfileForm(forms.ModelForm):
             raise forms.ValidationError('Введите корректный номер телефона.')
         
         return phone
+
+
+class AddTagForm(forms.ModelForm):
+    name = forms.CharField(label='Название тега', max_length=25, widget=forms.TextInput(attrs={'class': 'input input-bordered w-full focus:ring-2 focus:ring-primary bg-white text-gray-800'}))
+    class Meta:
+        model = Tag
+        fields = ('name',)

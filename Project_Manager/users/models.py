@@ -1,10 +1,16 @@
+import random
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 from project_manager import settings
 
 
-# Create your models here.
+def get_colors():
+    return ['sky', 'blue', 'red', 'orange', 'lime', 'teal', 'violet', 'zinc']
+
+def get_random_color():
+    return random.choice(get_colors())
+
 
 class User(AbstractUser):
     ...
@@ -19,6 +25,7 @@ class Profile(models.Model):
 class Tag(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name='tags')
     name = models.CharField(max_length=25, blank=True, null=True)
+    color = models.CharField(max_length=25, default=get_random_color)
 
 
 class SocialNetwork(models.Model):
