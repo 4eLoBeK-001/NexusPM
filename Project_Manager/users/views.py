@@ -51,4 +51,14 @@ def profile_user(request):
         'profile': profile,
         'social_links': social_links
     }
-    return render(request, 'users/base-profile.html', data)
+    return render(request, 'users/profile.html', data)
+
+
+def change_profile(request):
+    user = get_object_or_404(get_user_model(), pk=request.user.pk)
+    profile = user.profile
+    data = {
+        'user': user,
+        'profile': profile,
+    }
+    return render(request, 'users/change-profile.html', data)

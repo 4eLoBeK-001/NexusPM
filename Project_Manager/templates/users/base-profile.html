@@ -13,13 +13,21 @@
 
     <!-- Вкладки -->
     <div role="tablist" class="tabs tabs-boxed bg-gray-300 mb-6">
-      <a role="tab" class="tab tab-active">О себе</a>
-      <a role="tab" class="tab">Редактировать</a>
+      <a href="{% url 'users:profile' %}" role="tab"
+        class="tab {% if request.resolver_match.url_name == 'profile' %}tab-active{% endif %}">
+        О себе
+      </a>
+  
+      <a href="{% url 'users:change_profile' %}" role="tab"
+        class="tab {% if request.resolver_match.url_name == 'change_profile' %}tab-active{% endif %}">
+        Редактировать
+      </a>
       <a role="tab" class="tab">Со стороны</a>
     </div>
 
     <div>
-        {% include 'users/profile.html' %}
+        {% block profile-content %}
+        {% endblock profile-content %}
     </div>
     
 

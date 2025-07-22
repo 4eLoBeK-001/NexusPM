@@ -1,0 +1,16 @@
+{% extends 'users/base-profile.html' %}
+
+
+{% block profile-content %}
+<form method="post" class="space-y-4">
+    {% csrf_token %}
+  
+    <h2 class="text-xl font-semibold">Основные данные</h2>
+    {{ user_form.as_p }}
+  
+    <h2 class="text-xl font-semibold">Профиль</h2>
+    {{ profile_form.as_p }}
+  
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>
+{% endblock profile-content %}

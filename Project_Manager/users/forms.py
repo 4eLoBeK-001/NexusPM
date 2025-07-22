@@ -75,3 +75,7 @@ class RegisterUserForm(forms.ModelForm):
             'username': 'Логин',
             'email': 'Почта'
         }
+
+
+class ChangeProfileForm(forms.ModelForm):
+    ...
