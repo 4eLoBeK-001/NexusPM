@@ -51,4 +51,4 @@ def profile_user(request):
         'profile': profile,
         'social_links': social_links
     }
-    return render(request, 'users/profile.html', data)
+    return render(request, 'users/base-profile.html', data)

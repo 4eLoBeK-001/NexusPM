@@ -1,74 +1,33 @@
-{% extends 'base.html' %}
 
-{% block content %}
-<div class="flex flex-col text-gray-800 lg:flex-row w-full p-6 gap-6">
 
-  <!-- Sidebar/Profile Card -->
-  <aside class="bg-white shadow-lg rounded-lg p-6 w-full lg:w-1/4">
-    <div class="text-center">
-      <img src="" alt="Avatar" class="rounded-full mx-auto mb-4 bg-gray-800 w-32 h-32" />
-      <h2 class="text-xl font-bold">{{ user.username }}</h2>
-      <p class="text-sm text-gray-500">{{ user.first_name }} {{ user.last_name }}</p>
-      <p class="text-sm text-gray-500">{{ user.email }}</p>
-      <button class="btn btn-primary btn-sm mt-4 w-full">Download Resume</button>
-    </div>
-    <div class="flex justify-center space-x-4 mt-4 text-purple-600 text-lg">
-      <a href="#"><i class="fab fa-facebook"></i></a>
-      <a href="#"><i class="fab fa-twitter"></i></a>
-      <a href="#"><i class="fab fa-instagram"></i></a>
-      <a href="#"><i class="fab fa-linkedin"></i></a>
-    </div>
-    <div class="mt-6">
-      <h3 class="text-sm font-semibold mb-2 text-gray-800">КРАТКОЕ ОПИСАНИЕ О СЕБЕ</h3>
-      <p class="text-sm text-gray-600">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed diam nonummy eirmod tempor
-        invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-      </p>
-    </div>
-  </aside>
+<!-- Секция о себе -->
+<section class="mb-8">
+  <h2 class="text-2xl font-semibold mb-2">ОПИСАНИЕ О СЕБЕ</h2>
+  <p class="text-gray-600 mb-2">
+    {{ profile.description|default:"Тут пока пусто" }}
+  </p>
+</section>
 
-  <!-- Main Profile Content -->
-  <main class="flex-1">
-
-    <!-- Tabs -->
-    <div role="tablist" class="tabs tabs-boxed bg-gray-300 mb-6">
-      <a role="tab" class="tab tab-active">О себе</a>
-      <a role="tab" class="tab">Редактировать</a>
-      <a role="tab" class="tab">Со стороны</a>
-    </div>
-
-    <!-- About Section -->
-    <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-2">ОПИСАНИЕ О СЕБЕ</h2>
-      <p class="text-gray-600 mb-2">
-        {{ profile.description|default:"Тут пока пусто" }}
-      </p>
-    </section>
-
-    <!-- Skills Section -->
-    <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-4">ТЕГИ</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {% for tag in profile.tags.all %}
+<!-- Секция тегов -->
+<section class="mb-8">
+  <h2 class="text-2xl font-semibold mb-4">ТЕГИ</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {% for tag in profile.tags.all %}
         {{tag.name}}
-        {% endfor %}
-      </div>
-    </section>
+    {% endfor %}
+  </div>
+</section>
 
-    <!-- Contact Section -->
-    <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-4">Контактная информация</h2>
-      <div class="bg-white shadow rounded-lg p-6">
-        <p class="mb-2"><strong>Email:</strong> {{ user.email }}</p>
-        <p class="mb-2"><strong>Телефон:</strong> {{ profile.phone_number|default:"---" }}</p>
-        <p class="mb-2"><strong>Социальные сети:</strong>
-          {% for social in social_links %}
-          <a href="{{ social.link }}">{{ social.network }}</a> 
-          {% endfor %}
-        </p>
-      </div>
-    </section>
-
-  </main>
-</div>
-{% endblock content %}
+<!-- Контакты -->
+<section class="mb-8">
+  <h2 class="text-2xl font-semibold mb-4">Контактная информация</h2>
+  <div class="bg-white shadow rounded-lg p-6">
+    <p class="mb-2"><strong>Email:</strong> {{ user.email }}</p>
+    <p class="mb-2"><strong>Телефон:</strong> {{ profile.phone_number|default:"---" }}</p>
+    <p class="mb-2"><strong>Социальные сети:</strong>
+      {% for social in social_links %}
+      <a href="{{ social.link }}">{{ social.network }}</a> 
+      {% endfor %}
+    </p>
+  </div>
+</section>
