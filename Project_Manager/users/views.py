@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.urls import reverse
-from .forms import LoginUserForm, RegisterUserForm
+from .forms import ChangeProfileForm, ChangeUserForm, LoginUserForm, RegisterUserForm
 # Create your views here.
 
 def login_user(request):
@@ -57,8 +57,25 @@ def profile_user(request):
 def change_profile(request):
     user = get_object_or_404(get_user_model(), pk=request.user.pk)
     profile = user.profile
+    user_form = ChangeUserForm(instance=user)
+    profile_form = ChangeProfileForm(instance=profile)
+
+    if request.method == 'POST':
+        if 'user_form' in request.POST:
+            user_form = ChangeUserForm(request.POST, instance=user)
+            if user_form.is_valid():
+                user_form.save()
+                return redirect(request.META.get('HTTP_REFERER'))
+        if 'profile_form' in request.POST:
+            profile_form = ChangeProfileForm(request.POST, instance=profile)
+            if profile_form.is_valid():
+                profile_form.save()
+                return redirect(request.META.get('HTTP_REFERER'))
+
     data = {
         'user': user,
         'profile': profile,
+        'user_form': user_form,
+        'profile_form': profile_form
     }
     return render(request, 'users/change-profile.html', data)

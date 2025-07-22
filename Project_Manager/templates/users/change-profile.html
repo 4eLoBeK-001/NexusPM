@@ -2,15 +2,44 @@
 
 
 {% block profile-content %}
-<form method="post" class="space-y-4">
+<form method="post" class="space-y-4" action="?form=profile_form#profile-form" id="profile-form">
     {% csrf_token %}
   
     <h2 class="text-xl font-semibold">Основные данные</h2>
-    {{ user_form.as_p }}
+    {% for user_field in user_form %}
+    <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-medium mb-2" for="{{ user_field.id_for_label }}">
+            <i class="text-indigo-500"></i>{{ user_field.label }}
+        </label>
+        {{ user_field }}
+        <div class="form_error">{{ user_field.errors }} </div>
+    </div>
+    {% endfor %}
   
-    <h2 class="text-xl font-semibold">Профиль</h2>
-    {{ profile_form.as_p }}
-  
-    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <button type="submit" name="user_form" class="btn btn-primary">Сохранить</button>
 </form>
+
+<form method="post" class="space-y-4" action="?form=user_form#user-form" id="user-form">
+    {% csrf_token %}
+
+    <h2 class="text-xl font-semibold">Профиль</h2>
+    {% for profile_field in profile_form %}
+    <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-medium mb-2" for="{{ profile_field.id_for_label }}">
+            <i class="text-indigo-500"></i>{{ profile_field.label }}
+        </label>
+        {{ profile_field }}
+
+        {% if profile_field.errors %}
+            <div class="text-red-600 text-sm mt-1">
+            {{ profile_field.errors }}
+            </div>
+        {% endif %}
+
+    </div>
+    {% endfor %}
+
+    <button type="submit" name="profile_form" class="btn btn-primary">Сохранить</button>
+</form>
+
 {% endblock profile-content %}
