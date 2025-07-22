@@ -28,6 +28,11 @@ class Tag(models.Model):
     color = models.CharField(max_length=25, default=get_random_color)
 
 
+    @property
+    def get_colors(self):
+        return f'text-{self.color}-700 bg-{self.color}-200 border-{self.color}-700'
+
+
 class SocialNetwork(models.Model):
     TELEGRAM = 'Telegram'
     VKONTAKTE = 'VK'

@@ -47,13 +47,15 @@ def register_user(request):
 def profile_user(request):
     user = get_object_or_404(get_user_model(), pk=request.user.pk)
     profile = user.profile
+    tags = profile.tags.all()
     tag_form = AddTagForm()
     social_links = profile.social_links.all()
     data = {
         'user': user,
         'profile': profile,
         'social_links': social_links,
-        'tag_form': tag_form
+        'tag_form': tag_form,
+        'tags': tags
     }
     return render(request, 'users/profile.html', data)
 
