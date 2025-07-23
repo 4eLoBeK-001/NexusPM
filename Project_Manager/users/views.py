@@ -3,6 +3,8 @@ from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.views.decorators.http import require_http_methods
 from django.urls import reverse
 
+from .models import Tag
+
 from .forms import AddTagForm, ChangeProfileForm, ChangeUserForm, LoginUserForm, RegisterUserForm
 # Create your views here.
 
@@ -58,6 +60,12 @@ def profile_user(request):
         'tags': tags
     }
     return render(request, 'users/profile.html', data)
+
+
+def delete_user_tag(request, tag_pk):
+    tag = get_object_or_404(Tag, pk=tag_pk)
+    tag.delete()
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 @require_http_methods(['POST'])

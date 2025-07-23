@@ -11,4 +11,5 @@ urlpatterns = [
     path('profile/', views.profile_user, name='profile'),
     path('change/profile/', views.change_profile, name='change_profile'),
     path('profile/create/tag/', views.create_user_tag, name='create_user_tag'),
+    path('profile/delete/tag/<int:tag_pk>/', views.delete_user_tag, name='delete_user_tag'),
 ]
