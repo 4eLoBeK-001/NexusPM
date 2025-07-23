@@ -21,6 +21,9 @@ class Profile(models.Model):
     short_description = models.CharField(max_length=200, blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
 
+    def __str__(self):
+        return f'Профиль {self.user}'
+
 
 class Tag(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name='tags')
@@ -31,6 +34,9 @@ class Tag(models.Model):
     @property
     def get_colors(self):
         return f'text-{self.color}-700 bg-{self.color}-200 border-{self.color}-700'
+    
+    def __str__(self):
+        return f'Тег {self.name}'
 
 
 class SocialNetwork(models.Model):
@@ -48,7 +54,11 @@ class SocialNetwork(models.Model):
     link = models.URLField(max_length=255)
 
     class Meta:
+        ordering = ('network',)
         unique_together = ('profile', 'network')
+    
+    def __str__(self):
+        return f'{self.network} на {self.profile.user}'
     
 
 
@@ -58,13 +68,22 @@ class TeamMember(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date_joining = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f'{self.user} в команде {self.team}'
+
 
 class ProjectMember(models.Model):
     project = models.ForeignKey('projects.Project', on_delete=models.CASCADE, related_name='pm')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date_joining = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f'{self.user} в проекте {self.project}'
+
 
 class TaskExecutor(models.Model):
     task = models.ForeignKey('tasks.Task', on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f'{self.user} ответственен за {self.task}'
