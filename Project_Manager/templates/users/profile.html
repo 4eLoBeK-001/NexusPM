@@ -43,10 +43,11 @@
     <div class="mb-2">
       <strong>Социальные сети:</strong>
       {% if social_links %}
-        <ul class="list-disc list-inside mt-1">
+        <ul class="list-none pl-0">
           {% for social in social_links %}
-            <li>
+            <li class="flex items-center gap-3">
               <a href="{{ social.link }}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">
+                <i class="fab {{ social.get_fa_name }} text-lg"></i>
                 {{ social.network }} 
               </a>
               <a href="{% url 'users:delete_social_network' social.pk %}" class="ml-4 text-red-700">✕</a>

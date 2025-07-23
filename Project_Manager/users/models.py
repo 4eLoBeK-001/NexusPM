@@ -67,6 +67,14 @@ class SocialNetwork(models.Model):
         verbose_name = 'Социальная сеть'
         verbose_name_plural = 'Социальные сети'
     
+    @property
+    def get_fa_name(self):
+        return {
+            'Telegram': 'fa-telegram text-blue-500',
+            'VK': 'fa-vk text-blue-700',
+            'GitHub': 'fa-github text-black',
+        }.get(self.network)
+
     def __str__(self):
         return f'{self.network} на {self.profile.user}'
     
