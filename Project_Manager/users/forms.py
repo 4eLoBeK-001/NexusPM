@@ -182,3 +182,15 @@ class AddSocialnetworkForm(forms.Form):
         label='Ваш ник или ID',
         widget=forms.TextInput(attrs={'class': 'w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400'})
     )
+
+    def __init__(self, *args, **kwargs):
+        self.profile = kwargs.pop('profile', None)
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        network = cleaned_data['network']
+
+        if SocialNetwork.objects.filter(profile=self.profile, network=network).exists():
+            raise forms.ValidationError(f'{network} уже привязан к вашему профилю')
+        return cleaned_data

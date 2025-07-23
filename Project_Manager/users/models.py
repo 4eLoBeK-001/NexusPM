@@ -47,6 +47,11 @@ class SocialNetwork(models.Model):
     network = models.CharField(max_length=20, choices=SOCIAL_CHOICES)
     link = models.URLField(max_length=255)
 
+    class Meta:
+        unique_together = ('profile', 'network')
+    
+
+
 
 class TeamMember(models.Model):
     team = models.ForeignKey('teams.Team', on_delete=models.CASCADE)

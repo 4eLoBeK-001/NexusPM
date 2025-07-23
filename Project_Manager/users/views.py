@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.views.decorators.http import require_http_methods
+from django.contrib import messages
 from django.urls import reverse
 
 from .models import SocialNetwork, Tag
@@ -66,11 +67,32 @@ def profile_user(request):
     return render(request, 'users/profile.html', data)
 
 
+SOCIAL_LINKS  = {
+    'Telegram': lambda username: 'https://t.me/' + username,
+    'VK': lambda username: 'https://m.vk.com/id/' + username,
+    'GitHub': lambda username: 'https://github.com/' + username,
+}
+
 @require_http_methods(['POST'])
 def add_social_link(request):
     user = request.user    
     profile = user.profile
-    social_form = AddSocialnetworkForm(request.POST)
+    social_form = AddSocialnetworkForm(request.POST, profile=profile)
+    if social_form.is_valid():
+
+        network = social_form.cleaned_data['network']
+        username = social_form.cleaned_data['username']
+        link = SOCIAL_LINKS[network](username)
+
+        SocialNetwork.objects.create(
+            profile=profile,
+            network=network,
+            link=link
+        )
+        return redirect(request.META.get('HTTP_REFERER'))
+    else:
+        for error in social_form.non_field_errors():
+            messages.error(request, error)
 
     return redirect(request.META.get('HTTP_REFERER'))
 
