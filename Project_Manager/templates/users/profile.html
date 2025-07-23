@@ -40,12 +40,31 @@
   <div class="bg-white shadow rounded-lg p-6">
     <p class="mb-2"><strong>Email:</strong> {{ user.email }}</p>
     <p class="mb-2"><strong>Телефон:</strong> {{ profile.phone_number|default:"---" }}</p>
-    <p class="mb-2"><strong>Социальные сети:</strong>
-      {% for social in social_links %}
-      <a href="{{ social.link }}">{{ social.network }}</a> 
-      {% endfor %}
-    </p>
+    <div class="mb-2">
+      <strong>Социальные сети:</strong>
+      {% if social_links %}
+        <ul class="list-disc list-inside mt-1">
+          {% for social in social_links %}
+            <li>
+              <a href="{{ social.link }}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">
+                {{ social.network }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-gray-500 mt-1">Нет добавленных ссылок</p>
+      {% endif %}
+    </div>
+    <div>
+      <a onclick="modal_social_network.showModal();" href="#" class="flex items-center gap-2 text-sky-500 text-[0.95rem] hover:underline">
+        <span class="font-bold text-base">+</span>
+        Добавить ссылку
+      </a>
+      {% include 'users/includes/social-links-modal.html' %}
+    </div>
   </div>
 </section>
+
 
 {% endblock profile-content %}

@@ -3,9 +3,9 @@ from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.views.decorators.http import require_http_methods
 from django.urls import reverse
 
-from .models import Tag
+from .models import SocialNetwork, Tag
 
-from .forms import AddTagForm, ChangeProfileForm, ChangeUserForm, LoginUserForm, RegisterUserForm
+from .forms import AddSocialnetworkForm, AddTagForm, ChangeProfileForm, ChangeUserForm, LoginUserForm, RegisterUserForm
 # Create your views here.
 
 def login_user(request):
@@ -51,15 +51,28 @@ def profile_user(request):
     profile = user.profile
     tags = profile.tags.all()
     tag_form = AddTagForm()
+    social_form = AddSocialnetworkForm()
+    networks = [network[0] for network in SocialNetwork.SOCIAL_CHOICES]
     social_links = profile.social_links.all()
     data = {
         'user': user,
         'profile': profile,
         'social_links': social_links,
+        'social_form': social_form,
+        'networks': networks,
         'tag_form': tag_form,
         'tags': tags
     }
     return render(request, 'users/profile.html', data)
+
+
+@require_http_methods(['POST'])
+def add_social_link(request):
+    user = request.user    
+    profile = user.profile
+    social_form = AddSocialnetworkForm(request.POST)
+
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 def delete_user_tag(request, tag_pk):

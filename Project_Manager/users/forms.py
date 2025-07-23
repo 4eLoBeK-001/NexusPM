@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 
-from .models import Profile, Tag, User
+from .models import Profile, SocialNetwork, Tag, User
 
 CLASS_FOR_FIELDS = 'w-full px-4 py-3 text-slate-200 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition'
 
@@ -168,3 +168,17 @@ class AddTagForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = ('name',)
+
+
+class AddSocialnetworkForm(forms.Form):
+    network = forms.ChoiceField(
+        choices=SocialNetwork.SOCIAL_CHOICES,
+        widget=forms.RadioSelect(attrs={
+            'class': 'bg-white radio radio-info radio-sm'
+        }),
+        label='Выберите социальную сеть:'
+    )
+    username = forms.CharField(
+        label='Ваш ник или ID',
+        widget=forms.TextInput(attrs={'class': 'w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400'})
+    )
