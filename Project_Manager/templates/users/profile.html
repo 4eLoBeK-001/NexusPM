@@ -47,8 +47,9 @@
           {% for social in social_links %}
             <li>
               <a href="{{ social.link }}" target="_blank" rel="noopener" class="text-blue-600 hover:underline">
-                {{ social.network }}
+                {{ social.network }} 
               </a>
+              <a href="{% url 'users:delete_social_network' social.pk %}" class="ml-4 text-red-700">✕</a>
             </li>
           {% endfor %}
         </ul>

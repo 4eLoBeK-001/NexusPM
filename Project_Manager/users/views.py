@@ -74,7 +74,7 @@ SOCIAL_LINKS  = {
 }
 
 @require_http_methods(['POST'])
-def add_social_link(request):
+def add_social_network(request):
     user = request.user    
     profile = user.profile
     social_form = AddSocialnetworkForm(request.POST, profile=profile)
@@ -95,6 +95,13 @@ def add_social_link(request):
             messages.error(request, error)
 
     return redirect(request.META.get('HTTP_REFERER'))
+
+
+def delete_social_network(request, network_pk):
+    network = get_object_or_404(SocialNetwork, pk=network_pk)
+    network.delete()
+    return redirect(request.META.get('HTTP_REFERER'))
+    
 
 
 def delete_user_tag(request, tag_pk):
