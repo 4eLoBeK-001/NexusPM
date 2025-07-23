@@ -60,6 +60,12 @@ class Task(models.Model):
         }.get(self.priority)
 
 
+class TaskImage(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='task_images/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+
 class Tag(models.Model):
     name = models.CharField(max_length=25)
     color = models.ForeignKey('Color', on_delete=models.SET_NULL, null=True)
