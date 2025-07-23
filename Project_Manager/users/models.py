@@ -21,6 +21,10 @@ class Profile(models.Model):
     short_description = models.CharField(max_length=200, blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
 
+    class Meta:
+        verbose_name = 'Профиль'
+        verbose_name_plural = 'Профили'
+
     def __str__(self):
         return f'Профиль {self.user}'
 
@@ -29,6 +33,10 @@ class Tag(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True, related_name='tags')
     name = models.CharField(max_length=25, blank=True, null=True)
     color = models.CharField(max_length=25, default=get_random_color)
+
+    class Meta:
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
 
 
     @property
@@ -56,6 +64,8 @@ class SocialNetwork(models.Model):
     class Meta:
         ordering = ('network',)
         unique_together = ('profile', 'network')
+        verbose_name = 'Социальная сеть'
+        verbose_name_plural = 'Социальные сети'
     
     def __str__(self):
         return f'{self.network} на {self.profile.user}'
@@ -68,6 +78,11 @@ class TeamMember(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date_joining = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ('-date_joining',)
+        verbose_name = 'Участник команды'
+        verbose_name_plural = 'Участники команд'
+
     def __str__(self):
         return f'{self.user} в команде {self.team}'
 
@@ -76,6 +91,11 @@ class ProjectMember(models.Model):
     project = models.ForeignKey('projects.Project', on_delete=models.CASCADE, related_name='pm')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date_joining = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-date_joining',)
+        verbose_name = 'Участник проекта'
+        verbose_name_plural = 'Участники проектов'
 
     def __str__(self):
         return f'{self.user} в проекте {self.project}'

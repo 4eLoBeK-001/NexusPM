@@ -23,6 +23,11 @@ class Team(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ('-created_at', 'name')
+        verbose_name = 'Команда'
+        verbose_name_plural = 'Команды'
+
     @property
     def short_name(self):
         return self.name[:2].upper()

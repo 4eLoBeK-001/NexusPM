@@ -34,6 +34,12 @@ class Task(models.Model):
     parent_task = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subtasks')
     executor = models.ManyToManyField(get_user_model(), through='users.TaskExecutor', related_name='assigned_tasks', blank=True)
 
+
+    class Meta:
+        ordering = ('-created_at', 'name')
+        verbose_name = 'Задача'
+        verbose_name_plural = 'Задачи'
+
     def clean(self):
         from django.core.exceptions import ValidationError
         if self.parent_task and self.parent_task.parent_task:
@@ -59,6 +65,10 @@ class Tag(models.Model):
     color = models.ForeignKey('Color', on_delete=models.SET_NULL, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='tags', null=True)
 
+    class Meta:
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
+
     def __str__(self):
         return self.name
 
@@ -68,6 +78,10 @@ class Status(models.Model):
     color = models.ForeignKey('Color', on_delete=models.SET_NULL, null=True, blank=False)
     is_completed = models.BooleanField(default=False, blank=False)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='statuses', null=True)
+
+    class Meta:
+        verbose_name = 'Статус'
+        verbose_name_plural = 'Статусы'
 
     def __str__(self):
         return self.name
@@ -80,6 +94,10 @@ class Color(models.Model):
     text_color = models.CharField(max_length=50)
     border_color = models.CharField(max_length=50)
 
+    class Meta:
+        verbose_name = 'Цвет'
+        verbose_name_plural = 'Цвета'
+
     def __str__(self):
         return self.name
 
@@ -89,6 +107,11 @@ class Comment(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, related_name='comcreator', null=True)
     task = models.ForeignKey(Task, on_delete=models.SET_NULL, related_name='comments', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-created_at', 'task')
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
 
     def __str__(self):
         return f'Комментарий от {self.author} на {self.task}'
