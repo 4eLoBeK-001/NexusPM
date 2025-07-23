@@ -2,7 +2,7 @@ from django import forms
 
 from users.models import TaskExecutor
 
-from .models import Status, Tag, Task, Comment
+from .models import Status, Tag, Task, Comment, TaskImage
 
 
 class CreateTaskForm(forms.ModelForm):
@@ -182,3 +182,9 @@ class AddCommentForm(forms.ModelForm):
                 'rows': 4,
             })
         }
+
+
+class AddImageTaskForm(forms.ModelForm):
+    class Meta:
+        model = TaskImage
+        fields = ('image',)
