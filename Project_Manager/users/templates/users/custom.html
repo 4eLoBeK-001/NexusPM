@@ -1,0 +1,15 @@
+
+
+
+<div class="w-40 h-40 rounded-full bg-gray-400 cursor-pointer" id="image-div-avatar">
+<img src="{{ form.avatar }}" alt="">
+</div>
+
+<input type="{{widget.type}}" class="opacity-0" name="{{widget.name}}" id="{{widget.attrs.id}}">
+  
+<script>
+    document.getElementById('image-div-avatar').addEventListener('click', () => {
+       document.getElementById('{{widget.attrs.id}}').click();
+   })
+
+</script>

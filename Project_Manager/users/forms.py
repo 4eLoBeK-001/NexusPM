@@ -3,6 +3,8 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 
+from users.widgets import CustomImageField
+
 from .models import Profile, SocialNetwork, Tag, User
 
 CLASS_FOR_FIELDS = 'w-full px-4 py-3 text-slate-200 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition'
@@ -116,10 +118,11 @@ class ChangeUserForm(forms.ModelForm):
 class ChangeProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('description', 'short_description', 'phone_number')
+        fields = ('profile_picture', 'description', 'short_description', 'phone_number')
 
         CLASS_FOR_FIELDS = 'p-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white text-gray-800'
         widgets = {
+            'profile_picture': CustomImageField(attrs={'id': 'id_profile_picture'}),
             'description': forms.Textarea(attrs={
                 'class': CLASS_FOR_FIELDS,
                 'placeholder': 'Описание профиля',
@@ -137,6 +140,7 @@ class ChangeProfileForm(forms.ModelForm):
         }
 
         labels = {
+            'profile_picture': 'Аватарка',
             'description': 'Описание',
             'short_description': 'Краткое описание',
             'phone_number': 'Номер телефона',
