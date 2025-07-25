@@ -1,18 +1,21 @@
-<dialog id="modal_add_image_task" class="modal">
+{% load task_url %}
+
+
+<dialog id="modal_add_image_task" class="modal cursor-default">
     <div class="modal-box bg-white shadow-xl text-base-content rounded-lg">
         <button onclick="this.closest('dialog').close();" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
 
         <h3 class="text-2xl font-bold text-gray-700 mb-4">Добавить вложение</h3>
 
-        <form action="" method="post" enctype="multipart/form-data" class="space-y-4">
+        <form action="{% url_task task 'processing_image' %}" method="post" enctype="multipart/form-data" class="space-y-4">
             {% csrf_token %}
 
             <div class="flex items-center gap-4">
                 <!-- Кликабельный div -->
-                <div id="image-div-task" class="w-40 h-40 bg-gray-300 rounded-lg flex items-center justify-center overflow-hidden">
-                    <div id="image-preview-task" class="text-gray-500 font-medium text-center">Нажмите для выбора</div>
+                <div id="image-div-task" class="relative min-w-28 min-h-28 max-w-52 max-h-52 bg-gray-300 hover:bg-gray-200 rounded-lg flex items-center justify-center cursor-pointer overflow-hidden group">
+                    <div id="image-preview-task" class="text-gray-500 text-base font-medium text-center">Нажмите для выбора картинки</div>
                 </div>
-
+            
                 <!-- Скрытое поле input -->
                 <input type="file" name="image_task" id="image-input-task" class="hidden" accept="image/*">
             </div>
