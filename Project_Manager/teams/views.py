@@ -84,8 +84,12 @@ def deleting_team_members(request, pk, member_pk):
     # Удаляет сначала участника из всех проектов, а потом уже из команды
     team = get_object_or_404(Team, pk=pk, team_member=request.user)
     project_members_list = team.projects.filter(project_members__id=member_pk) # Все проекты в которых он присутствует
+    member = get_object_or_404(get_user_model(), pk=member_pk)
 
     for project in project_members_list:
+        tasks = member.assigned_tasks.filter(project=project)
+        for task in tasks:
+            task.executor.remove(member_pk)
         project.project_members.remove(member_pk)
 
     team.team_member.remove(member_pk)

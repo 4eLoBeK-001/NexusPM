@@ -3,6 +3,7 @@ from django.db.transaction import commit
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth import get_user_model
 
 from teams.models import Team
 
@@ -116,9 +117,14 @@ def project_members(request, project_pk, *args, **kwargs):
 @require_project_member
 def delete_project_members(request, project_pk, member_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
+    member = get_object_or_404(get_user_model(), pk=member_pk)
     project.project_members.remove(member_pk)
+    tasks_where_user_is_executor = member.assigned_tasks.filter(project=project)
+    for task in tasks_where_user_is_executor:
+        task.executor.remove(member_pk)
 
     return render(request, 'projects/includes/member.html')
+
 
 @require_http_methods(['POST'])
 @require_project_member
