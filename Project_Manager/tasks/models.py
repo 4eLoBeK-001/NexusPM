@@ -65,6 +65,14 @@ class TaskImage(models.Model):
     image = models.ImageField(upload_to='task_images/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f'Вложение к задаче {self.task}'
+    
+    class Meta:
+        ordering = ('-uploaded_at',)
+        verbose_name = 'Вложение'
+        verbose_name_plural = 'Вложения'
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=25)

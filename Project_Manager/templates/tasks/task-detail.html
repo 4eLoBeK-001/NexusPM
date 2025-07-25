@@ -108,17 +108,17 @@
               </button>
               {% include 'tasks/includes/add-task-image-modal.html' %}
             </summary>
-            <div class="mt-2 pl-6 text-gray-600 flex">
+            <div class="mt-2 pl-6 text-gray-600 flex gap-4">
               {% if task.images.exists %}
                 {% for image in task.images.all %}
-                  <a href="{{ image.image.url }}" target="_blank" class="mr-4">
-                    <img src="{{ image.image.url }}" class="w-40" alt="">
+                  <a href="{{ image.image.url }}" target="_blank" class="block w-40 h-32 overflow-hidden rounded shadow">
+                    <img src="{{ image.image.url }}" alt="" class="w-full h-full object-cover">
                   </a>
                 {% endfor %}
               {% else %}
                 <p class="text-sm italic">Нет вложений.</p>
               {% endif %}
-            </div>
+            </div>            
           </details>
         </div>
         <hr>
