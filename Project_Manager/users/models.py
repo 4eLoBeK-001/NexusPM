@@ -20,6 +20,7 @@ class Profile(models.Model):
     description = models.TextField(blank=True, null=True)
     short_description = models.CharField(max_length=200, blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='users/profile_pictures/', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Профиль'
