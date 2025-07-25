@@ -188,3 +188,7 @@ class AddImageTaskForm(forms.ModelForm):
     class Meta:
         model = TaskImage
         fields = ('image',)
+
+        widgets = {
+            'image': forms.FileInput(attrs={'class': 'hidden'})
+        }

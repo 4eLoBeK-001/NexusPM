@@ -1,23 +1,61 @@
-
 <dialog id="modal_add_image_task" class="modal">
     <div class="modal-box bg-white shadow-xl text-base-content rounded-lg">
         <button onclick="this.closest('dialog').close();" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
 
         <h3 class="text-2xl font-bold text-gray-700 mb-4">Добавить вложение</h3>
 
-        <form action="" method="post" class="space-y-4">
+        <form action="" method="post" enctype="multipart/form-data" class="space-y-4">
             {% csrf_token %}
 
-            <div>
+            <div class="flex items-center gap-4">
+                <!-- Кликабельный div -->
+                <div id="image-div-task" class="w-40 h-40 bg-gray-300 rounded-lg flex items-center justify-center overflow-hidden">
+                    <div id="image-preview-task" class="text-gray-500 font-medium text-center">Нажмите для выбора</div>
+                </div>
 
+                <!-- Скрытое поле input -->
+                <input type="file" name="image_task" id="image-input-task" class="hidden" accept="image/*">
             </div>
 
-            <!-- Отправка формы -->
+            <!-- Кнопка -->
             <div class="pt-4">
-                <button class="btn btn-primary w-full text-white" name="add_task" type="submit">
+                <button class="btn btn-primary w-full text-white" name="add_image_task" type="submit">
                     Сохранить
                 </button>
             </div>
         </form>
     </div>
 </dialog>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const imageDiv = document.getElementById('image-div-task');
+        const input = document.getElementById('image-input-task');
+    
+        imageDiv.addEventListener('click', () => {
+            input.click();
+        });
+    
+        input.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+    
+                reader.onload = function (e) {
+                    const previewElement = document.getElementById('image-preview-task');
+    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'w-full h-full object-cover rounded-lg';
+                    img.id = 'image-preview-task';
+    
+                    previewElement.parentNode.replaceChild(img, previewElement);
+                };
+    
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
+    

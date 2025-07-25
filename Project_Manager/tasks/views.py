@@ -122,7 +122,6 @@ def task_detail(request, task_pk, *args, **kwargs):
     project = task.project
     executors = task.executor.all()
     statuses = Status.objects.all()
-    image_task_form = AddImageTaskForm()
     tags = Tag.objects.filter(project=project)
     update_tag_form = UpdateTagForm(instance=task, project=project)
     create_tag_form = CreateTagForm()
@@ -154,7 +153,6 @@ def task_detail(request, task_pk, *args, **kwargs):
         'task_form': task_form,
         'project_members': project_members,
         'executor_ids': executor_ids,
-        'image_task_form': image_task_form,
         'create_subtask_form': create_subtask_form,
         'comment_form': comment_form,
         'priorities': task.PriprityChoices
