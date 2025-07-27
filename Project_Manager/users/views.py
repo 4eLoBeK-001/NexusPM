@@ -134,7 +134,7 @@ def change_profile(request):
             if user_form.is_valid():
                 user_form.save()
                 return redirect(request.META.get('HTTP_REFERER'))
-        if 'profile_form' in request.POST:
+        if 'profile_form' in request.POST or request.FILES.__len__()>0:
             profile_form = ChangeProfileForm(request.POST, request.FILES, instance=profile)
             if profile_form.is_valid():
                 profile_form.save()

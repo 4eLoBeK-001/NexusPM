@@ -122,7 +122,7 @@ class ChangeProfileForm(forms.ModelForm):
 
         CLASS_FOR_FIELDS = 'p-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white text-gray-800'
         widgets = {
-            'profile_picture': CustomImageField(attrs={'id': 'id_profile_picture'}),
+            'profile_picture': forms.FileInput(attrs={'class': 'hidden'}),
             'description': forms.Textarea(attrs={
                 'class': CLASS_FOR_FIELDS,
                 'placeholder': 'Описание профиля',

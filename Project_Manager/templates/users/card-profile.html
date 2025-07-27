@@ -1,11 +1,9 @@
 {% load static %}
 
 <div class="text-center">
-    {% if profile.profile_picture %}
-      <img src="{{ profile.profile_picture.url }}" alt="Avatar" class="rounded-full mx-auto mb-4 bg-gray-800 w-32 h-32" />
-    {% else %}
-      <img src="{% static 'users/default_avatar/avatar.png' %}" alt="Avatar" class="rounded-full mx-auto mb-4 bg-gray-800 w-32 h-32" />
-    {% endif %}
+
+    <img src="{{ profile.get_profile_picture_url }}" alt="Avatar" class="rounded-full mx-auto mb-4 bg-gray-800 w-32 h-32 object-cover" />
+
 
     <h2 class="text-xl font-bold">{{ user.username }}</h2>
     <p class="text-sm text-gray-500">{{ user.first_name }} {{ user.last_name }}</p>

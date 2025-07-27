@@ -2,7 +2,7 @@
 
 
 {% block profile-content %}
-<form method="post" class="space-y-4" action="?form=profile_form#profile-form" id="profile-form">
+<form method="post" class="space-y-4" action="?form=user_form#user-form" id="user-form">
     {% csrf_token %}
   
     <h2 class="text-xl font-semibold">Основные данные</h2>
@@ -19,27 +19,50 @@
     <button type="submit" name="user_form" class="btn btn-primary">Сохранить</button>
 </form>
 
-<form method="post" class="space-y-4" enctype="multipart/form-data" action="?form=user_form#user-form" id="user-form">
+<form action="" method="post"></form>
+
+<form method="post" class="space-y-4" enctype="multipart/form-data" action="" id="profile-form">
     {% csrf_token %}
 
     <h2 class="text-xl font-semibold">Профиль</h2>
-    {% for profile_field in profile_form %}
-    <div class="mb-6">
-        <label class="block text-gray-700 text-sm font-medium mb-2" for="{{ profile_field.id_for_label }}">
-            <i class="text-indigo-500"></i>{{ profile_field.label }}
-        </label>
-        {{ profile_field }}
 
-        {% if profile_field.errors %}
-            <div class="text-red-600 text-sm mt-1">
-            {{ profile_field.errors }}
+    {{ profile_form.profile_picture.label }}
+    {{ profile_form.profile_picture }}
+    <div id="img" onclick="changePhoto(this)" class="w-36 h-36 bg-red-400 rounded-full flex items-center justify-center font-bold text-white cursor-pointer hover:opacity-75">
+        <img class="w-36 h-36 rounded-full object-cover" src="{{ profile.get_profile_picture_url }}" alt="" >
+    </div>
+
+
+    {% for profile_field in profile_form %}
+        {% if profile_field.name != 'profile_picture' %}
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-medium mb-2" for="{{ profile_field.id_for_label }}">
+                    <i class="text-indigo-500"></i>{{ profile_field.label }}
+                </label>
+                {{ profile_field }}
+
+                {% if profile_field.errors %}
+                    <div class="text-red-600 text-sm mt-1">
+                    {{ profile_field.errors }}
+                    </div>
+                {% endif %}
+
             </div>
         {% endif %}
-
-    </div>
     {% endfor %}
 
     <button type="submit" name="profile_form" class="btn btn-primary">Сохранить</button>
 </form>
 
+<script>
+    function changePhoto(profile_picture) {
+        document.getElementById('id_profile_picture').click();
+
+        document.getElementById('id_profile_picture').addEventListener('change', () => {
+            document.getElementById('profile-form').submit();
+        });
+    }
+</script>
+
 {% endblock profile-content %}
+
