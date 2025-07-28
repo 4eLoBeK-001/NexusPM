@@ -112,8 +112,8 @@ class Notifications(models.Model):
 
 
 class TeamMember(models.Model):
-    team = models.ForeignKey('teams.Team', on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    team = models.ForeignKey('teams.Team', on_delete=models.CASCADE, related_name='participate_in_team')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='members_teams')
     date_joining = models.DateTimeField(auto_now_add=True)
 
     class Meta:

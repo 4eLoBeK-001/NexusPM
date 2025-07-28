@@ -1,8 +1,10 @@
 from django.contrib import admin
 
 from .models import Team
-from .models import TeamMember
+from .models import TeamMember, TeamInvitation
 
+
+admin.site.register(TeamInvitation)
 
 class OrderItemInline(admin.TabularInline):
     model = TeamMember

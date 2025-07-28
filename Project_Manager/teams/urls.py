@@ -10,7 +10,7 @@ urlpatterns = [
     path('', views.workplace, name='workplace'),
     path('team/<int:pk>/conf/', views.team_conf, name='team_conf'),
     path('team/<int:pk>/members/', views.team_members, name='team_members'),
-    path('team/<int:pk>/members/add/', views.add_team_member, name='add_team_member'),
+    path('team/<int:pk>/members/adds/', views.send_invitation_to_team, name='send_invitation_to_team'),
     path('team/<int:pk>/member/<int:member_pk>/delete/', views.deleting_team_members, name='deleting_team_members'),
     
     path('teams/', views.team_list, name='team_list'),

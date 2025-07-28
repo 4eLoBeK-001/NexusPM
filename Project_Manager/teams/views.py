@@ -9,7 +9,7 @@ from django.utils.safestring import mark_safe
 from users.models import User
 
 from .forms import AddModalTeamForm, AddTeamForm, AddTeamMemberModalForm
-from .models import Team
+from .models import Team, TeamInvitation
 
 
 def workplace(request):
@@ -50,32 +50,36 @@ def team_members(request, pk):
     }
     return render(request, 'teams/includes/team_members.html', context)
 
+
 @require_http_methods(['POST'])
-def add_team_member(request, pk):
-    team = Team.objects.get(pk=pk, team_member=request.user)
-
+def send_invitation_to_team(request, pk):
+    team = get_object_or_404(Team, pk=pk)
     form = AddTeamMemberModalForm(request.POST)
-
     if form.is_valid():
-        emails = form.cleaned_data['email']
+        emails = form.cleaned_data.get('email')
         not_fould_emails = []
-
         for email in emails:
             user = get_user_model().objects.filter(email=email).first()
-            if user:
-                team.team_member.add(user.pk)
+
+            if user: 
+                # проверка, что пользователь не уже участник и не приглашён
+                already_invited = TeamInvitation.objects.filter(team=team, invited_user=user, accepted=False).exists()
+                already_member = user.members_teams.filter(team=team).exists()
+                if not already_member and not already_invited:
+                    TeamInvitation.objects.create(team=team, invited_by=request.user, invited_user=user)
+                else:
+                    not_fould_emails.append(email)
             else:
                 not_fould_emails.append(email)
-            
+        
         if not_fould_emails:
             form.add_error(
-                'email', 
-                mark_safe(f'Пользователи с адресами: <strong>{', '.join(not_fould_emails)}</strong> не найдены')
+                'email',
+                mark_safe(f'Пользователи с адресами <strong>{', '.join(not_fould_emails)}</strong> не найдены или уже находятся в команде')
             )
-            return render(request, 'teams/includes/team_members.html', {'team': team, 'form': form})
-
+            return render(request, 'teams/includes/team_members.html', {'form': form, 'team': team})
     else:
-        return render(request, 'teams/includes/team_members.html', {'team': team, 'form': form})
+        return render(request, 'teams/includes/team_members.html', {'form': form, 'team': team})
     return redirect(request.META.get('HTTP_REFERER'))
 
 

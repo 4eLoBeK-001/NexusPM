@@ -34,3 +34,20 @@ class Team(models.Model):
 
     def __str__(self):
         return f'Пороект - {self.name}'
+
+
+class TeamInvitation(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='invitations')
+    invited_by = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='sent_invitations')
+    invited_user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='team_invitations')
+    created_at = models.DateTimeField(auto_now_add=True)
+    accepted = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('team', 'invited_user')
+        verbose_name = 'Приглашение'
+        verbose_name_plural = 'Приглашения'
+    
+    def __str__(self):
+        return f'{self.invited_user} приглашён {self.invited_by} в {self.team}'
+
