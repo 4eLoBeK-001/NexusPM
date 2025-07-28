@@ -1,8 +1,11 @@
+from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.urls import reverse
+
+from teams.models import TeamInvitation
 
 from .models import Notifications, SocialNetwork, Tag
 
@@ -154,4 +157,20 @@ def notifications(request):
     context = {
         'notifications': notifications
     }
-    return render(request, 'users/notifications.html', context)
+    return render(request, 'notifications.html', context)
+
+
+def notification_list(request):
+    notifications = Notifications.objects.filter(user=request.user)
+    context = {
+        'notifications': notifications
+    }
+    return render(request, 'users/includes/notifications_list.html', context)
+
+
+def invitation_list(request):
+    invitations = TeamInvitation.objects.filter(invited_user=request.user)
+    context = {
+        'invitations': invitations
+    }
+    return render(request, 'users/includes/invitation_list.html', context)
