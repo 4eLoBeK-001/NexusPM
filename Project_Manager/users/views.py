@@ -4,7 +4,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.urls import reverse
 
-from .models import SocialNetwork, Tag
+from .models import Notifications, SocialNetwork, Tag
 
 from .forms import AddSocialnetworkForm, AddTagForm, ChangeProfileForm, ChangeUserForm, LoginUserForm, RegisterUserForm
 # Create your views here.
@@ -147,3 +147,11 @@ def change_profile(request):
         'profile_form': profile_form
     }
     return render(request, 'users/change-profile.html', data)
+
+
+def notifications(request):
+    notifications = Notifications.objects.filter(user=request.user)
+    context = {
+        'notifications': notifications
+    }
+    return render(request, 'users/notifications.html', context)

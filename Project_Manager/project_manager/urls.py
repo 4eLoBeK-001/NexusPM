@@ -8,7 +8,6 @@ from project_manager import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.main_page, name='home'),
-    path('notifications/', views.notifications, name='notifications'),
 
     path('auth/', include('users.urls', namespace='users')),
     path('workplace/', include('teams.urls', namespace='teams')),

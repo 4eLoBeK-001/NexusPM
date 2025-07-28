@@ -17,4 +17,6 @@ urlpatterns = [
 
     path('profile/create/social/', views.add_social_network, name='add_social_network'),
     path('profile/create/social/<int:network_pk>/', views.delete_social_network, name='delete_social_network'),
+    
+    path('notifications/', views.notifications, name='notifications'),
 ]
