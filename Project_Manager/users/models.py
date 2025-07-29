@@ -23,9 +23,6 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='users/profile_pictures/', null=True, blank=True)
 
-    # self.profile_picture = 'users/profile_pictures/avatar.html'
-    # lst = ('C:\\', 'Users', 'user', 'Desktop', 'test', 'Project_Manager', 'Project_Manager', 'media')
-
     @property
     def get_profile_picture_url(self):
         if not self.profile_picture:

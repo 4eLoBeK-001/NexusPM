@@ -11,6 +11,9 @@
             <div class="space-y-3 max-h-60 overflow-y-auto pr-2">
                 {% for member in project_members %}
                     <label class="flex items-center gap-3 p-3 bg-white border border-gray-300 rounded-md shadow-sm cursor-pointer hover:bg-gray-50">
+                        <div class="w-12 rounded-full border border-black border-[2px] ring ring-primary ring-2 overflow-hidden">
+                            <img src="{{member.profile.get_profile_picture_url}}" alt="">
+                          </div>
                         <input type="checkbox" name="executor" value="{{ member.id }}"
                             {% if member.id in executor_ids %}checked{% endif %}
                             class="checkbox checkbox-info">

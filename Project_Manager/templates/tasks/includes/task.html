@@ -39,13 +39,24 @@
 
     <!-- Исполнители -->
     <div class="w-2/12 flex justify-start">
-        <div id="exAvatar-{{task.pk}}" class="avatar {% if task.status.is_completed %}grayscale{% endif %}">
-            <!-- <div class="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"></div> -->
-            {% for executor in task.executor.all %}
-              <p class="text-gray-700 mr-2">{{executor}}</p>
+        <div class="flex -space-x-4">
+            {% for executor in task.executor.all|slice:":3" %}
+                <div class="avatar">
+                    <div class="w-12 rounded-full border border-black border-[2px] ring ring-primary ring-2 overflow-hidden">
+                        <img src="{{executor.profile.get_profile_picture_url}}" />
+                    </div>
+                </div>
             {% endfor %}
+            {% if task.executor.count > 3 %}
+            <div class="z-[20]">
+                <div class="w-12 h-12 flex justify-center items-center rounded-full bg-neutral border border-black border-1 ring ring-primary ring-2 text-gray-100">
+                    <span class="text-center text-sm">+{{task.executor.count|add:"-3"}}</span>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
+    
 
     <!-- Статус -->
     <div id="status-{{task.pk}}" class="w-2/12">
