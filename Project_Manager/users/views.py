@@ -4,6 +4,7 @@ from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.urls import reverse
+from django.utils.html import format_html
 
 from teams.models import TeamInvitation
 
@@ -174,3 +175,20 @@ def invitation_list(request):
         'invitations': invitations
     }
     return render(request, 'users/includes/invitation_list.html', context)
+
+
+def accept_invitation(request, invitation_id):
+    invitation = get_object_or_404(TeamInvitation, pk=invitation_id, invited_user=request.user)
+    if not invitation.accepted:
+        invitation.team.team_member.add(request.user)
+        invitation.accepted = True
+        invitation.save()
+        messages.success(
+            request,
+            format_html(
+                'Вы вступили в команду <a id="mtl" href={url}>{team}</a>',
+                url=reverse('teams:projects:project_list', args=[invitation.team.id]),
+                team=invitation.team.name
+            )
+        )
+    return redirect(request.META.get('HTTP_REFERER'))

@@ -21,4 +21,6 @@ urlpatterns = [
     path('notifications/', views.notifications, name='notifications'),
     path('notifications/new/', views.notification_list, name='notification_list'),
     path('notifications/inv/', views.invitation_list, name='invitation_list'),
+   
+    path('invitation/<int:invitation_id>/accept/', views.accept_invitation, name='accept_invitation'),
 ]

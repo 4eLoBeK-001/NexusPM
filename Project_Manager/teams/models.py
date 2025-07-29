@@ -44,7 +44,7 @@ class TeamInvitation(models.Model):
     accepted = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ('team', 'invited_user')
+        ordering = ('-created_at',)
         verbose_name = 'Приглашение'
         verbose_name_plural = 'Приглашения'
     
