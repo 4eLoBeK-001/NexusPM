@@ -42,8 +42,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                
                 'teams.context_processors.all_teams_processor',
                 'teams.context_processors.project_form_processor',
+                'users.context_processors.tracker_unread_notifications_processor',
             ],
         },
     },

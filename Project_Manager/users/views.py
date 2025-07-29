@@ -156,7 +156,7 @@ def change_profile(request):
 def notifications(request):
     notifications = Notifications.objects.filter(user=request.user)
     context = {
-        'notifications': notifications
+        'notifications': notifications,
     }
     return render(request, 'notifications.html', context)
 
@@ -172,7 +172,7 @@ def notification_list(request):
 def invitation_list(request):
     invitations = TeamInvitation.objects.filter(invited_user=request.user)
     context = {
-        'invitations': invitations
+        'invitations': invitations,
     }
     return render(request, 'users/includes/invitation_list.html', context)
 
