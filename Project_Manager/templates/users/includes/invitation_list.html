@@ -36,7 +36,7 @@
       <p href="" class="px-4 py-1.5 text-sm font-medium rounded-md border border-blue-600 text-blue-600 hover:bg-blue-100 transition-colors cursor-pointer">
         {{ invitation.accepted|yesno:"Принято,Не принято" }}
       </p>
-      <input type="checkbox" class="p-3 mt-1 checkbox checkbox-primary" {% if invitation.accepted %}checked{%endif%}/>
+      <input type="radio" class="p-3 mt-1 radio radio-primary" {% if invitation.accepted %}checked {%endif%} />
     </div>
 
   </div>

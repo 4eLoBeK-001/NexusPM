@@ -154,19 +154,29 @@ def change_profile(request):
 
 
 def notifications(request):
-    notifications = Notifications.objects.filter(user=request.user)
+    notifications = Notifications.objects.filter(user=request.user, is_read=False)
     context = {
         'notifications': notifications,
     }
     return render(request, 'notifications.html', context)
 
 
-def notification_list(request):
-    notifications = Notifications.objects.filter(user=request.user)
+def notification_list(request, read):
+    notifications = Notifications.objects.filter(user=request.user, is_read=read)
     context = {
         'notifications': notifications
     }
     return render(request, 'users/includes/notifications_list.html', context)
+
+
+def read_notification(request, notification_id):
+    notification = get_object_or_404(Notifications, pk=notification_id, user=request.user)
+    notification.is_read = not notification.is_read
+    notification.save()
+    context = {
+        'notification': notification
+    }
+    return render(request, 'users/includes/notification.html', context)
 
 
 def invitation_list(request):

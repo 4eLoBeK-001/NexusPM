@@ -9,9 +9,9 @@
       <div class="flex items-center gap-x-4 text-2xl font-semibold text-black">
         <div class="btn-group">
             <div class="flex gap-2">
-                <a hx-get="{% url 'users:notification_list' %}" hx-target="#list-content" data-value="new" class="btn btn-outline btn-primary btn-active btn-md">Новые</a>
+                <a hx-get="{% url 'users:new_notification_list' 0 %}" hx-vals='{"type": "new"}' hx-target="#list-content" data-value="new" class="btn btn-outline btn-primary btn-active btn-md">Новые</a>
                 <a hx-get="{% url 'users:invitation_list' %}" hx-target="#list-content" data-value="invites" class="btn btn-outline btn-primary btn-md">Приглашения</a>
-                <a href="#" data-value="read" class="btn btn-outline btn-primary btn-md">Прочитанные</a>
+                <a hx-get="{% url 'users:new_notification_list' 1 %}" hx-vals='{"type": "read"}' hx-target="#list-content" data-value="read" class="btn btn-outline btn-primary btn-md">Прочитанные</a>
               </div>
               
               <script>
