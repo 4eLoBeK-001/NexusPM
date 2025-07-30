@@ -5,6 +5,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django.db.models import Q, F, Count, Sum
 
 from users.models import User
 
@@ -41,12 +42,18 @@ def team_conf(request, pk):
     }
     return render(request, 'teams/includes/setting.html', context)
 
+
 def team_members(request, pk):
     team = Team.objects.get(pk=pk, team_member=request.user)
     form = AddTeamMemberModalForm()
+    team_members = team.team_member.annotate(
+        team_projects_count=Count('project_membership', filter=Q(project_membership__team=team)),
+        member_date_joining=F('members_teams__date_joining')
+        ).all()
     context = {
         'team': team,
-        'form': form
+        'form': form,
+        'team_members': team_members
     }
     return render(request, 'teams/includes/team_members.html', context)
 
@@ -155,4 +162,15 @@ def delete_team(request, pk):
         response = redirect('teams:team_list')
     team.delete()
     return response
-    
+
+
+@require_http_methods(['GET'])
+def search_team_members(request, pk):
+    team = get_object_or_404(Team, pk=pk)
+    search = request.GET.get('input_search')
+    team_members = team.team_member.filter(username__icontains=search)
+    context = {
+        'team_members': team_members,
+        'team': team
+    }
+    return render(request, 'teams/includes/team_members_list.html', context)
