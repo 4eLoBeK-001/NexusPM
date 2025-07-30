@@ -169,6 +169,16 @@ def notification_list(request, read):
     return render(request, 'users/includes/notifications_list.html', context)
 
 
+def search_notifications(request):
+    search = request.GET.get('search_notif')
+    notifications = Notifications.objects.filter(user=request.user, name__icontains=search)
+    context = {
+        'notifications': notifications
+    }
+    return render(request, 'users/includes/notifications_list.html', context)
+
+
+
 def read_notification(request, notification_id):
     notification = get_object_or_404(Notifications, pk=notification_id, user=request.user)
     notification.is_read = not notification.is_read

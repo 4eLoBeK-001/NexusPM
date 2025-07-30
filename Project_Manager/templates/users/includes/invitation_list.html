@@ -1,44 +1,45 @@
 
 
 
+<div id="invitation-list-content">
+  {% for invitation in invitations %}
 
-{% for invitation in invitations %}
+  <div id="card_{{invitation.id}}" class="my-2 bg-gray-50 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors">
 
-<div id="card_{{invitation.id}}" class="my-2 bg-gray-50 border border-gray-200 rounded-lg hover:border-blue-300 transition-colors">
-
-  <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4">
+        
       
-    
-    <!-- Основное содержимое -->
-    <div class="flex-1 min-w-0">
+      <!-- Основное содержимое -->
+      <div class="flex-1 min-w-0">
 
-      <div>
-        <h3 class="text-lg font-semibold text-gray-800 truncate">Вам пришло приглашение в "<a href="{% url 'users:accept_invitation' invitation.id %}" class="text-blue-500 visited:text-red-700">{{ invitation.team }}</a>" от <a href="">{{ invitation.invited_by }}</a></h3>
-      </div>
-
-      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2 text-sm text-gray-500">
-
-        <div class="flex items-center">
-          <i class="far fa-calendar-alt mr-1.5 text-gray-400"></i>
-          <span title="Дата создания">{{ invitation.created_at|date:"d.m.Y H:i" }}</span>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-800 truncate">Вам пришло приглашение в "<a href="{% url 'users:accept_invitation' invitation.id %}" class="text-blue-500 visited:text-red-700">{{ invitation.team }}</a>" от <a href="">{{ invitation.invited_by }}</a></h3>
         </div>
 
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2 text-sm text-gray-500">
+
+          <div class="flex items-center">
+            <i class="far fa-calendar-alt mr-1.5 text-gray-400"></i>
+            <span title="Дата создания">{{ invitation.created_at|date:"d.m.Y H:i" }}</span>
+          </div>
+
+        </div>
       </div>
+
+      <div id="status-container-{{invitation.id}}" class="flex flex-col justify-between sm:flex-row sm:items-center  gap-2">
+
+
+      </div>
+      
+      <!-- Кнопки действий -->
+      <div class="flex gap-4 sm:ml-auto mt-2 sm:mt-0">
+        <p href="" class="px-4 py-1.5 text-sm font-medium rounded-md border border-blue-600 text-blue-600 hover:bg-blue-100 transition-colors cursor-pointer">
+          {{ invitation.accepted|yesno:"Принято,Не принято" }}
+        </p>
+        <input type="radio" class="p-3 mt-1 radio radio-primary" {% if invitation.accepted %}checked {%endif%} />
+      </div>
+
     </div>
-
-    <div id="status-container-{{invitation.id}}" class="flex flex-col justify-between sm:flex-row sm:items-center  gap-2">
-
-
-    </div>
-    
-    <!-- Кнопки действий -->
-    <div class="flex gap-4 sm:ml-auto mt-2 sm:mt-0">
-      <p href="" class="px-4 py-1.5 text-sm font-medium rounded-md border border-blue-600 text-blue-600 hover:bg-blue-100 transition-colors cursor-pointer">
-        {{ invitation.accepted|yesno:"Принято,Не принято" }}
-      </p>
-      <input type="radio" class="p-3 mt-1 radio radio-primary" {% if invitation.accepted %}checked {%endif%} />
-    </div>
-
   </div>
+  {% endfor %}
 </div>
-{% endfor %}
