@@ -1,10 +1,13 @@
-from django.db.models import Q
+from django.db.models import F, Q, Count    
+from django.db.models import Subquery, OuterRef
+
 from django.db.transaction import commit
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import get_user_model
 
+from users.models import ProjectMember
 from teams.models import Team
 
 from projects.models import Project
@@ -99,16 +102,29 @@ def project_settings(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/setting.html', data)
 
 
-@require_project_member
+# @require_project_member
+
 def project_members(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
-    project_members = project.project_members.all()
-    team_members = project.team.team_member.all()
+    team = project.team
+
+    project_count_subquery = ProjectMember.objects.filter(
+        user=OuterRef('pk'),
+        project__team=team
+    ).values('user').annotate(count=Count('project')).values('count')
+
+    project_membersa = project.project_members.annotate(
+        projects_count=Subquery(project_count_subquery),
+        date_joining=F('members_projects__date_joining')
+    ).all()
+
+    team_members = team.team_member.all()
+
     data = {
         'project': project,
-        'project_members': project_members,
-        'project_member_ids': project_members.values_list('id', flat=True),
-        'team_member': team_members,
+        'project_members': project_membersa,
+        'project_member_ids': project_membersa.values_list('id', flat=True),
+        'team_members': team_members,
     }
     return render(request, 'projects/includes/members.html', data)
 

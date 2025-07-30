@@ -47,9 +47,9 @@ def team_members(request, pk):
     team = Team.objects.get(pk=pk, team_member=request.user)
     form = AddTeamMemberModalForm()
     team_members = team.team_member.annotate(
-        team_projects_count=Count('project_membership', filter=Q(project_membership__team=team)),
+        projects_count=Count('project_membership', filter=Q(project_membership__team=team)),
         member_date_joining=F('members_teams__date_joining')
-        ).all()
+    ).all()
     context = {
         'team': team,
         'form': form,

@@ -5,7 +5,7 @@
         <td class="w-10 py-1 px-3 text-center whitespace-nowrap">{{ forloop.counter }}</td>
         <td class="py-1 px-6 text-left font-bold">{{ member.username }}</td>
         <td class="py-1 px-6 text-left">{{ member.email|default:"---" }}</td>
-        <td class="py-1 px-6 text-left">Кол-во проектов</td>
+        <td class="py-1 px-6 text-left">{{ member.projects_count }}</td>
         <td class="py-1 px-6 text-left">
             <div class="dropdown">
                 <div tabindex="0" role="button" class="btn m-1 bg-gray-100 text-gray-800 rounded-2xl border-gray-400 hover:bg-gray-50 hover:border-sky-600 shadow-md">Гость <i class='fas fa-angle-down mt-1'></i></div>
@@ -15,7 +15,7 @@
                 </ul>
             </div>
         </td>
-        <td class="py-1 px-6 text-left">Дата</td>
+        <td class="py-1 px-6 text-left">{{ member.date_joining }}</td>
         <td class="" title="Исключить из проекта">
             <a 
             hx-post="{% url 'teams:projects:delete_project_members' project.team.pk project.pk member.pk %}"

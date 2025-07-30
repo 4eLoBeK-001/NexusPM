@@ -124,7 +124,7 @@ class TeamMember(models.Model):
 
 class ProjectMember(models.Model):
     project = models.ForeignKey('projects.Project', on_delete=models.CASCADE, related_name='pm')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='members_projects')
     date_joining = models.DateTimeField(auto_now_add=True)
 
     class Meta:
