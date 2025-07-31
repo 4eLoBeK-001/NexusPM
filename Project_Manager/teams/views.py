@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import permission_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
@@ -29,18 +30,21 @@ def team_list(request):
 
 def team_conf(request, pk):
     team = Team.objects.get(pk=pk, team_member=request.user)
-    if request.method == 'POST':
-        form = AddTeamForm(request.POST, request.FILES, instance=team)
-        if form.is_valid():
-            form.save()
-            return redirect(request.META.get('HTTP_REFERER'))
-    else:
-        form = AddTeamForm(instance=team)
+    form = AddTeamForm(instance=team)
     context = {
         'team': team,
         'form': form
     }
     return render(request, 'teams/includes/setting.html', context)
+
+
+@require_http_methods(['POST'])
+def change_team(request, pk):
+    team = Team.objects.get(pk=pk, team_member=request.user)
+    form = AddTeamForm(request.POST, request.FILES, instance=team)
+    if form.is_valid():
+        form.save()
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 def team_members(request, pk):
@@ -128,7 +132,7 @@ def create_team(request):
 
 
 # @require_http_methods(['PUT', 'PATCH'])
-def update_team(request, pk):
+def sidebar_update_team(request, pk):
     team = get_object_or_404(Team, pk=pk)
     if request.method == 'POST':
         form = AddModalTeamForm(request.POST, request.FILES, instance=team)
