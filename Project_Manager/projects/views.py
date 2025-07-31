@@ -44,6 +44,7 @@ def search_projects(request, pk):
     return render(request, 'projects/s.html', context)
 
 
+
 @require_http_methods(['POST'])
 def create_project(request):
     form = AddModalProjectForm(request.POST, request.FILES)
@@ -62,6 +63,7 @@ def create_project(request):
             project.project_members.add(request.user.id)
         return redirect(request.META.get('HTTP_REFERER', '/'))
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
 
 
 @require_project_member
@@ -90,16 +92,21 @@ def project_status_changes(request, project_pk):
 def project_settings(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     form = UpdateProjectForm(instance=project)
-    if request.method == 'POST':
-        form = UpdateProjectForm(request.POST, request.FILES, instance=project)
-        if form.is_valid():
-            form.save()
-            return redirect(request.META.get('HTTP_REFERER'))
     data = {
         'project': project,
         'form': form
     }
     return render(request, 'projects/includes/setting.html', data)
+
+
+@require_http_methods(['POST'])
+@require_project_member
+def change_project(request, project_pk, *args, **kwargs):
+    project = get_object_or_404(Project, pk=project_pk)
+    form = UpdateProjectForm(request.POST, request.FILES, instance=project)
+    if form.is_valid():
+        form.save()
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 # @require_project_member
@@ -182,19 +189,19 @@ def project_tags(request, project_pk, *args, **kwargs):
     data = {
         'project': project,
         'tags': tags,
-        'tag_form': form
+        'create_tag_form': form
     }
     return render(request, 'projects/includes/tags.html', data)
 
 
+@require_http_methods(['POST'])
 @require_project_member
 def delete_tag(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     tags = project.tags.all()
-    if request.method == 'POST':
-        selected_tag = request.POST.get('tag_id')
-        tag = get_object_or_404(Tag, pk=int(selected_tag))
-        tag.delete()
+    selected_tag = request.POST.get('tag_id')
+    tag = get_object_or_404(Tag, pk=int(selected_tag))
+    tag.delete()
     data = {
         'project': project,
         'tags': tags
@@ -263,14 +270,14 @@ def search_status(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/status-list.html', data)
 
 
+@require_http_methods(['POST'])
 @require_project_member
 def delete_status(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     statuses = project.statuses.all()
-    if request.method == 'POST':
-        status_id = request.POST.get('status_id')
-        status = get_object_or_404(Status, pk=int(status_id))
-        status.delete()
+    status_id = request.POST.get('status_id')
+    status = get_object_or_404(Status, pk=status_id)
+    status.delete()
     data = {
         'project': project,
         'statuses': statuses,
