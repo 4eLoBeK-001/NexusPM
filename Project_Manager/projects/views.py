@@ -156,7 +156,16 @@ def add_project_members(request, project_pk, *args, **kwargs):
 def search_members(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     text = request.GET.get('input_search')
-    project_members = project.project_members.filter(username__icontains=text)
+    team = project.team
+    project_count_subquery = ProjectMember.objects.filter(
+        user=OuterRef('pk'),
+        project__team=team
+    ).values('user').annotate(count=Count('project')).values('count')
+
+    project_members = project.project_members.annotate(
+        projects_count=Subquery(project_count_subquery),
+        date_joining=F('members_projects__date_joining')
+    ).filter(Q(username__icontains=text) | Q(email__icontains=text))
 
     data = {
         'project': project,
