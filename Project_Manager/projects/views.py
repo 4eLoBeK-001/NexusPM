@@ -44,7 +44,7 @@ def search_projects(request, pk):
     return render(request, 'projects/s.html', context)
 
 
-
+# Метка
 @require_http_methods(['POST'])
 def create_project(request):
     form = AddModalProjectForm(request.POST, request.FILES)
@@ -65,7 +65,7 @@ def create_project(request):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
-
+# Метка
 @require_project_member
 def delete_project(request, project_pk):
     response = redirect(request.META.get('HTTP_REFERER'))
@@ -76,6 +76,7 @@ def delete_project(request, project_pk):
     return response
 
 
+# Метка
 @require_project_member
 def project_status_changes(request, project_pk):
     project = get_object_or_404(Project, pk=project_pk)
@@ -88,6 +89,7 @@ def project_status_changes(request, project_pk):
     }
     return render(request, 'projects/includes/change-status.html', data)
 
+
 @require_project_member
 def project_settings(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
@@ -99,6 +101,7 @@ def project_settings(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/setting.html', data)
 
 
+# Метка
 @require_http_methods(['POST'])
 @require_project_member
 def change_project(request, project_pk, *args, **kwargs):
@@ -136,6 +139,7 @@ def project_members(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/members.html', data)
 
 
+# Метка
 @require_http_methods(['POST'])
 @require_project_member
 def delete_project_members(request, project_pk, member_pk, *args, **kwargs):
@@ -149,6 +153,7 @@ def delete_project_members(request, project_pk, member_pk, *args, **kwargs):
     return render(request, 'projects/includes/member.html')
 
 
+# Метка
 @require_http_methods(['POST'])
 @require_project_member
 def add_project_members(request, project_pk, *args, **kwargs):
@@ -194,6 +199,7 @@ def project_tags(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/tags.html', data)
 
 
+# Метка
 @require_http_methods(['POST'])
 @require_project_member
 def delete_tag(request, project_pk, *args, **kwargs):
@@ -221,6 +227,7 @@ def search_tags(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/tags_list_partial.html', data)
 
 
+# Метка
 @require_http_methods(['POST'])
 @require_project_member
 def create_tag(request, project_pk, *args, **kwargs):
@@ -246,6 +253,7 @@ def project_statuses(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/statuses.html', data)
 
 
+# Метка
 @require_http_methods(['POST'])
 @require_project_member
 def create_status(request, project_pk, *args, **kwargs):
@@ -270,6 +278,7 @@ def search_status(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/status-list.html', data)
 
 
+# Метка
 @require_http_methods(['POST'])
 @require_project_member
 def delete_status(request, project_pk, *args, **kwargs):

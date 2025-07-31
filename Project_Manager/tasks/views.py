@@ -62,6 +62,7 @@ def task_search(request, project_pk, *args, **kwargs):
     }
     return render(request, 'tasks/includes/tasks.html', context)
 
+
 def task_filter(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     tasks = Task.objects.filter(project=project, parent_task__isnull=True)
@@ -169,6 +170,7 @@ def processing_image(request, task_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+@require_http_methods(['POST'])
 def create_subtask(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
     project = task.project
@@ -215,8 +217,6 @@ def add_executors(request, task_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-
-
 @require_http_methods(['POST'])
 def add_comment(request, task_pk, project_pk, **kwargs):
     comment_form = AddCommentForm(request.POST)
@@ -233,9 +233,8 @@ def add_comment(request, task_pk, project_pk, **kwargs):
     return render(request, 'tasks/includes/comment.html', data)
 
 
-
+@require_http_methods(['POST'])
 def delete_comment(request, comm_pk, *args, **kwargs):
-    if request.method == 'POST':
-        comment = get_object_or_404(Comment, pk=comm_pk)
-        comment.delete()
+    comment = get_object_or_404(Comment, pk=comm_pk)
+    comment.delete()
     return render(request, 'tasks/includes/comment.html')
