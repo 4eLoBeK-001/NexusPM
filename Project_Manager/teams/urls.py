@@ -17,7 +17,6 @@ urlpatterns = [
     path('teams/', views.team_list, name='team_list'),
     path('create/', views.create_team, name='create_team'),
     path('change/<int:pk>/', views.change_team, name='change_team'),
-    path('update/<int:pk>/', views.sidebar_update_team, name='sidebar_update_team'),
     path('delete/<int:pk>/', views.delete_team, name='delete_team'),
     path('search/', views.search_team, name='search_team'),
     path('ssearch/', views.sidebar_search_team, name='sidebar_search_team'),

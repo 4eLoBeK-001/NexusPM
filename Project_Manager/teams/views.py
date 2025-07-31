@@ -38,10 +38,10 @@ def team_conf(request, pk):
     return render(request, 'teams/includes/setting.html', context)
 
 
-# @permission_required(perm='teams.change_team', raise_exception=True)
+@permission_required(perm='teams.change_team', raise_exception=True)
 @require_http_methods(['POST'])
 def change_team(request, pk):
-    team = Team.objects.get(pk=pk, team_member=request.user)
+    team = get_object_or_404(Team, pk=pk, team_member=request.user)
     form = AddTeamForm(request.POST, request.FILES, instance=team)
     if form.is_valid():
         form.save()
@@ -131,17 +131,6 @@ def create_team(request):
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect(request.META.get('HTTP_REFERER'))
 
-
-# @require_http_methods(['PUT', 'PATCH'])
-def sidebar_update_team(request, pk):
-    team = get_object_or_404(Team, pk=pk)
-    if request.method == 'POST':
-        form = AddModalTeamForm(request.POST, request.FILES, instance=team)
-        if form.is_valid():
-            form.save()
-            return redirect(request.META.get('HTTP_REFERER', 'fallback_url'))
-    
-    return redirect(request.META.get('HTTP_REFERER', 'fallback_url'))
 
 
 @require_http_methods(['GET'])
