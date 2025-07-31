@@ -30,9 +30,11 @@ def login_user(request):
     }
     return render(request, 'users/login.html', data)
 
+
 def logout_user(request):
     logout(request)
     return redirect(request.META.get('HTTP_REFERER'))
+
 
 def register_user(request):
     if request.method == 'POST':
@@ -107,7 +109,6 @@ def delete_social_network(request, network_pk):
     return redirect(request.META.get('HTTP_REFERER'))
     
 
-
 def delete_user_tag(request, tag_pk):
     tag = get_object_or_404(Tag, pk=tag_pk)
     tag.delete()
@@ -176,7 +177,6 @@ def search_notifications(request):
         'notifications': notifications
     }
     return render(request, 'users/includes/notifications_list.html', context)
-
 
 
 def read_notification(request, notification_id):

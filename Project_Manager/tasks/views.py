@@ -32,6 +32,7 @@ def task_list(request, project_pk, *args, **kwargs):
     return render(request, 'tasks/task_list.html', context)
 
 
+# Метка
 @require_http_methods(['POST'])
 def create_task(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
@@ -88,6 +89,7 @@ def task_filter(request, project_pk, *args, **kwargs):
     return render(request, 'tasks/includes/tasks.html', context)
 
 
+# Метка
 @require_http_methods(['POST'])
 def create_status(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
@@ -99,6 +101,7 @@ def create_status(request, project_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+# Метка
 @require_http_methods(['POST'])
 def change_status(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
@@ -147,6 +150,7 @@ def task_detail(request, task_pk, *args, **kwargs):
     return render(request, 'tasks/task-detail.html', data)
 
 
+# Метка
 @require_http_methods(['POST'])
 def change_task(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
@@ -157,6 +161,7 @@ def change_task(request, task_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+# Метка
 @require_http_methods(['POST'])
 def processing_image(request, task_pk, *args, **kwargs):
     image = request.FILES.get('image_task')
@@ -165,6 +170,7 @@ def processing_image(request, task_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+# Метка
 @require_http_methods(['POST'])
 def create_subtask(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
@@ -179,6 +185,7 @@ def create_subtask(request, task_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+# Метка
 @require_http_methods(['POST'])
 def task_delete(request, task_pk, *args, **kwargs):
     task_pk = request.POST.get('task_pk') or request.POST.get('detail_task_pk')
@@ -191,6 +198,7 @@ def task_delete(request, task_pk, *args, **kwargs):
         return redirect(request.META.get('HTTP_REFERER'))
 
 
+# Метка
 @require_http_methods(['POST'])
 def change_tag(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
@@ -200,6 +208,7 @@ def change_tag(request, task_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+# Метка
 @require_http_methods(['POST'])
 def change_priority(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
@@ -213,6 +222,7 @@ def change_priority(request, task_pk, *args, **kwargs):
     return render(request, 'tasks/includes/change-priority.html', data)
 
 
+# Метка
 @require_http_methods(['POST'])
 def add_executors(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
@@ -237,6 +247,7 @@ def add_comment(request, task_pk, project_pk, **kwargs):
     return render(request, 'tasks/includes/comment.html', data)
 
 
+# Метка
 @require_http_methods(['POST'])
 def delete_comment(request, comm_pk, *args, **kwargs):
     comment = get_object_or_404(Comment, pk=comm_pk)
