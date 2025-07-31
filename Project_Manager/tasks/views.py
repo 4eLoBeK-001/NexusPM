@@ -129,20 +129,6 @@ def task_detail(request, task_pk, *args, **kwargs):
     comment_form = AddCommentForm()
     task_form = UpdateTaskForm(instance=task)
     
-    if request.method == 'POST':
-        
-        if 'update_task' in request.POST:
-            task_form = UpdateTaskForm(request.POST, instance=task)
-            if task_form.is_valid():
-                task_form.save()
-                return redirect(request.META.get('HTTP_REFERER'))
-
-        if 'update_tags' in request.POST:
-            tag_list_ids = request.POST.getlist('tag')
-            tags_list = Tag.objects.filter(id__in=tag_list_ids)
-            task.tag.set(tags_list)
-            return redirect(request.META.get('HTTP_REFERER'))
-
     data = {
         'task': task,
         'project': project,
@@ -160,6 +146,15 @@ def task_detail(request, task_pk, *args, **kwargs):
     }
     return render(request, 'tasks/task-detail.html', data)
 
+
+@require_http_methods(['POST'])
+def change_task(request, task_pk, *args, **kwargs):
+    task = get_object_or_404(Task, pk=task_pk)
+    task_form = UpdateTaskForm(request.POST, instance=task)
+    if task_form.is_valid():
+        task_form.save()
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 @require_http_methods(['POST'])
@@ -194,6 +189,15 @@ def task_delete(request, task_pk, *args, **kwargs):
         return reverse('task_list', args=[task.project.team.pk, task.project.pk, task.pk])
     else:
         return redirect(request.META.get('HTTP_REFERER'))
+
+
+@require_http_methods(['POST'])
+def change_tag(request, task_pk, *args, **kwargs):
+    task = get_object_or_404(Task, pk=task_pk)
+    tag_list_ids = request.POST.getlist('tag')
+    tags_list = Tag.objects.filter(id__in=tag_list_ids)
+    task.tag.set(tags_list)
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 @require_http_methods(['POST'])

@@ -6,7 +6,7 @@
 <!-- Левый блок -->
 <div class="flex items-center ml-4 space-x-4">
     <div class="text-xl font-semibold text-gray-800 w-full">
-      <form method="post" id="edit-task-form">
+      <form method="post" action="{% url_task task 'change_task' %}" id="edit-task-form">
         {% csrf_token %}
         <div class="flex items-center space-x-2 w-full">
 
