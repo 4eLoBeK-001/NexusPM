@@ -4,7 +4,7 @@
     <div class="modal-box bg-gray-100 max-w-md p-6 rounded-lg shadow-xl">
         <button class="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition-colors" onclick="add_project_modal.close();">✕</button>
       <h3 class="text-2xl font-bold text-gray-800 mb-4">Создание проекта</h3>
-      <form action="{% url 'teams:projects:create_project' %}" method="post" id="ss1" enctype="multipart/form-data">
+      <form action="{% url 'teams:projects:create_project' team.pk %}" method="post" id="ss1" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="team_id" value="{{ team.id }}">
 

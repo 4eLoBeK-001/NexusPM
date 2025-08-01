@@ -9,7 +9,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import permission_required
 
 from users.models import ProjectMember
+
 from teams.models import Team
+from teams.utils.decorators import role_required
 
 from projects.models import Project
 from projects.forms import AddModalProjectForm, UpdateProjectForm
@@ -45,10 +47,9 @@ def search_projects(request, pk):
     return render(request, 'projects/s.html', context)
 
 
-# @permission_required(perm='projects.add_project', raise_exception=True)
-#Пометка
+@role_required('Admin')
 @require_http_methods(['POST'])
-def create_project(request):
+def create_project(request, pk):
     form = AddModalProjectForm(request.POST, request.FILES)
     if form.is_valid():
         team_id = request.POST.get('team_id')
@@ -67,10 +68,9 @@ def create_project(request):
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
-# @permission_required(perm='projects.delete_project', raise_exception=True)
-#Пометка
+@role_required('Admin')
 @require_project_member
-def delete_project(request, project_pk):
+def delete_project(request, project_pk, *args, **kwargs):
     response = redirect(request.META.get('HTTP_REFERER'))
     project = get_object_or_404(Project, pk=project_pk)
     if request.GET.get('trigger') == 'detail':
@@ -79,10 +79,9 @@ def delete_project(request, project_pk):
     return response
 
 
-# @permission_required(perm='projects.change_project', raise_exception=True)
-#Пометка
+@role_required('Admin')
 @require_project_member
-def project_status_changes(request, project_pk):
+def project_status_changes(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     status = request.POST.get('status')
     project.status = status
@@ -105,8 +104,7 @@ def project_settings(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/setting.html', data)
 
 
-# @permission_required(perm='projects.change_project', raise_exception=True)
-#Пометка
+@role_required('Admin')
 @require_http_methods(['POST'])
 @require_project_member
 def change_project(request, project_pk, *args, **kwargs):
@@ -144,8 +142,7 @@ def project_members(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/members.html', data)
 
 
-# @permission_required(perm='users.delete_projectmember', raise_exception=True)
-#Пометка
+@role_required('Admin')
 @require_http_methods(['POST'])
 @require_project_member
 def delete_project_members(request, project_pk, member_pk, *args, **kwargs):
@@ -159,8 +156,7 @@ def delete_project_members(request, project_pk, member_pk, *args, **kwargs):
     return render(request, 'projects/includes/member.html')
 
 
-# @permission_required(perm='users.add_projectmember', raise_exception=True)
-#Пометка
+@role_required('Admin')
 @require_http_methods(['POST'])
 @require_project_member
 def add_project_members(request, project_pk, *args, **kwargs):
@@ -206,8 +202,7 @@ def project_tags(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/tags.html', data)
 
 
-# @permission_required(perm='projects.delete_project', raise_exception=True)
-#Пометка
+@role_required('Member')
 @require_http_methods(['POST'])
 @require_project_member
 def delete_tag(request, project_pk, *args, **kwargs):
@@ -235,8 +230,7 @@ def search_tags(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/tags_list_partial.html', data)
 
 
-# @permission_required(perm='projects.add_project', raise_exception=True)
-#Пометка
+@role_required('Member')
 @require_http_methods(['POST'])
 @require_project_member
 def create_tag(request, project_pk, *args, **kwargs):
@@ -262,8 +256,7 @@ def project_statuses(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/statuses.html', data)
 
 
-# @permission_required(perm='projects.add_project', raise_exception=True)
-#Пометка
+@role_required('Admin')
 @require_http_methods(['POST'])
 @require_project_member
 def create_status(request, project_pk, *args, **kwargs):
@@ -288,8 +281,7 @@ def search_status(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/status-list.html', data)
 
 
-# @permission_required(perm='projects.delete_project', raise_exception=True)
-#Пометка
+@role_required('Admin')
 @require_http_methods(['POST'])
 @require_project_member
 def delete_status(request, project_pk, *args, **kwargs):

@@ -5,7 +5,7 @@
     <ul tabindex="0" class="dropdown-content menu text-gray-600 bg-white border border-gray-300 rounded-box z-[1] w-48 p-2 shadow-sm">
         <li>
             <a class="flex items-center gap-2"
-            hx-post="{% url 'teams:projects:project_status_changes' project.id %}"
+            hx-post="{% url 'teams:projects:project_status_changes' project.team.pk project.id %}"
             hx-vals='{"status": "{{ status_choices.IN_WORK }}"}'
             hx-target="#status-container-{{project.id}}"
             >
@@ -15,7 +15,7 @@
         </li>
         <li>
             <a class="flex items-center gap-2"
-            hx-post="{% url 'teams:projects:project_status_changes' project.id %}"
+            hx-post="{% url 'teams:projects:project_status_changes' project.team.pk project.id %}"
             hx-vals='{"status": "{{ status_choices.STOPPED }}"}'
             hx-target="#status-container-{{project.id}}"
             >
@@ -25,7 +25,7 @@
         </li>
         <li>
             <a class="flex items-center gap-2"
-            hx-post="{% url 'teams:projects:project_status_changes' project.id %}"
+            hx-post="{% url 'teams:projects:project_status_changes' project.team.pk project.id %}"
             hx-vals='{"status": "{{ status_choices.COMPLETED }}"}'
             hx-target="#status-container-{{project.id}}"
             >
