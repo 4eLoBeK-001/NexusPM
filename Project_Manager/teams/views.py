@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import permission_required, login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
@@ -17,7 +17,7 @@ from .models import Team, TeamInvitation
 def workplace(request):
     return render(request, 'teams/workplace.html')
 
-
+@login_required
 def team_list(request):
     teams = Team.objects.filter(team_member=request.user)
     team_forms = {team.id: AddModalTeamForm(instance=team) for team in teams}
@@ -114,6 +114,7 @@ def deleting_team_members(request, pk, member_pk):
     return render(request, 'teams/includes/team_members_list.html')
 
 
+@login_required
 @require_http_methods(['POST'])
 def create_team(request):
     form = AddModalTeamForm(request.POST, request.FILES)
@@ -147,7 +148,7 @@ def search_team(request):
 @require_http_methods(['GET'])
 def sidebar_search_team(request):
     search = request.GET.get('search', '')
-    queryset = Team.objects.filter(name__icontains=search)
+    queryset = Team.objects.filter(team_member=request.user, name__icontains=search)
     return render(request, 'includes/team_list.html', {'context_teams': queryset})
 
 

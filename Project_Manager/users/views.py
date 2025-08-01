@@ -2,6 +2,7 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
 from django.utils.html import format_html
@@ -52,7 +53,7 @@ def register_user(request):
     }
     return render(request, 'users/register.html', data)
 
-
+@login_required
 def profile_user(request):
     user = get_object_or_404(get_user_model(), pk=request.user.pk)
     profile = user.profile
@@ -154,6 +155,7 @@ def change_profile(request):
     return render(request, 'users/change-profile.html', data)
 
 
+@login_required
 def notifications(request):
     notifications = Notifications.objects.filter(user=request.user, is_read=False)
     context = {
