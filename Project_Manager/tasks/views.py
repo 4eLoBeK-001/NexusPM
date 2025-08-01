@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.contrib import messages
+from django.contrib.auth.decorators import permission_required
 from django.utils.html import format_html
 
 from projects.models import Project
@@ -32,7 +33,7 @@ def task_list(request, project_pk, *args, **kwargs):
     return render(request, 'tasks/task_list.html', context)
 
 
-# Метка
+@permission_required(perm='tasks.add_task', raise_exception=True)
 @require_http_methods(['POST'])
 def create_task(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
@@ -89,19 +90,7 @@ def task_filter(request, project_pk, *args, **kwargs):
     return render(request, 'tasks/includes/tasks.html', context)
 
 
-# Метка
-@require_http_methods(['POST'])
-def create_status(request, project_pk, *args, **kwargs):
-    project = get_object_or_404(Project, pk=project_pk)
-    form = CreateStatusForm(request.POST)
-    if form.is_valid():
-        status = form.save(commit=False)
-        status.project = project
-        status.save()
-    return redirect(request.META.get('HTTP_REFERER'))
-
-
-# Метка
+@permission_required(perm='tasks.change_status', raise_exception=True)
 @require_http_methods(['POST'])
 def change_status(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
@@ -150,7 +139,7 @@ def task_detail(request, task_pk, *args, **kwargs):
     return render(request, 'tasks/task-detail.html', data)
 
 
-# Метка
+@permission_required(perm='tasks.change_task', raise_exception=True)
 @require_http_methods(['POST'])
 def change_task(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
@@ -161,7 +150,7 @@ def change_task(request, task_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-# Метка
+@permission_required(perm='tasks.add_taskimage', raise_exception=True)
 @require_http_methods(['POST'])
 def processing_image(request, task_pk, *args, **kwargs):
     image = request.FILES.get('image_task')
@@ -170,7 +159,8 @@ def processing_image(request, task_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-# Метка
+
+@permission_required(perm='tasks.add_task', raise_exception=True)
 @require_http_methods(['POST'])
 def create_subtask(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
@@ -185,7 +175,7 @@ def create_subtask(request, task_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-# Метка
+@permission_required(perm='tasks.delete_task', raise_exception=True)
 @require_http_methods(['POST'])
 def task_delete(request, task_pk, *args, **kwargs):
     task_pk = request.POST.get('task_pk') or request.POST.get('detail_task_pk')
@@ -198,7 +188,7 @@ def task_delete(request, task_pk, *args, **kwargs):
         return redirect(request.META.get('HTTP_REFERER'))
 
 
-# Метка
+@permission_required(perm='tasks.change_tag', raise_exception=True)
 @require_http_methods(['POST'])
 def change_tag(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
@@ -208,7 +198,7 @@ def change_tag(request, task_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-# Метка
+@permission_required(perm='tasks.add_task', raise_exception=True)
 @require_http_methods(['POST'])
 def change_priority(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
@@ -222,7 +212,7 @@ def change_priority(request, task_pk, *args, **kwargs):
     return render(request, 'tasks/includes/change-priority.html', data)
 
 
-# Метка
+@permission_required(perm='users.add_taskexecutor', raise_exception=True)
 @require_http_methods(['POST'])
 def add_executors(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)
@@ -247,7 +237,7 @@ def add_comment(request, task_pk, project_pk, **kwargs):
     return render(request, 'tasks/includes/comment.html', data)
 
 
-# Метка
+@permission_required(perm='tasks.delete_comment', raise_exception=True)
 @require_http_methods(['POST'])
 def delete_comment(request, comm_pk, *args, **kwargs):
     comment = get_object_or_404(Comment, pk=comm_pk)

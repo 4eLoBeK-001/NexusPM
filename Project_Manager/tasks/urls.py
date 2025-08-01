@@ -16,7 +16,6 @@ urlpatterns = [
     path('<int:project_pk>/tasks/filter/', views.task_filter, name='task_filter'),
 
     path('<int:project_pk>/task/<int:task_pk>/status/change/', views.change_status, name='change_status'),
-    path('<int:project_pk>/task/<int:task_pk>/status/create/', views.create_status, name='create_status'),
 
     path('<int:project_pk>/project/<int:task_pk>/tag/change/', views.change_tag, name='change_tag'),
 
