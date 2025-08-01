@@ -8,7 +8,7 @@ from . import views
 app_name = 'projects'
 
 urlpatterns = [
-    path('<int:team_pk>/project/', decorator_include(require_project_member, 'tasks.urls', namespace='tasks')),
+    path('<int:pk>/project/', decorator_include(require_project_member, 'tasks.urls', namespace='tasks')),
 
     path('<int:pk>/projects/', views.project_list, name='project_list'),
     path('<int:pk>/search/', views.search_projects, name='search_team'),

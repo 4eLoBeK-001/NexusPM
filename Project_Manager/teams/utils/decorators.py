@@ -17,7 +17,7 @@ def role_required(min_role_required):
             required_role = TeamMember.RoleChoices.get_priority(min_role_required)
             role_proirty = team_member.RoleChoices.get_priority(team_member.role)
 
-            if required_role >= role_proirty :
+            if required_role > role_proirty:
                 raise PermissionDenied
 
             return view_func(request, *args, **kwargs)
