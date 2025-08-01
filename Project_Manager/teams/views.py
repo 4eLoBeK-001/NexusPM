@@ -38,7 +38,8 @@ def team_conf(request, pk):
     return render(request, 'teams/includes/setting.html', context)
 
 
-@permission_required(perm='teams.change_team', raise_exception=True)
+# @permission_required(perm='teams.change_team', raise_exception=True)
+#Пометка
 @require_http_methods(['POST'])
 def change_team(request, pk):
     team = get_object_or_404(Team, pk=pk, team_member=request.user)
@@ -63,7 +64,8 @@ def team_members(request, pk):
     return render(request, 'teams/includes/team_members.html', context)
 
 
-@permission_required(perm='teams.add_teaminvitation', raise_exception=True)
+# @permission_required(perm='teams.add_teaminvitation', raise_exception=True)
+#Пометка
 @require_http_methods(['POST'])
 def send_invitation_to_team(request, pk):
     team = get_object_or_404(Team, pk=pk)
@@ -96,7 +98,8 @@ def send_invitation_to_team(request, pk):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-@permission_required(perm='teams.delete_teaminvitation', raise_exception=True)
+# @permission_required(perm='teams.delete_teaminvitation', raise_exception=True)
+#Пометка
 @require_http_methods(['POST'])
 def deleting_team_members(request, pk, member_pk):
     # Удаляет сначала участника из всех проектов, а потом уже из команды
@@ -152,7 +155,8 @@ def sidebar_search_team(request):
     return render(request, 'includes/team_list.html', {'context_teams': queryset})
 
 
-@permission_required(perm='teams.delete_team', raise_exception=True)
+# @permission_required(perm='teams.delete_team', raise_exception=True)
+#Пометка
 @require_http_methods(['POST'])
 def delete_team(request, pk):
     response = redirect(request.META.get('HTTP_REFERER'))
