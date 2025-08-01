@@ -5,9 +5,10 @@ from users.models import TeamMember, User
 
 
 @receiver(signal=post_save, sender=Team)
-def signal_create(sender, instance, *args, **kwargs):
-    TeamMember.objects.create(
-        user=instance.author,
-        team=instance,
-        role='Creator'
-    )
+def signal_create(sender, instance, created, *args, **kwargs):
+    if created:
+        TeamMember.objects.create(
+            user=instance.author,
+            team=instance,
+            role='Creator'
+        )
