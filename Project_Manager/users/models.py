@@ -109,8 +109,24 @@ class Notifications(models.Model):
 
 
 class TeamMember(models.Model):
+    class RoleChoices(models.TextChoices):
+        CREATOR = 'Creator', 'Создатель'
+        ADMIN = 'Admin', 'Администратор'
+        MEMBER = 'Member', 'Участник'
+        VIEWER = 'Viewer', 'Наблюдатель'
+
+        @classmethod
+        def get_priority(cls, role):
+            return {
+                cls.CREATOR: 4,
+                cls.ADMIN: 3,
+                cls.MEMBER: 2,
+                cls.VIEWER: 1,
+            }.get(role, 0)
+
     team = models.ForeignKey('teams.Team', on_delete=models.CASCADE, related_name='participate_in_team')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='members_teams')
+    role = models.CharField(max_length=20, choices=RoleChoices.choices, default=RoleChoices.VIEWER)
     date_joining = models.DateTimeField(auto_now_add=True)
 
     class Meta:
