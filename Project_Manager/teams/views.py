@@ -12,6 +12,8 @@ from users.models import User
 
 from .forms import AddModalTeamForm, AddTeamForm, AddTeamMemberModalForm
 from .models import Team, TeamInvitation
+from .utils.decorators import role_required
+from users.models import TeamMember
 
 
 def workplace(request):
@@ -40,6 +42,7 @@ def team_conf(request, pk):
 
 # @permission_required(perm='teams.change_team', raise_exception=True)
 #Пометка
+@role_required('Admin')
 @require_http_methods(['POST'])
 def change_team(request, pk):
     team = get_object_or_404(Team, pk=pk, team_member=request.user)
@@ -125,7 +128,6 @@ def create_team(request):
         team = form.save(commit=False)
         team.author = request.user
         team.save()
-        team.team_member.set([request.user.id])
         messages.success(
             request, 
             message=format_html(
