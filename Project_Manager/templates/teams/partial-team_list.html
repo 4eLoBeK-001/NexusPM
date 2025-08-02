@@ -13,6 +13,7 @@
                 {% endif %}
 
                 <div class="dropdown dropdown-end absolute top-0 right-0 w-[30px] h-auto rounded-md hover:bg-gray-300">
+                    {% if team.author == request.user %}
                     <!-- Кнопка с иконкой (без фона) -->
                     <div tabindex="0" role="button" class="pointer bg-transparent border-none hover:bg-transparent">
                         <img 
@@ -30,6 +31,8 @@
                             {% include 'includes/update-team-modal.html' %}
                         {% endwith %}
                     </ul>
+                    {% else %}
+                    {% endif %}
                 </div>
 
             </div>
