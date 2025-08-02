@@ -199,7 +199,7 @@ def change_tag(request, task_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-@role_required('Member')
+@role_required('Manager')
 @require_http_methods(['POST'])
 def change_priority(request, task_pk, *args, **kwargs):
     task = get_object_or_404(Task, pk=task_pk)

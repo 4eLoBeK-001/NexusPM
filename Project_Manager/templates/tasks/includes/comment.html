@@ -3,7 +3,7 @@
 <div id="comment-{{comment.pk}}" class="relative bg-white shadow p-4 rounded-lg border border-gray-200">
                 
     <!-- Иконка удаления -->
-    {% if comment.author == request.user %}
+    {% if comment.author == request.user or your_role >= ROLE_PRIORITY.MANAGER %}
     <a
         hx-post="{% url 'teams:projects:tasks:delete_comment' project.team.pk project.pk task.pk comment.pk %}"
         hx-target="#comment-{{comment.pk}}"

@@ -14,17 +14,25 @@
                         <div class="w-12 rounded-full border border-black border-[2px] ring ring-primary ring-2 overflow-hidden">
                             <img src="{{member.profile.get_profile_picture_url}}" alt="">
                           </div>
+                        {% if your_role >= ROLE_PRIORITY.MEMBER %}
                         <input type="checkbox" name="executor" value="{{ member.id }}"
                             {% if member.id in executor_ids %}checked{% endif %}
                             class="checkbox checkbox-info">
+                        {% else %}
+                        <input type="checkbox" name="executor" value="{{ member.id }}" disabled
+                            {% if member.id in executor_ids %}checked{% endif %}
+                            class="checkbox checkbox-info">
+                        {% endif %}
                         <span class="text-gray-800 font-medium">{{ member }}</span>
                     </label>
                 {% endfor %}
             </div>
 
+            {% if your_role >= ROLE_PRIORITY.MEMBER %}
             <div class="mt-6">
                 <button class="btn btn-primary text-white" name="choice_executor" type="submit">Сохранить</button>
             </div>
+            {% endif %}
 
         </form>
     </div>

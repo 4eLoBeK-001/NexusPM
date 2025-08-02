@@ -12,6 +12,7 @@
 
         <!-- Блок описания -->
         <div>
+          {% if your_role >= ROLE_PRIORITY.MEMBER %}
           <form method="post" action="{% url_task task 'change_task' %}">
             <details open class="group mb-4">
               <summary class="cursor-pointer font-semibold text-gray-700 flex items-center">
@@ -39,6 +40,26 @@
               </div>
           </details>
         </form>
+        {% else %}
+        <details open class="group mb-4">
+          <summary class="cursor-pointer font-semibold text-gray-700 flex items-center">
+              <div class="flex items-center text-lg">
+                  <div class="w-5 h-5 flex items-center justify-center transition-transform transform group-open:rotate-90 mr-2">
+                      <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
+                  </div>
+                  {{ task_form.description.label_tag }}
+              </div>
+          </summary>
+      
+          <!-- Контент блока -->
+          <div class="mt-2">
+              <p class="hidden">{{ task_form.name }}</p>
+              <textarea class="mt-2 w-full text-gray-700 border border-gray-300 rounded-md p-2 resize-none focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400 bg-gray-100" disabled>{{ task.description }}</textarea>
+          </div>
+        </details>
+        {% endif %}
       </div>
       <hr>
     
@@ -58,10 +79,12 @@
                 {% if task.parent_task %}
                   <!-- Пустота -->
                 {% else %}
-                <button onclick="modal_create_task.showModal();" class="border-2 border-dashed border-gray-400 hover:border-sky-500 hover:text-sky-500 bg-white ml-2 p-2 px-3 text-base rounded-lg leading-4 transition-all duration-300 ease-in-out transform shadow-sm hover:shadow-md">
-                  + добавить
-                </button>
-                {% include 'tasks/includes/create-subtask-modal.html' with task_form=create_subtask_form %}
+                  {% if your_role >= ROLE_PRIORITY.MEMBER %}
+                  <button onclick="modal_create_task.showModal();" class="border-2 border-dashed border-gray-400 hover:border-sky-500 hover:text-sky-500 bg-white ml-2 p-2 px-3 text-base rounded-lg leading-4 transition-all duration-300 ease-in-out transform shadow-sm hover:shadow-md">
+                    + добавить
+                  </button>
+                  {% include 'tasks/includes/create-subtask-modal.html' with task_form=create_subtask_form %}
+                  {% endif %}
                 {% endif %}
             </summary>
         
@@ -103,10 +126,12 @@
                 </div>
                 Вложения
               </div>
+              {% if your_role >= ROLE_PRIORITY.MEMBER %}
               <button onclick="modal_add_image_task.showModal();" class="border-2 border-dashed border-gray-400 hover:border-sky-500 hover:text-sky-500 bg-white ml-2 p-2 px-3 text-base rounded-lg leading-4 transition-all duration-300 ease-in-out transform shadow-sm hover:shadow-md">
                 + добавить
               </button>
               {% include 'tasks/includes/add-task-image-modal.html' %}
+              {% endif %}
             </summary>
             <div class="mt-2 pl-6 text-gray-600 flex gap-4">
               {% if task.images.exists %}
@@ -203,9 +228,11 @@
         <div>
           <div class="flex items-center mb-2">
             <h3 class="text-gray-700 font-bold text-base mb-0 leading-none">Теги</h3>
+            {% if your_role >= ROLE_PRIORITY.MEMBER %}
             <a onclick="modal_create_tag.showModal();" class="ml-2 pb-1 w-8 h-8 border-2 border-dashed border-black bg-white text-black text-xl flex items-center justify-center hover:bg-black hover:text-white transition-colors duration-300 rounded-lg cursor-pointer">
               <span class="leading-none">+</span>
             </a>
+            {% endif %}
           </div>
           {% include 'tasks/includes/add-tag-modal.html' %}
         
@@ -238,9 +265,15 @@
                 <div class="flex flex-wrap gap-2">
                   {% for tag in update_tag_form.tag.field.queryset %}
                     <label class="cursor-pointer mb-2">
+                      {% if your_role >= ROLE_PRIORITY.MEMBER %}
                       <input type="checkbox" name="tag" value="{{ tag.id }}"
                             {% if tag in update_tag_form.initial.tag or tag in update_tag_form.data.tag %}checked{% endif %}
                             class="hidden peer">
+                      {% else %}
+                      <input type="checkbox" name="tag" value="{{ tag.id }}"disabled  
+                            {% if tag in update_tag_form.initial.tag or tag in update_tag_form.data.tag %}checked {% endif %}
+                            class="hidden peer">
+                      {% endif %}
                       <span class="peer-checked:{{tag.color.bg_color}} peer-checked:{{tag.color.text_color}} peer-checked:{{tag.color.border_color}}
                                   bg-gray-200 text-gray-700 px-3 py-1 border rounded-full transition-all duration-200">
                         {{ tag.name }}
@@ -250,9 +283,11 @@
                 </div>
               </div>
 
+              {% if your_role >= ROLE_PRIORITY.MEMBER %}
               <div class="modal-action mt-6">
                 <button class="btn btn-primary text-sm text-white" name="update_tags" type="submit">Сохранить</button>
               </div>
+              {% endif %}
             </form>
           </div>
         </dialog>
@@ -263,7 +298,12 @@
         </div>
     
         <div id="priority-{{task.pk}}">
-          {% include 'tasks/includes/change-priority.html' %}
+          {% if your_role >= ROLE_PRIORITY.MANAGER %}
+            {% include 'tasks/includes/change-priority.html' %}
+          {% else %}
+            <h3 class="text-gray-700 font-bold text-base mb-1">Приоритет</h3>
+            <div class="inline-block px-3 py-1 rounded-lg text-base text-gray-600 font-medium border">{{task.priority}}</div>
+          {% endif %}
         </div>
     
         <div>

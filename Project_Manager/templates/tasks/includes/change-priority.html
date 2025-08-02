@@ -1,8 +1,8 @@
 
 {% load task_url %}
-<h3 class="text-gray-700 font-bold text-base mb-1">Приоритет</h3>
 
 <div class="dropdown">
+    <h3 class="text-gray-700 font-bold text-base mb-1">Приоритет</h3>
     <div tabindex="0" role="button" class="px-3 py-1 rounded-lg text-base text-gray-600 font-medium border">{{task.priority}}<i class='fas fa-angle-down ml-2 mt-1'></i></div>
     <ul tabindex="0" class="dropdown-content menu text-gray-600 bg-white border border-gray-300 rounded-box z-[1] w-[12.5rem] shadow-sm">
         {% for status in priorities %}

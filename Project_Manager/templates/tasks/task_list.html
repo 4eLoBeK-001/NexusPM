@@ -105,10 +105,12 @@
       <button onclick="showFilter(this);" class="btn btn-outline border-gray-400 text-gray-700 hover:bg-gray-100">
         Добавить фильтры
       </button>
+      {% if your_role >= ROLE_PRIORITY.MEMBER %}
       <button class="btn btn-primary text-lg text-white whitespace-nowrap" onclick="modal_create_task.showModal();">
         Создать задачу
       </button>
       {% include 'tasks/includes/create-task-modal.html' %}
+      {% endif %}
     </div>
   </div>
 
