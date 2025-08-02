@@ -8,7 +8,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import permission_required
 
-from users.models import ProjectMember
+from users.models import ProjectMember, TeamMember
 
 from teams.models import Team
 from teams.utils.decorators import role_required
@@ -120,6 +120,7 @@ def change_project(request, project_pk, *args, **kwargs):
 def project_members(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     team = project.team
+    roles = TeamMember.RoleChoices.choices
 
     project_count_subquery = ProjectMember.objects.filter(
         user=OuterRef('pk'),
@@ -134,10 +135,12 @@ def project_members(request, project_pk, *args, **kwargs):
     team_members = team.team_member.all()
 
     data = {
+        'team': team,
         'project': project,
         'project_members': project_membersa,
         'project_member_ids': project_membersa.values_list('id', flat=True),
         'team_members': team_members,
+        'roles': roles
     }
     return render(request, 'projects/includes/members.html', data)
 

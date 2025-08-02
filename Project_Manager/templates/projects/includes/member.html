@@ -8,10 +8,19 @@
         <td class="py-1 px-6 text-left">{{ member.projects_count }}</td>
         <td class="py-1 px-6 text-left">
             <div class="dropdown">
-                <div tabindex="0" role="button" class="btn m-1 bg-gray-100 text-gray-800 rounded-2xl border-gray-400 hover:bg-gray-50 hover:border-sky-600 shadow-md">Гость <i class='fas fa-angle-down mt-1'></i></div>
+                <div tabindex="0" role="button" class="btn m-1 bg-gray-100 text-gray-800 rounded-2xl border-gray-400 hover:bg-gray-50 hover:border-sky-600 shadow-md">{{member.members_teams.first.get_role_display}} <i class='fas fa-angle-down mt-1'></i></div>
                 <ul tabindex="0" class="dropdown-content menu bg-white border border-gray-300 rounded-box z-[1] w-52 p-2 shadow-sm">
-                <li><a>Админ</a></li>
-                <li><a>Гость</a></li>
+                {% for role, name_role in roles %}
+                    <li>
+                      <a 
+                      hx-post="{% url 'teams:change_role_member' team.pk member.pk%}"
+                      hx-target="#pp-{{member.pk}}"
+                      hx-swap="outerHTML"
+                      hx-vals='{"selected_role": "{{role}}"}'>
+                      {{name_role}}
+                      </a>
+                  </li>
+                {% endfor %}
                 </ul>
             </div>
         </td>
