@@ -176,7 +176,7 @@ def create_subtask(request, task_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-@role_required('Member')
+@role_required('Manager')
 @require_http_methods(['POST'])
 def task_delete(request, task_pk, *args, **kwargs):
     task_pk = request.POST.get('task_pk') or request.POST.get('detail_task_pk')
@@ -239,7 +239,7 @@ def add_comment(request, task_pk, project_pk, **kwargs):
     return render(request, 'tasks/includes/comment.html', data)
 
 
-@role_required('Member')
+@role_required('Manager')
 @require_http_methods(['POST'])
 def delete_comment(request, comm_pk, *args, **kwargs):
     comment = get_object_or_404(Comment, pk=comm_pk)

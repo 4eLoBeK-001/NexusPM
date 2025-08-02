@@ -112,14 +112,16 @@ class TeamMember(models.Model):
     class RoleChoices(models.TextChoices):
         CREATOR = 'Creator', 'Создатель'
         ADMIN = 'Admin', 'Администратор'
+        MANAGER = 'Manager', 'Менеджер'
         MEMBER = 'Member', 'Участник'
         VIEWER = 'Viewer', 'Наблюдатель'
 
         @classmethod
         def get_priority(cls, role):
             return {
-                cls.CREATOR: 4,
-                cls.ADMIN: 3,
+                cls.CREATOR: 5,
+                cls.ADMIN: 4,
+                cls.MANAGER: 3,
                 cls.MEMBER: 2,
                 cls.VIEWER: 1,
             }.get(role, 0)

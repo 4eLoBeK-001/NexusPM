@@ -79,7 +79,7 @@ def delete_project(request, project_pk, *args, **kwargs):
     return response
 
 
-@role_required('Admin')
+@role_required('Manager')
 @require_project_member
 def project_status_changes(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
@@ -256,7 +256,7 @@ def project_statuses(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/statuses.html', data)
 
 
-@role_required('Admin')
+@role_required('Manager')
 @require_http_methods(['POST'])
 @require_project_member
 def create_status(request, project_pk, *args, **kwargs):
@@ -281,7 +281,7 @@ def search_status(request, project_pk, *args, **kwargs):
     return render(request, 'projects/includes/status-list.html', data)
 
 
-@role_required('Admin')
+@role_required('Manager')
 @require_http_methods(['POST'])
 @require_project_member
 def delete_status(request, project_pk, *args, **kwargs):
