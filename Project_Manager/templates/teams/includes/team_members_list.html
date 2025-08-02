@@ -5,24 +5,32 @@
     <td class="py-1 px-6 text-left">{{ member.email|default:"---" }}</td>
     <td class="py-1 px-6 text-left">{{member.projects_count }}</td>
     <td class="py-1 px-6 text-left">
+        {% if member != team.author and your_role >= ROLE_PRIORITY.ADMIN %}
         <div class="dropdown">
             <div tabindex="0" role="button" class="btn m-1 bg-gray-100 text-gray-800 rounded-2xl border-gray-400 hover:bg-gray-50 hover:border-sky-600 shadow-md">{{member.members_teams.first.get_role_display}} <i class='fas fa-angle-down mt-1'></i></div>
             <ul tabindex="0" class="dropdown-content menu bg-white border border-gray-300 rounded-box z-[1] w-52 p-2 shadow-sm">
-              {% for role, name_role in roles %}
-              <li>
-                <a 
-                hx-post="{% url 'teams:change_role_member' team.pk member.pk%}"
-                hx-target="#team-member-{{member.pk}}"
-                hx-swap="outerHTML"
-                hx-vals='{"selected_role": "{{role}}"}'>
-                {{name_role}}
-                </a>
-            </li>
-              {% endfor %}
-            </ul>
+                {% for role, name_role in roles %}
+                <li>
+                  <a 
+                  hx-post="{% url 'teams:change_role_member' team.pk member.pk%}"
+                  hx-target="#team-member-{{member.pk}}"
+                  hx-swap="outerHTML"
+                  hx-vals='{"selected_role": "{{role}}"}'>
+                  {{name_role}}
+                  </a>
+              </li>
+                {% endfor %}
+              </ul>
+
         </div>
+        {% else %}
+            <div tabindex="0" role="button" class="btn m-1 bg-gray-100 text-gray-800 rounded-2xl border-gray-400 hover:bg-gray-50 hover:border-sky-600 shadow-md">{{member.members_teams.first.get_role_display}} </div>
+        {% endif %}
     </td>
     <td class="py-1 px-6 text-left">{{member.member_date_joining }}</td>
+    <!-- Человек не может удалить сам себя -->
+    <!-- Если участник не является собой, если участник не создатель проекта, если участник админ или старше -->
+    {% if member != request.user and member != team.author and your_role >= ROLE_PRIORITY.ADMIN %}
     <td class="" title="Исключить из команды">
         <a 
         hx-post="{% url 'teams:deleting_team_members' team.pk member.pk %}"
@@ -32,4 +40,7 @@
             <i class="fa fa-trash"></i>
         </a>
     </td>
+    {% else %}
+    <td></td>
+    {% endif %}
 </tr>

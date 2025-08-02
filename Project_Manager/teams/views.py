@@ -178,14 +178,26 @@ def sidebar_search_team(request):
     return render(request, 'includes/team_list.html', {'context_teams': queryset})
 
 
-@role_required('Creator')
-@require_http_methods(['POST'])
-def delete_team(request, pk):
+def get_team_and_redirect(request, pk):
     response = redirect(request.META.get('HTTP_REFERER'))
     team = get_object_or_404(Team, pk=pk, team_member=request.user)
     if request.GET.get('trigger') == 'detail':
         response = redirect('teams:team_list')
+    return team, response
+
+
+@role_required('Creator')
+@require_http_methods(['POST'])
+def delete_team(request, pk):
+    team, response = get_team_and_redirect(request, pk)
     team.delete()
+    return response
+
+
+@require_http_methods(['POST'])
+def leave_from_team(request, pk):
+    team, response = get_team_and_redirect(request, pk)
+    team.team_member.remove(request.user.pk)
     return response
 
 

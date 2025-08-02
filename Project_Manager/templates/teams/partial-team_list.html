@@ -13,7 +13,6 @@
                 {% endif %}
 
                 <div class="dropdown dropdown-end absolute top-0 right-0 w-[30px] h-auto rounded-md hover:bg-gray-300">
-                    {% if team.author == request.user %}
                     <!-- Кнопка с иконкой (без фона) -->
                     <div tabindex="0" role="button" class="pointer bg-transparent border-none hover:bg-transparent">
                         <img 
@@ -23,6 +22,7 @@
                         >`
                     </div>
                     
+                    {% if team.author == request.user %}
                     <!-- Выпадающее меню -->
                     <ul tabindex="0" class="dropdown-content menu bg-gray-100 border border-gray-400 shadow-md rounded-lg z-10 w-52 p-2">
                         <li><a class="rounded text-gray-600 hover:bg-gray-200"  onclick="document.getElementById('update_team_modal_{{ team.id }}').showModal()">Редактировать</a></li>
@@ -32,6 +32,9 @@
                         {% endwith %}
                     </ul>
                     {% else %}
+                    <ul tabindex="0" class="dropdown-content menu bg-gray-100 border border-gray-400 shadow-md rounded-lg z-10 w-52 p-2">
+                        <li><a class="rounded text-red-500 hover:bg-red-500 hover:text-white" hx-post="{% url 'teams:leave_from_team' team.id %}" hx-target="#card_{{team.id}}" hx-swap="delete">Покинуть команду</a></li>
+                    </ul>
                     {% endif %}
                 </div>
 
