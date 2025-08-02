@@ -4,6 +4,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.utils.html import format_html
+from django.http import HttpResponse
 
 from teams.utils.decorators import role_required
 
@@ -238,10 +239,9 @@ def add_comment(request, task_pk, project_pk, **kwargs):
     }
     return render(request, 'tasks/includes/comment.html', data)
 
-
 @role_required('Manager')
 @require_http_methods(['POST'])
 def delete_comment(request, comm_pk, *args, **kwargs):
     comment = get_object_or_404(Comment, pk=comm_pk)
     comment.delete()
-    return render(request, 'tasks/includes/comment.html')
+    return HttpResponse()
