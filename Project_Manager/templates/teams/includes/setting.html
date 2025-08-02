@@ -2,9 +2,10 @@
 
 {% block configuration_content %}
 <div class="p-6 max-w-2xl mx-auto">
+
+{% if your_role >= ROLE_PRIORITY.ADMIN %}
     <form action="{% url 'teams:change_team' team.pk %}" method="post" class="space-y-6" enctype="multipart/form-data">
         {% csrf_token %}
-
         <div class="flex flex-col gap-4">
             <label for="img" class="label">
                 <span class="label-text text-gray-800 text-lg font-medium">Изображение проекта</span>
@@ -16,7 +17,8 @@
                     <div id="img" class="w-36 h-36 bg-{{ team.color }}-400 rounded-xl flex items-center justify-center font-bold text-white">
                     </div>
                 {% endif %}
-            <input type="file" name="image" id="image-input_{{team.id}}" class="hidden">
+                <input type="file" name="image" id="image-input_{{team.id}}" class="hidden">
+            </div>
         </div>
 
         {% for field in form %}
@@ -25,34 +27,59 @@
                     <label for="{{ field.id_for_label }}" class="label">
                         <span class="label-text text-gray-800 text-lg font-medium">{{ field.label }}</span>
                     </label>
-                    
                     {{ field }}
-                    
                     {% if field.help_text %}
-                    <label class="label">
-                        <span class="label-text-alt">{{ field.help_text }}</span>
-                    </label>
+                        <label class="label">
+                            <span class="label-text-alt">{{ field.help_text }}</span>
+                        </label>
                     {% endif %}
-                    
                     {% if field.errors %}
-                    <div class="text-error text-sm mt-1">
-                        {{ field.errors }}
-                    </div>
+                        <div class="text-error text-sm mt-1">
+                            {{ field.errors }}
+                        </div>
                     {% endif %}
                 </div>
             {% endif %}
         {% endfor %}
 
         <div class="flex justify-end space-x-4 pt-4">
-            <button type="" class="text-black bg-white hover:text-white btn">Назад</button>
+            <a href="{% url 'teams:projects:project_list' team.pk %}" class="text-black bg-white hover:text-white btn">Назад</a>
             <button type="submit" class="btn btn-primary btn-outline">Сохранить</button>
         </div>
     </form>
-</div>
 
-<script>
-    document.getElementById('image-div_{{team.id}}').addEventListener('click', () => {
-        document.getElementById('image-input_{{team.id}}').click();
-    })
-</script>
+    <script>
+        document.getElementById('image-div_{{team.id}}').addEventListener('click', () => {
+            document.getElementById('image-input_{{team.id}}').click();
+        })
+    </script>
+
+{% else %}
+    <div class="flex flex-col gap-4">
+        {% if team.image %}
+            <img class="w-36 h-36 rounded-xl" src="{{ team.image.url }}">
+        {% else %}
+            <div class="w-36 h-36 bg-{{ team.color }}-400 rounded-xl flex items-center justify-center font-bold text-white"></div>
+        {% endif %}
+    </div>
+
+    {% for field in form %}
+        {% if field.name != 'image' %}
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text text-gray-800 text-lg font-medium">{{ field.label }}</span>
+                </label>
+                <div class="py-2 px-4 border rounded bg-gray-100 text-gray-800">
+                    {{ field.value|default:"---" }}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <div class="flex justify-end pt-4">
+        <a href="{% url 'teams:projects:project_list' team.pk %}" class="text-black bg-white hover:text-white btn">Назад</a>
+    </div>
+{% endif %}
+
+</div>
 {% endblock configuration_content %}

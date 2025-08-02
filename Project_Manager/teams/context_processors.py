@@ -26,9 +26,16 @@ def role_proccessor(request):
     if not request.user.is_authenticated or not team_pk:
         return {}
 
+    get_priority = TeamMember.RoleChoices.get_priority
     member = TeamMember.objects.get(team_id=team_pk, user=request.user)
-    print(member.role)
-    return {
-        'your_role': member.role
-    }
 
+    return {
+        'your_role': get_priority(member.role),
+        'ROLE_PRIORITY': {
+            'CREATOR': get_priority(TeamMember.RoleChoices.CREATOR),
+            'ADMIN': get_priority(TeamMember.RoleChoices.ADMIN),
+            'MANAGER': get_priority(TeamMember.RoleChoices.MANAGER),
+            'MEMBER': get_priority(TeamMember.RoleChoices.MEMBER),
+            'VIEWER': get_priority(TeamMember.RoleChoices.VIEWER),
+        }
+    }
