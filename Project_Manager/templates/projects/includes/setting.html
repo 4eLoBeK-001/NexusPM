@@ -3,6 +3,8 @@
 {% block configuration_content %}
 
 <div class="p-6 max-w-2xl mx-auto">
+
+{% if your_role >= ROLE_PRIORITY.ADMIN %}
     <form action="{% url 'teams:projects:change_project' project.team.pk project.pk %}" method="post" class="space-y-6" enctype="multipart/form-data">
         {% csrf_token %}
 
@@ -46,37 +48,62 @@
         {% endfor %}
 
         <div class="flex justify-end space-x-4 pt-4">
-            <a url="{% url 'teams:projects:project_list' project.team.pk %}" class="text-black bg-white hover:text-white btn">Назад</a>
-            <button type="submit" class="btn btn-primary btn-outline">Сохранить</button>
+        <a href="{% url 'teams:projects:project_list' project.team.pk %}" class="text-black bg-white hover:text-white btn">Назад</a>
+        <button type="submit" class="btn btn-primary btn-outline">Сохранить</button>
         </div>
     </form>
+    <script>
+        document.getElementById('image-div_{{project.id}}').addEventListener('click', () => {
+            document.getElementById('image-input_{{project.id}}').click();
+        });
+
+        document.getElementById('image-input_{{project.id}}').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewElement = document.getElementById('image-preview_{{project.id}}');
+                    
+                    if (previewElement.tagName === 'DIV') {
+                        const img = document.createElement('img');
+                        img.id = 'image-preview_{{project.id}}';
+                        img.className = 'w-36 h-36 rounded-xl';
+                        img.src = e.target.result;
+                        previewElement.parentNode.replaceChild(img, previewElement);
+                    } 
+                    else {
+                        previewElement.src = e.target.result;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+{% else %}
+    <div class="flex flex-col gap-4">
+        {% if project.image %}
+            <img class="w-36 h-36 rounded-xl" src="{{ project.image.url }}">
+        {% else %}
+            <div class="w-36 h-36 bg-{{ project.color }}-400 rounded-xl flex items-center justify-center font-bold text-white"></div>
+        {% endif %}
+    </div>
+
+    {% for field in form %}
+        {% if field.name != 'image' %}
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text text-gray-800 text-lg font-medium">{{ field.label }}</span>
+                </label>
+                <div class="py-2 px-4 border rounded bg-gray-100 text-gray-800">
+                    {{ field.value|default:"---" }}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <div class="flex justify-end pt-4">
+        <a href="{% url 'teams:projects:project_list' project.team.pk %}" class="text-black bg-white hover:text-white btn">Назад</a>
+    </div>
+    {% endif %}
 </div>
-<script>
-    document.getElementById('image-div_{{project.id}}').addEventListener('click', () => {
-        document.getElementById('image-input_{{project.id}}').click();
-    });
-
-    document.getElementById('image-input_{{project.id}}').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const previewElement = document.getElementById('image-preview_{{project.id}}');
-                
-                if (previewElement.tagName === 'DIV') {
-                    const img = document.createElement('img');
-                    img.id = 'image-preview_{{project.id}}';
-                    img.className = 'w-36 h-36 rounded-xl';
-                    img.src = e.target.result;
-                    previewElement.parentNode.replaceChild(img, previewElement);
-                } 
-                else {
-                    previewElement.src = e.target.result;
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-</script>
-
 {% endblock configuration_content %}

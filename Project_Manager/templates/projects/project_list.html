@@ -44,10 +44,13 @@
     </div>
 
     <div class="flex-none">
+      {% if your_role  >= ROLE_PRIORITY.ADMIN %}
       <button class="btn btn-primary text-lg mx-4 text-white whitespace-nowrap" onclick="add_project_modal.showModal();">
           Создать проект
       </button>
       {% include 'projects/includes/add-project-modal.html' %}
+      {% else %}
+      {% endif %}
     </div>
 
   </div>

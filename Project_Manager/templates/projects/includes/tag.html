@@ -4,6 +4,7 @@
 <td class="py-3 px-6 text-left font-bold text-base"><span class="inline-flex items-center rounded-md {{ tag.color.bg_color }} px-2 py-1 text-sm font-medium border {{ tag.color.border_color }} {{ tag.color.text_color }}">{{ tag.name }}</span></td>
 <td class="py-3 px-6 text-left font-bold text-base">{{ tag.color }}</td>
 <td class="py-1 px-4 text-left">
+    {% if your_role >= ROLE_PRIORITY.MEMBER %}
     <a 
         class="block text-red-600 hover:bg-red-500 hover:text-white rounded-xl px-5 py-4 cursor-pointer transition"
         title="Удалить тег"
@@ -14,4 +15,5 @@
     >
         <i class="fa fa-trash"></i>
     </a>
+    {% endif%}
 </td>

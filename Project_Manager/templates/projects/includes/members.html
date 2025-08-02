@@ -35,10 +35,13 @@
     </div>
 
     <div class="flex-none">
+        {% if your_role >= ROLE_PRIORITY.ADMIN %}
         <button class="btn btn-primary text-lg mx-4 text-white whitespace-nowrap" onclick="add_members_modal.showModal();">
             Добавить участников
         </button>
         {% include 'projects/includes/add-members-modal.html' %}
+        {% else %}
+        {% endif %}
     </div>
 
 </div>

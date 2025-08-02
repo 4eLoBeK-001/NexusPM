@@ -1,6 +1,7 @@
 
 
 <div class="dropdown">
+    {% if your_role  >= ROLE_PRIORITY.MANAGER %}
     <div tabindex="0" role="button" class="px-3 py-1 rounded-lg {{project.status_text}} text-sm font-medium {{project.status_color}} border border-gray-400">{{ project.status }} <i class='fas fa-angle-down ml-1 mt-1'></i></div>
     <ul tabindex="0" class="dropdown-content menu text-gray-600 bg-white border border-gray-300 rounded-box z-[1] w-48 p-2 shadow-sm">
         <li>
@@ -33,5 +34,8 @@
             {{ status_choices.COMPLETED }}
             </a>
         </li>
-    </ul>            
+    </ul>
+    {% else %}
+    <div tabindex="0" role="button" class="px-3 py-1 rounded-lg {{project.status_text}} text-sm font-medium {{project.status_color}} border border-gray-400">{{ project.status }}</div>
+    {% endif %}
 </div>
