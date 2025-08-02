@@ -53,6 +53,7 @@ def change_team(request, pk):
 def team_members(request, pk):
     team = Team.objects.get(pk=pk, team_member=request.user)
     form = AddTeamMemberModalForm()
+    roles = TeamMember.RoleChoices.choices
     team_members = team.team_member.annotate(
         projects_count=Count('project_membership', filter=Q(project_membership__team=team)),
         member_date_joining=F('members_teams__date_joining')
@@ -60,9 +61,33 @@ def team_members(request, pk):
     context = {
         'team': team,
         'form': form,
+        'roles': roles,
         'team_members': team_members
     }
     return render(request, 'teams/includes/team_members.html', context)
+
+
+@role_required('Admin')
+@require_http_methods(['POST'])
+def change_role_member(request, pk, member_pk, *args, **kwargs):
+    team = get_object_or_404(Team, pk=pk, team_member=request.user)
+    member = team.participate_in_team.select_related('user').get(user_id=member_pk)
+    selected_role = request.POST.get('selected_role')
+    member.role = selected_role
+    roles = TeamMember.RoleChoices.choices
+    member.save()
+    team_member = team.team_member.annotate(
+        projects_count=Count('project_membership', filter=Q(project_membership__team=team)),
+        member_date_joining=F('members_teams__date_joining')
+    ).get(pk=member.user.pk)
+    context = {
+        'team': team,
+        'member': team_member,
+        'roles': roles
+    }
+    print(team_members)
+    return render(request, 'teams/includes/team_members_list.html', context)
+
 
 
 @role_required('Admin')
