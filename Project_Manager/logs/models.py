@@ -5,8 +5,11 @@ from django.contrib.auth import get_user_model
 
 class ActionLog(models.Model):
     ACTION_CHOICES = [
-        ('team_changed', 'Изменения в команде'),
+        ('team_changed_name', 'Изменение названия команды'),
+        ('team_changed_description', 'Изменение описание команды'),
+        ('team_changed_photo', 'Изменение фото команды'),
         ('team_member_joined', 'Присоединение к команде'),
+        ('team_member_role_changed', 'Изменение роли'),
         ('team_member_left', 'Покинул команду'),
         ('project_created', 'Создание проекта'),
         ('project_changed', 'Изменения проекта'),
@@ -34,6 +37,72 @@ class ActionLog(models.Model):
 
     def __str__(self):
         return f'Логирование {self.user}'
+    
+
+    def get_html(self):
+        from django.utils.html import format_html
+        from django.urls import reverse
+
+        if self.action_type == 'team_changed_name':
+            string = f'Пользователь {self.user} изменил название команды {self.data.get('old')} на {self.daga.get('new')}'
+
+        if self.action_type == 'team_changed_description':
+            string = f'Пользователь {self.user} изменил название команды {self.team.name} с {self.data.get('old')} на {self.data.get('new')}'
+
+        if self.action_type == 'team_changed_photo':
+            string = f'Пользователь {self.user} изменил фото команды {self.team.name}'
+
+        if self.action_type == 'team_member_joined':
+            string = f'Пользователь {self.user} вступил в команду {self.team.name}'
+
+        if self.action_type == 'team_member_role_changed':
+            string = f'У {self.user} была сменена роль с {self.data.get('old')} на {self.data.get('new')}'
+
+        if self.action_type == 'team_member_left':
+            string = f'Пользователь {self.user} покинул команду {self.team.name}'
+
+        if self.action_type == 'project_created':
+            ...
+
+        if self.action_type == 'project_changed':
+            ...
+
+        if self.action_type == 'project_deleted':
+            ...
+
+        if self.action_type == 'task_created':
+            ...
+
+        if self.action_type == 'task_deleted':
+            ...
+
+        if self.action_type == 'tack_changed':
+            ...
+
+        if self.action_type == 'task_executor_changed':
+            ...
+
+        if self.action_type == 'tag_created':
+            ...
+
+        if self.action_type == 'tag_deleted':
+            ...
+
+        if self.action_type == 'task_tag_changed':
+            ...
+
+        if self.action_type == 'status_created':
+            ...
+
+        if self.action_type == 'status_deleted':
+            ...
+
+        if self.action_type == 'comment_created':
+            ...
+
+        if self.action_type == 'comment_deleted':
+            ...
+
     
     class Meta:
         verbose_name = 'История действия'
