@@ -6,6 +6,25 @@ from teams.middleware import get_current_user
 from .models import Task, Tag, Status, TaskImage, Comment
 
 
+@receiver(signal=post_save, sender=Task)
+def create_task_signal(sender, instance, created, *args, **kwargs):
+    if created:
+        print(f'Команда - {instance.project.team.name} \n'
+              f'Проект - {instance.project.name} \n'
+              f'{get_current_user()} создал задачу {instance.name}'
+ 
+        )
+
+
+@receiver(signal=post_delete, sender=Task)
+def create_task_signal(sender, instance, *args, **kwargs):
+    print(f'Команда - {instance.project.team.name} \n'
+            f'Проект - {instance.project.name} \n'
+            f'{get_current_user()} удалил задачу {instance.name}'
+
+    )
+
+
 @receiver(signal=post_save, sender=Tag)
 def create_tag_signal(sender, instance, created, *args, **kwargs):
     if created:
