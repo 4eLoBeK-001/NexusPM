@@ -12,12 +12,20 @@ class ActionLog(models.Model):
         ('team_member_role_changed', 'Изменение роли'),
         ('team_member_left', 'Покинул команду'),
         ('project_created', 'Создание проекта'),
-        ('project_changed', 'Изменения проекта'),
+        ('project_changed_name', 'Изменение названия проекта'),
+        ('project_changed_description', 'Изменение описание проекта'),
+        ('project_changed_photo', 'Изменение фото проекта'),
+        ('project_changed_status', 'Изменение статуса проекта'),
         ('project_deleted', 'Удаление проекта'),
+        ('subtask_created', 'Создана задача'),
         ('task_created', 'Создана задача'),
         ('task_deleted', 'Задача удалена'),
-        ('tack_changed', 'Изменение задачи'),
+        ('team_changed_name', 'Изменение названия задачи'),
+        ('team_changed_description', 'Изменение описания задачи'),
+        ('team_changed_status', 'Изменение статуса задачи'),
+        ('team_changed_priority', 'Изменение приоритета задачи'),
         ('task_executor_changed', 'Изменены исполнители'),
+        ('task_no_executor', 'Исполнителей нет'),
         ('tag_created', 'Создан тег'),
         ('tag_deleted', 'Удалён тег'),
         ('task_tag_changed', 'У задачи поменялись теги'),
@@ -65,46 +73,92 @@ class ActionLog(models.Model):
             return string
 
         if self.action_type == 'project_created':
-            ...
+            string = f'Команда {self.team.name}. {self.user.username} создал проект {self.project.name}'
+            return string
 
-        if self.action_type == 'project_changed':
-            ...
+        if self.action_type == 'project_changed_name':
+            string = f'Команда {self.team.name}. {self.user.username} изменил имя проекта "{self.data.get('old')}" на "{self.data.get('new')}"'
+            return string
 
+        if self.action_type == 'project_changed_description':
+            string = f'Команда {self.team.name}. {self.user.username} изменил описание проекта "{self.data.get('old')}" на "{self.data.get('new')}"'
+            return string
+
+        if self.action_type == 'project_changed_photo':
+            string = f'Команда {self.team.name}. {self.user.username} изменил фото проекта {self.project.name}'
+            return string
+        
+        if self.action_type == 'project_changed_photo':
+            string = f'Команда {self.team.name}. {self.user.username} изменил статус проекта {self.project.name} с "{self.data.get('old')}" на "{self.data.get('new')}"'
+            return string
+        
         if self.action_type == 'project_deleted':
-            ...
+            string = f'Команда {self.team.name}. {self.user.username} удалил проект {self.project.name}'
+            return string
 
         if self.action_type == 'task_created':
-            ...
-
+            string = f'{self.user.username} создал задачу {self.task.name}'
+            return string
+        
+        if self.action_type == 'subtask_created':
+            string = f'{self.user.username} создал подзадачу {self.task.name} к задаче {self.task.parent_task.name}'
+            return string
+        
         if self.action_type == 'task_deleted':
-            ...
+            string = f'{self.user.username} удалил задачу {self.task.name}'
+            return string
 
-        if self.action_type == 'tack_changed':
-            ...
+        if self.action_type == 'team_changed_name':
+            string = f'{self.user.username} изменил имя задачи с {self.data.get('old')} на {self.data.get('new')}'
+            return string
+        
+        if self.action_type == 'team_changed_description':
+            string = f'{self.user.username} изменил описание задачи {self.task.name} с {self.data.get('old')} на {self.data.get('new')}'
+            return string
+        
+        if self.action_type == 'team_changed_status':
+            string = f'{self.user.username} изменил статус задачи {self.task.name} с {self.data.get('old')} на {self.data.get('new')}'
+            return string
+        
+        if self.action_type == 'team_changed_priority':
+            string = f'{self.user.username} изменил приоритет задачи {self.task.name} с {self.data.get('old')} на {self.data.get('new')}'
+            return string
 
         if self.action_type == 'task_executor_changed':
-            ...
+            string = f'За задачу {self.task.name} назначены исполнители {self.data.get('data')}'
+            return string
+
+        if self.action_type == 'task_no_executor':
+            string = f'У задачи {self.task.name} больше нет исполнителей'
+            return string
 
         if self.action_type == 'tag_created':
-            ...
+            string = f'{self.user.username} создал новый тег {self.data.get('data')}'
+            return string
 
         if self.action_type == 'tag_deleted':
-            ...
+            string = f'{self.user.username} удалил тег {self.data.get('data')}'
+            return string
 
         if self.action_type == 'task_tag_changed':
-            ...
+            string = f'{self.user.username} в задаче {self.task.name} изменил теги: {self.data.get('data')}'
+            return string
 
         if self.action_type == 'status_created':
-            ...
+            string = f'{self.user.username} создал новый статус {self.data.get('data')}'
+            return string
 
         if self.action_type == 'status_deleted':
-            ...
+            string = f'{self.user.username} удалил статус {self.data.get('data')}'
+            return string
 
         if self.action_type == 'comment_created':
-            ...
+            string = f'{self.user.username} оставил комментарие к задаче {self.task.name}: {self.data.get('data')}'
+            return string
 
         if self.action_type == 'comment_deleted':
-            ...
+            string = f'{self.user.username} удалил комментарий к задаче {self.task.username}'
+            return string
 
     
     class Meta:
