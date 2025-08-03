@@ -33,7 +33,7 @@ class Team(models.Model):
         return self.name[:2].upper()
 
     def __str__(self):
-        return f'Пороект - {self.name}'
+        return f'Команда - {self.name}'
 
 
 class TeamInvitation(models.Model):
