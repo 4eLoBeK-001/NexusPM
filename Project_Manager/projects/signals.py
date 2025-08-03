@@ -16,6 +16,9 @@ def create_project_signal(sender, instance, created, *args, **kwargs):
 
 @receiver(signal=pre_save, sender=Project)
 def change_project_signal(sender, instance, *args, **kwargs):
+    if not instance.pk:
+        return
+
     old_instance = Project.objects.get(pk=instance.pk)
     
     changes = {}
@@ -24,7 +27,7 @@ def change_project_signal(sender, instance, *args, **kwargs):
         changes['name'] = (old_instance.name, instance.name)
     if old_instance.description != instance.description:
         changes['description'] = (old_instance.description, instance.description)
-    if old_instance.image != instance.image:
+    if str(old_instance.image) != str(instance.image):
         changes['photo'] = 'Фото было изменено'
     if old_instance.status != instance.status:
         changes['status'] = (old_instance.status, instance.status)
@@ -39,8 +42,6 @@ def change_project_signal(sender, instance, *args, **kwargs):
             print(f'Пользователь {get_current_user()} изменил фото проекта "{instance.name}"')
         if changes.get('status'):
             print(f'Пользователь {get_current_user()} изменил статус проекта "{instance.name}" с "{changes.get('status')[0]}" на "{changes.get('status')[1]}"')
-
-
 
 
 @receiver(signal=post_delete, sender=Project)

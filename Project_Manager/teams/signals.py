@@ -7,7 +7,7 @@ from users.models import TeamMember, User
 
 
 @receiver(signal=post_save, sender=Team)
-def signal_create(sender, instance, created, *args, **kwargs):
+def create_team_signal(sender, instance, created, *args, **kwargs):
     if created:
         TeamMember.objects.create(
             user=instance.author,
@@ -15,8 +15,9 @@ def signal_create(sender, instance, created, *args, **kwargs):
             role='Creator'
         )
 
+
 @receiver(signal=pre_save, sender=Team)
-def pre_team_signal(sender, instance, *args, **kwargs):
+def change_team_signal(sender, instance, *args, **kwargs):
 
     if not instance.pk:
         return
@@ -55,11 +56,12 @@ def team_member_joined_signal(sender, instance, *args, **kwargs):
         old_member = TeamMember.objects.get(pk=instance.pk)
     except TeamMember.DoesNotExist:
         return
-
-    print(
-        f'У пользователя {user.username} в команде {team.name} была сменена роль '
-        f'с "{old_member.get_role_display()}" на "{instance.get_role_display()}"'
-    )
+    
+    if old_member.role != instance.role:
+        print(
+            f'У пользователя {user.username} в команде {team.name} была сменена роль '
+            f'с "{old_member.get_role_display()}" на "{instance.get_role_display()}"'
+        )
 
 
 @receiver(signal=pre_delete, sender=TeamMember)
@@ -67,4 +69,3 @@ def team_member_left_signal(sender, instance, *args, **kwargs):
     user = instance.user
     team = instance.team
     print(f'Пользователь {user.username} покинул команду {team.name}')
-
