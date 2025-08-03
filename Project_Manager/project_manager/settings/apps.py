@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'teams',
     'tasks',
+    'logs',
     'django_extensions',
     'debug_toolbar',
 ]
