@@ -42,22 +42,27 @@ class ActionLog(models.Model):
     def get_html(self):
 
         if self.action_type == 'team_changed_name':
-            string = f'Пользователь {self.user} изменил название команды {self.data.get('old')} на {self.data.get('new')}'
+            string = f'Пользователь {self.user.username} изменил название команды {self.data.get('old')} на {self.data.get('new')}'
             return string
         if self.action_type == 'team_changed_description':
-            string = f'Пользователь {self.user} изменил название команды {self.team.name} с {self.data.get('old')} на {self.data.get('new')}'
+            string = f'Пользователь {self.user.username} изменил описание команды {self.team.name} с {self.data.get('old')} на {self.data.get('new')}'
+            return string
 
         if self.action_type == 'team_changed_photo':
-            string = f'Пользователь {self.user} изменил фото команды {self.team.name}'
+            string = f'Пользователь {self.user.username} изменил фото команды {self.team.name}'
+            return string
 
         if self.action_type == 'team_member_joined':
-            string = f'Пользователь {self.user} вступил в команду {self.team.name}'
+            string = f'Пользователь {self.user.username} вступил в команду {self.team.name}'
+            return string
 
         if self.action_type == 'team_member_role_changed':
-            string = f'У {self.user} была сменена роль с {self.data.get('old')} на {self.data.get('new')}'
+            string = f'Команда {self.team.name}. У {self.user.username} была сменена роль с {self.data.get('old')} на {self.data.get('new')}'
+            return string
 
         if self.action_type == 'team_member_left':
-            string = f'Пользователь {self.user} покинул команду {self.team.name}'
+            string = f'Пользователь {self.user.username} покинул команду {self.team.name}'
+            return string
 
         if self.action_type == 'project_created':
             ...

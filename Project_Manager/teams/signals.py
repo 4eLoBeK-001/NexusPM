@@ -42,11 +42,12 @@ def change_team_signal(sender, instance, *args, **kwargs):
             log_action(action='team_changed_name', team=instance, user=get_current_user(),
                        data={'old': changes.get('name')[0], 'new': changes.get('name')[1]}
             )
-            print(f'Пользователь {get_current_user()} изменил имя команды "{changes.get('name')[0]}" на "{changes.get('name')[1]}"')
         if changes.get('description'):
-            print(f'Пользователь {get_current_user()} изменил описание команды "{instance.name}" с "{changes.get('description')[0]}" на "{changes.get('description')[1]}"')
+            log_action(action='team_changed_description', team=instance, user=get_current_user(),
+                       data={'old': changes.get('description')[0], 'new': changes.get('description')[1]}
+            )
         if changes.get('photo'):
-            print(f'Пользователь {get_current_user()} изменил фото команды "{instance.name}"')
+            log_action(action='team_changed_photo', team=instance, user=get_current_user())
 
 
 @receiver(signal=pre_save, sender=TeamMember)
@@ -54,7 +55,7 @@ def team_member_joined_signal(sender, instance, *args, **kwargs):
     user = instance.user
     team = instance.team
     if not instance.pk:
-        print(f'Пользователь {user.username} вступил в команду {team.name}')
+        log_action(action='team_member_joined', user=user, team=team)
         return
     try:
         old_member = TeamMember.objects.get(pk=instance.pk)
@@ -62,9 +63,8 @@ def team_member_joined_signal(sender, instance, *args, **kwargs):
         return
     
     if old_member.role != instance.role:
-        print(
-            f'У пользователя {user.username} в команде {team.name} была сменена роль '
-            f'с "{old_member.get_role_display()}" на "{instance.get_role_display()}"'
+        log_action(action='team_member_role_changed', user=user, team=team,
+                   data={'old': old_member.get_role_display(),'new': instance.get_role_display()}
         )
 
 
@@ -72,4 +72,4 @@ def team_member_joined_signal(sender, instance, *args, **kwargs):
 def team_member_left_signal(sender, instance, *args, **kwargs):
     user = instance.user
     team = instance.team
-    print(f'Пользователь {user.username} покинул команду {team.name}')
+    log_action(action='team_member_left', user=user, team=team)
