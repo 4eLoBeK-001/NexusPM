@@ -118,7 +118,7 @@ def delete_status_signal(sender, instance, *args, **kwargs):
 
 
 @receiver(signal=post_save, sender=Comment)
-def create_comment_tag(sender, instance, created, *args, **kwargs):
+def create_comment_signal(sender, instance, created, *args, **kwargs):
     if created:
         print(f'{get_current_user()} \n'
               f'оставил комментарий к задаче {instance.task.name}: {instance.content}'
@@ -126,7 +126,7 @@ def create_comment_tag(sender, instance, created, *args, **kwargs):
 
 
 @receiver(signal=post_delete, sender=Comment)
-def create_comment_tag(sender, instance, *args, **kwargs):
+def delete_comment_signal(sender, instance, *args, **kwargs):
         print(f'Задача - {instance.task.name} \n'
               f'{get_current_user()} удалил комментарий: {instance.content}'
         )
