@@ -38,14 +38,12 @@ class ActionLog(models.Model):
     def __str__(self):
         return f'Логирование {self.user}'
     
-
+    
     def get_html(self):
-        from django.utils.html import format_html
-        from django.urls import reverse
 
         if self.action_type == 'team_changed_name':
-            string = f'Пользователь {self.user} изменил название команды {self.data.get('old')} на {self.daga.get('new')}'
-
+            string = f'Пользователь {self.user} изменил название команды {self.data.get('old')} на {self.data.get('new')}'
+            return string
         if self.action_type == 'team_changed_description':
             string = f'Пользователь {self.user} изменил название команды {self.team.name} с {self.data.get('old')} на {self.data.get('new')}'
 

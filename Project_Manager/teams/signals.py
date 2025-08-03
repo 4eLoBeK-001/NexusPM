@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from .models import Team
 from teams.middleware import get_current_user
 from users.models import TeamMember, User
+from logs.services import log_action
 
 
 @receiver(signal=post_save, sender=Team)
@@ -38,6 +39,9 @@ def change_team_signal(sender, instance, *args, **kwargs):
 
     if changes:
         if changes.get('name'):
+            log_action(action='team_changed_name', team=instance, user=get_current_user(),
+                       data={'old': changes.get('name')[0], 'new': changes.get('name')[1]}
+            )
             print(f'Пользователь {get_current_user()} изменил имя команды "{changes.get('name')[0]}" на "{changes.get('name')[1]}"')
         if changes.get('description'):
             print(f'Пользователь {get_current_user()} изменил описание команды "{instance.name}" с "{changes.get('description')[0]}" на "{changes.get('description')[1]}"')

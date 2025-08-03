@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10">
+  <h1 class="text-3xl font-bold mb-6 text-center">История действий</h1>
+
+  {% if logs %}
+    <ul class="space-y-4">
+      {% for log in logs %}
+        <li class="bg-white border border-gray-200 rounded-xl shadow-sm p-4 hover:shadow-md transition">
+          <div class="flex justify-between items-start">
+            <div class="w-full">
+              <p class="text-gray-800 leading-relaxed break-words whitespace-normal overflow-hidden">
+                {{ log.get_html }}
+              </p>
+              <p class="text-sm text-gray-500 mt-2">
+                {{ log.created_at|date:"d.m.Y H:i" }}
+              </p>
+            </div>
+            <div class="ml-4 shrink-0">
+              <div class="badge badge-outline text-xs">
+                {{ log.get_action_type_display }}
+              </div>
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="text-center text-gray-500">Нет записей</div>
+  {% endif %}
+</div>
+{% endblock %}
