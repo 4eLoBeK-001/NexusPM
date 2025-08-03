@@ -18,14 +18,16 @@ class AddModalTeamForm(forms.ModelForm):
 
     class Meta:
         model = Team
-        fields = ('image', 'name')
+        fields = ('image', 'name', 'description')
 
         widgets = {
-            'image': CustomImageField(attrs={'class': 'ms'})
+            'image': CustomImageField(attrs={'class': 'ms'}),
+            'description': forms.HiddenInput()
         }
-    
+
         labels = {
             'image': 'Изображение',
+            'description': ''
         }
 
 

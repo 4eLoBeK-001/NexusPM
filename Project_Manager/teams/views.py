@@ -85,7 +85,6 @@ def change_role_member(request, pk, member_pk, *args, **kwargs):
         'member': team_member,
         'roles': roles
     }
-    print(team_members)
     return render(request, 'teams/includes/team_members_list.html', context)
 
 
