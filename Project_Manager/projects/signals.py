@@ -11,7 +11,7 @@ from logs.services import log_action
 @receiver(signal=post_save, sender=Project)
 def create_project_signal(sender, instance, created, *args, **kwargs):
     if created:
-        log_action(action='project_created', user=get_current_user(), team=instance.team, project=instance)
+        log_action(action='project_created', user=get_current_user(), team=instance.team, project=instance, data={'project_name': instance.name})
 
 
 
@@ -36,16 +36,15 @@ def change_project_signal(sender, instance, *args, **kwargs):
     
     if changes:
         if changes.get('name'):
-            log_action(action='project_changed_name', user=get_current_user(), project=instance, data={'old': changes.get('name')[0], 'new': changes.get('name')[1]})
+            log_action(action='project_changed_name', user=get_current_user(), project=instance, data={'old': changes.get('name')[0], 'new': changes.get('name')[1], 'project_name': instance.name})
         if changes.get('description'):
-            log_action(action='project_changed_description', user=get_current_user(), project=instance, data={'old': changes.get('description')[0], 'new': changes.get('description')[1]})
+            log_action(action='project_changed_description', user=get_current_user(), project=instance, data={'old': changes.get('description')[0], 'new': changes.get('description')[1], 'project_name': instance.name})
         if changes.get('photo'):
             log_action(action='project_changed_photo', user=get_current_user(), project=instance)
         if changes.get('status'):
-            log_action(action='project_changed_status', user=get_current_user(), project=instance, data={'old': changes.get('status')[0], 'new': changes.get('status')[1]})
+            log_action(action='project_changed_status', user=get_current_user(), project=instance, data={'old': changes.get('status')[0], 'new': changes.get('status')[1], 'project_name': instance.name})
 
 
 @receiver(signal=pre_delete, sender=Project)
 def delete_project_signal(sender, instance, origin, *args, **kwargs):
-    print(instance.description)
-    log_action(action='project_deleted', user=get_current_user(), team=instance.team, project=instance)
+    log_action(action='project_deleted', user=get_current_user(), team=instance.team, project=instance, data={'project_name': instance.name})

@@ -1,33 +1,68 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto mt-10">
-  <h1 class="text-3xl font-bold mb-6 text-center">История действий</h1>
+<div class="max-w-4xl mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold mb-6">История действий</h1>
 
-  {% if logs %}
-    <ul class="space-y-4">
-      {% for log in logs %}
-        <li class="bg-white border border-gray-200 rounded-xl shadow-sm p-4 hover:shadow-md transition">
-          <div class="flex justify-between items-start">
-            <div class="w-full">
-              <p class="text-gray-800 leading-relaxed break-words whitespace-normal overflow-hidden">
-                {{ log.get_html }}
-              </p>
-              <p class="text-sm text-gray-500 mt-2">
-                {{ log.created_at|date:"d.m.Y H:i" }}
-              </p>
+    <div class="space-y-4">
+        {% for log in logs %}
+            <div class="bg-white shadow rounded-lg p-4 border border-gray-200 relative">
+                <!-- Добавлен блок с абсолютным позиционированием в правом верхнем углу -->
+                <div class="absolute top-4 right-4 badge badge-outline text-xm">
+                  {{ log.get_action_type_display }}
+                </div>
+
+                <div class="text-sm text-gray-500 mb-2">
+                    {{ log.created_at|date:"d.m.Y H:i" }} —
+                    {% if log.user %}
+                        <span class="font-semibold text-gray-700">{{ log.user.username }}</span>
+                    {% else %}
+                        <span class="text-gray-400 italic">Пользователь удалён</span>
+                    {% endif %}
+                </div>
+
+                <div>
+                  <pre class="mt-3 text-md p-2 rounded text-gray-700 overflow-x-auto">{{ log.get_html }}</pre>
+                </div>
+
+                <div class="flex mt-3 text-xm bg-gray-50 p-2 rounded text-gray-700 overflow-x-auto">
+                    {% if log.team %}
+                        <div class="">
+                            Команда: 
+                            <a href="" class="text-blue-600 hover:underline">
+                                {{ log.team.name }}
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    <div class=""> | 
+                      {% if log.project %}
+                        Проект: 
+                        <a href="" class="text-blue-600 hover:underline">
+                              {{ log.project.name }}
+                        </a>
+                    {% else %}
+                      Проект: 
+                      <a href="" class="text-blue-600 hover:underline" title="Удалённый проект">
+                        {{ log.data.project_name }}
+                      </a>
+                    {% endif %}
+                    </div>
+
+                    {% if log.task %}
+                        <div> | 
+                            Задача: 
+                            <a href="" class="text-blue-600 hover:underline">
+                                {{ log.task.name }}
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+
             </div>
-            <div class="ml-4 shrink-0">
-              <div class="badge badge-outline text-xs">
-                {{ log.get_action_type_display }}
-              </div>
-            </div>
-          </div>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <div class="text-center text-gray-500">Нет записей</div>
-  {% endif %}
+        {% empty %}
+            <div class="text-gray-500 italic">История пуста.</div>
+        {% endfor %}
+    </div>
 </div>
-{% endblock %}
+{% endblock content %}

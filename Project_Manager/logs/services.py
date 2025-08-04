@@ -7,7 +7,7 @@ def log_action(action, user, data=None, team=None, project=None, task=None):
     ActionLog.objects.create(
         user=user,
         project=project,
-        team=team,
+        team=team if team is not None else project.team,
         action_type=action,
         data=data
     )

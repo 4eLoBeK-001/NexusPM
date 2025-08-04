@@ -65,7 +65,7 @@ class ActionLog(models.Model):
             return string
 
         if self.action_type == 'team_member_role_changed':
-            string = f'Команда {self.team.name}. У {self.user.username} была сменена роль с {self.data.get('old')} на {self.data.get('new')}'
+            string = f'У {self.user.username} была сменена роль с {self.data.get('old')} на {self.data.get('new')}'
             return string
 
         if self.action_type == 'team_member_left':
@@ -73,27 +73,27 @@ class ActionLog(models.Model):
             return string
 
         if self.action_type == 'project_created':
-            string = f'Команда {self.team.name}. {self.user.username} создал проект {self.project.name}'
+            string = f'{self.user.username} создал проект {self.project.name if self.project else self.data.get('project_name')}'
             return string
 
         if self.action_type == 'project_changed_name':
-            string = f'Команда {self.team.name}. {self.user.username} изменил имя проекта "{self.data.get('old')}" на "{self.data.get('new')}"'
+            string = f'{self.user.username} изменил имя проекта "{self.data.get('old')}" на "{self.data.get('new')}"'
             return string
 
         if self.action_type == 'project_changed_description':
-            string = f'Команда {self.team.name}. {self.user.username} изменил описание проекта "{self.data.get('old')}" на "{self.data.get('new')}"'
+            string = f'{self.user.username} изменил описание проекта "{self.data.get('old')}" на "{self.data.get('new')}"'
             return string
 
         if self.action_type == 'project_changed_photo':
-            string = f'Команда {self.team.name}. {self.user.username} изменил фото проекта {self.project.name}'
+            string = f'{self.user.username} изменил фото проекта {self.project.name if self.project else self.data.get('project_name')}'
             return string
         
         if self.action_type == 'project_changed_status':
-            string = f'Команда {self.team.name}. {self.user.username} изменил статус проекта {self.project.name} с "{self.data.get('old')}" на "{self.data.get('new')}"'
+            string = f'{self.user.username} изменил статус проекта {self.project.name if self.project else self.data.get('project_name')} с "{self.data.get('old')}" на "{self.data.get('new')}"'
             return string
         
         if self.action_type == 'project_deleted':
-            string = f'Команда {self.team.name}. {self.user.username} удалил проект {self.project.name}'
+            string = f'{self.user.username} удалил проект {self.project.name if self.project else self.data.get('project_name')}'
             return string
 
         if self.action_type == 'task_created':
@@ -162,5 +162,6 @@ class ActionLog(models.Model):
 
     
     class Meta:
+        ordering = ('-created_at',)
         verbose_name = 'История действия'
         verbose_name_plural = 'История действий'
