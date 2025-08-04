@@ -33,34 +33,35 @@
                           {{ log.team.name }}
                       </a>
                     {% else %}
+                      {% if log.data.team_name %}Команда: {%else%}{%endif%} 
                       <a href="" class="text-blue-600 hover:underline">
                         {{ log.data.team_name }}
                       </a>
                     {% endif %}
                   </div>
 
-                  <div class=""> | 
+                  <div class="">
                     {% if log.project %}
-                      Проект: 
+                        | Проект:
                       <a href="" class="text-blue-600 hover:underline">
                             {{ log.project.name }}
                       </a>
                   {% else %}
-                    {% if log.data.project_name %}Проект: {% else %}{%endif%} 
+                    {% if log.data.project_name %} | Проект: {% else %}{%endif%} 
                     <a href="" class="text-blue-600 hover:underline" title="Удалённый проект">
                       {{ log.data.project_name }}
                     </a>
                   {% endif %}
                   </div>
 
-                  <div> | 
+                  <div>
                     {% if log.task %}
-                      Задача: 
+                       |  Задача:
                       <a href="" class="text-blue-600 hover:underline">
                           {{ log.task.name }}
                       </a>
                     {% else %}
-                      {% if log.data.task_name %}Задача:{%else%}{%endif%} 
+                      {% if log.data.task_name %} |  Задача: {%else%}{%endif%} 
                       <a href="" class="text-blue-600 hover:underline">
                           {{ log.data.task_name }}
                       </a>
