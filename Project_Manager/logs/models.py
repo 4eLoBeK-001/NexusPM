@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 
 class ActionLog(models.Model):
     ACTION_CHOICES = [
+        ('team_deleted', 'Команда удалена'),
         ('team_changed_name', 'Изменение названия команды'),
         ('team_changed_description', 'Изменение описание команды'),
         ('team_changed_photo', 'Изменение фото команды'),
@@ -49,19 +50,22 @@ class ActionLog(models.Model):
     
     def get_html(self):
 
+        if self.action_type == 'team_deleted':
+            string = f'Команда {self.team.name if self.project else self.data.get('team_name')} была удалена'
+            return string
         if self.action_type == 'team_changed_name':
             string = f'Пользователь {self.user.username} изменил название команды {self.data.get('old')} на {self.data.get('new')}'
             return string
         if self.action_type == 'team_changed_description':
-            string = f'Пользователь {self.user.username} изменил описание команды {self.team.name} с {self.data.get('old')} на {self.data.get('new')}'
+            string = f'Пользователь {self.user.username} изменил описание команды {self.team.name if self.project else self.data.get('team_name')} с {self.data.get('old')} на {self.data.get('new')}'
             return string
 
         if self.action_type == 'team_changed_photo':
-            string = f'Пользователь {self.user.username} изменил фото команды {self.team.name}'
+            string = f'Пользователь {self.user.username} изменил фото команды {self.team.name if self.project else self.data.get('team_name')}'
             return string
 
         if self.action_type == 'team_member_joined':
-            string = f'Пользователь {self.user.username} вступил в команду {self.team.name}'
+            string = f'Пользователь {self.user.username} вступил в команду {self.team.name if self.project else self.data.get('team_name')}'
             return string
 
         if self.action_type == 'team_member_role_changed':
@@ -69,7 +73,7 @@ class ActionLog(models.Model):
             return string
 
         if self.action_type == 'team_member_left':
-            string = f'Пользователь {self.user.username} покинул команду {self.team.name}'
+            string = f'Пользователь {self.user.username} покинул команду {self.team.name if self.project else self.data.get('team_name')}'
             return string
 
         if self.action_type == 'project_created':

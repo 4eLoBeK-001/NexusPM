@@ -26,28 +26,32 @@
                 </div>
 
                 <div class="flex mt-3 text-xm bg-gray-50 p-2 rounded text-gray-700 overflow-x-auto">
+                  <div class="">
                     {% if log.team %}
-                        <div class="">
-                            Команда: 
-                            <a href="" class="text-blue-600 hover:underline">
-                                {{ log.team.name }}
-                            </a>
-                        </div>
-                    {% endif %}
-
-                    <div class=""> | 
-                      {% if log.project %}
-                        Проект: 
-                        <a href="" class="text-blue-600 hover:underline">
-                              {{ log.project.name }}
-                        </a>
+                      Команда: 
+                      <a href="" class="text-blue-600 hover:underline">
+                          {{ log.team.name }}
+                      </a>
                     {% else %}
-                      Проект: 
-                      <a href="" class="text-blue-600 hover:underline" title="Удалённый проект">
-                        {{ log.data.project_name }}
+                      <a href="" class="text-blue-600 hover:underline">
+                        {{ log.data.team_name }}
                       </a>
                     {% endif %}
-                    </div>
+                  </div>
+
+                  <div class=""> | 
+                    {% if log.project %}
+                      Проект: 
+                      <a href="" class="text-blue-600 hover:underline">
+                            {{ log.project.name }}
+                      </a>
+                  {% else %}
+                    {% if log.data.project_name %}Проект: {% else %}{%endif%} 
+                    <a href="" class="text-blue-600 hover:underline" title="Удалённый проект">
+                      {{ log.data.project_name }}
+                    </a>
+                  {% endif %}
+                  </div>
 
                     {% if log.task %}
                         <div> | 
