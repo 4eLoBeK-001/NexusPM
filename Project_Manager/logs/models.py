@@ -88,7 +88,7 @@ class ActionLog(models.Model):
             string = f'Команда {self.team.name}. {self.user.username} изменил фото проекта {self.project.name}'
             return string
         
-        if self.action_type == 'project_changed_photo':
+        if self.action_type == 'project_changed_status':
             string = f'Команда {self.team.name}. {self.user.username} изменил статус проекта {self.project.name} с "{self.data.get('old')}" на "{self.data.get('new')}"'
             return string
         

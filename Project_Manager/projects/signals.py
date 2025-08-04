@@ -5,13 +5,14 @@ from teams.middleware import get_current_user
 
 from .models import Project
 
+from logs.services import log_action
+
 
 @receiver(signal=post_save, sender=Project)
 def create_project_signal(sender, instance, created, *args, **kwargs):
     if created:
-        print(f'Команда - {instance.team.name} \n' 
-              f'{get_current_user()} создал команду {instance}'
-        )
+        log_action(action='project_created', user=get_current_user(), team=instance.team, project=instance)
+
 
 
 @receiver(signal=pre_save, sender=Project)
@@ -35,15 +36,16 @@ def change_project_signal(sender, instance, *args, **kwargs):
     
     if changes:
         if changes.get('name'):
-            print(f'Пользователь {get_current_user()} изменил имя проекта "{changes.get('name')[0]}" на "{changes.get('name')[1]}"')
+            log_action(action='project_changed_name', user=get_current_user(), project=instance, data={'old': changes.get('name')[0], 'new': changes.get('name')[1]})
         if changes.get('description'):
-            print(f'Пользователь {get_current_user()} изменил описание проекта "{instance.name}" с "{changes.get('description')[0]}" на "{changes.get('description')[1]}"')
+            log_action(action='project_changed_description', user=get_current_user(), project=instance, data={'old': changes.get('description')[0], 'new': changes.get('description')[1]})
         if changes.get('photo'):
-            print(f'Пользователь {get_current_user()} изменил фото проекта "{instance.name}"')
+            log_action(action='project_changed_photo', user=get_current_user(), project=instance)
         if changes.get('status'):
-            print(f'Пользователь {get_current_user()} изменил статус проекта "{instance.name}" с "{changes.get('status')[0]}" на "{changes.get('status')[1]}"')
+            log_action(action='project_changed_status', user=get_current_user(), project=instance, data={'old': changes.get('status')[0], 'new': changes.get('status')[1]})
 
 
-@receiver(signal=post_delete, sender=Project)
-def delete_project_signal(sender, instance, *args, **kwargs):
-    print(f'{get_current_user()} удалил проект {instance}')
+@receiver(signal=pre_delete, sender=Project)
+def delete_project_signal(sender, instance, origin, *args, **kwargs):
+    print(instance.description)
+    log_action(action='project_deleted', user=get_current_user(), team=instance.team, project=instance)
