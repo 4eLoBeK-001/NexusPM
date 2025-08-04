@@ -185,7 +185,7 @@ def task_delete(request, task_pk, *args, **kwargs):
     task.delete()
 
     if 'detail_task_pk' in request.POST:
-        return reverse('task_list', args=[task.project.team.pk, task.project.pk, task.pk])
+        return reverse('teams:projects:tasks:task_list', args=[task.project.team.pk, task.project.pk, task.pk])
     else:
         return redirect(request.META.get('HTTP_REFERER'))
 

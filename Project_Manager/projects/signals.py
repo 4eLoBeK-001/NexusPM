@@ -40,7 +40,7 @@ def change_project_signal(sender, instance, *args, **kwargs):
         if changes.get('description'):
             log_action(action='project_changed_description', user=get_current_user(), project=instance, data={'old': changes.get('description')[0], 'new': changes.get('description')[1], 'project_name': instance.name})
         if changes.get('photo'):
-            log_action(action='project_changed_photo', user=get_current_user(), project=instance)
+            log_action(action='project_changed_photo', user=get_current_user(), project=instance, data={'project_name': instance.name})
         if changes.get('status'):
             log_action(action='project_changed_status', user=get_current_user(), project=instance, data={'old': changes.get('status')[0], 'new': changes.get('status')[1], 'project_name': instance.name})
 

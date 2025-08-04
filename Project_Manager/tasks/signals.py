@@ -108,7 +108,7 @@ def create_comment_signal(sender, instance, created, *args, **kwargs):
         log_action(action='comment_created', user=get_current_user(), task=instance.task, data={'data': instance.content})
 
 
-@receiver(signal=post_delete, sender=Comment)
+@receiver(signal=pre_delete, sender=Comment)
 def delete_comment_signal(sender, instance, *args, **kwargs):
     log_action(action='comment_deleted', user=get_current_user(), task=instance.task, data={'data': instance.content})
 

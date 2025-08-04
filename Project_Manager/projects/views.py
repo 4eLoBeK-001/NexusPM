@@ -73,6 +73,8 @@ def create_project(request, pk):
 def delete_project(request, project_pk, *args, **kwargs):
     response = redirect(request.META.get('HTTP_REFERER'))
     project = get_object_or_404(Project, pk=project_pk)
+    project.tags.all().delete()
+    project.statuses.all().delete()
     if request.GET.get('trigger') == 'detail':
         response = redirect(reverse('teams:projects:project_list', args=[project.team.pk]))
     project.delete()
