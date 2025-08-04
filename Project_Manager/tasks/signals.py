@@ -1,34 +1,30 @@
-from django.db.models.signals import post_save, pre_save, m2m_changed, post_delete
+from django.db.models.signals import post_save, pre_save, m2m_changed, post_delete, pre_delete
 from django.dispatch import receiver
 
 from teams.middleware import get_current_user
 
 from .models import Task, Tag, Status, TaskImage, Comment
+
 from users.models import TaskExecutor
+
+from logs.services import log_action
 
 
 @receiver(signal=post_save, sender=Task)
 def create_task_signal(sender, instance, created, *args, **kwargs):
     if created:
         if instance.parent_task:
-            print(f'Команда - {instance.project.team.name} \n'
-                  f'Проект - {instance.project.name} \n'
-                  f'{get_current_user()} создал подзадачу {instance.name} к задаче {instance.parent_task.name}'
-                  )
+            log_action(action='subtask_created', user=get_current_user(), task=instance, data={'task_name': instance.name})
+
         else:
-            print(f'Команда - {instance.project.team.name} \n'
-                  f'Проект - {instance.project.name} \n'
-                  f'{get_current_user()} создал задачу {instance.name}'
-            )
+            log_action(action='task_created', user=get_current_user(), task=instance, data={'task_name': instance.name})
 
 
-@receiver(signal=post_delete, sender=Task)
+
+@receiver(signal=pre_delete, sender=Task)
 def delete_task_signal(sender, instance, *args, **kwargs):
-    print(f'Команда - {instance.project.team.name} \n'
-            f'Проект - {instance.project.name} \n'
-            f'{get_current_user()} удалил задачу {instance.name}'
+    log_action(action='task_deleted', user=get_current_user(), task=instance, data={'task_name': instance.name})
 
-    )
 
 
 @receiver(signal=pre_save, sender=Task)
@@ -53,13 +49,14 @@ def change_task_signal(sender, instance, *args, **kwargs):
 
     if changes:
         if changes.get('name'):
-            print(f'{user} изменил имя задачи с {old_instance.name} на {instance.name}')
+            log_action(action='team_changed_name', user=get_current_user(), task=instance, data={'old': old_instance.name, 'new': instance.name, 'task_name': instance.name})
         if changes.get('description'):
-            print(f'{user} изменил описание задачи {instance.name} с {old_instance.description} на {instance.description}')
+            log_action(action='team_changed_description', user=get_current_user(), task=instance, data={'old': old_instance.description, 'new': instance.description, 'task_name': instance.name})
         if changes.get('status'):
             print(f'{user} изменил статус задачи {instance.name} с {old_instance.status} на {instance.status}')
+            log_action(action='team_changed_status', user=get_current_user(), task=instance, data={'old': str(changes.get('status')[0]), 'new': str(changes.get('status')[1]), 'task_name': instance.name})
         if changes.get('priority'):
-            print(f'{user} изменил приоритет задачи {instance.name} с {old_instance.priority} на {instance.priority}')
+            log_action(action='team_changed_priority', user=get_current_user(), task=instance, data={'old': old_instance.priority, 'new': instance.priority, 'task_name': instance.name})
 
 
 @receiver(signal=m2m_changed, sender=Task.executor.through)
@@ -67,19 +64,15 @@ def change_executor_signal(sender, instance, action, *args, **kwargs):
     if action in ['post_add', 'post_remove', 'post_clear']:
         executors = [executor.username for executor in instance.executor.all()]
         if executors:
-            response = f'За задачу {instance.name} назначены исполнители: \n{', '.join(executors)}'
+            log_action(action='task_executor_changed', user=get_current_user(), task=instance, data={'data': ', '.join(executors), 'task_name': instance.name})
         else:
-            response = f'У задачи {instance.name} больше нет исполнителей'
-        print(response)
+            log_action(action='task_no_executor', user=get_current_user(), task=instance, data={'task_name': instance.name})
 
 
 @receiver(signal=post_save, sender=Tag)
 def create_tag_signal(sender, instance, created, *args, **kwargs):
     if created:
-        print(f'Команда - {instance.project.team.name} \n' 
-              f'Проект - {instance.project.name} \n' 
-              f'{get_current_user()} создал новый тег {instance.name}'
-        )
+        log_action(action='tag_created', user=get_current_user(), project=instance.project, data={'data': instance.name, 'tag_name': instance.name})
 
 
 @receiver(signal=m2m_changed, sender=Task.tag.through)
@@ -87,46 +80,35 @@ def change_tag_signal(sender, instance, action, *args, **kwargs):
     if action in ['post_add', 'post_remove', 'post_clear']:
         
         tags_list = [tag.name for tag in instance.tag.all()]
-        print(f'Пользователь {get_current_user()} в задаче {instance.name} \n'
-              f'Изменил теги: {', '.join(tags_list)}'
-        )
+        log_action(action='task_tag_changed', user=get_current_user(), task=instance, data={'data': ', '.join(tags_list), 'tag_name': ', '.join(tags_list)})
+
 
 
 @receiver(signal=post_delete, sender=Tag)
 def delete_tag_signal(sender, instance, *args, **kwargs):
-    print(f'Команда - {instance.project.team.name} \n' 
-            f'Проект - {instance.project.name} \n' 
-            f'{get_current_user()} удалил тег {instance.name}'
-    )
+        log_action(action='tag_deleted', user=get_current_user(), project=instance.project, data={'data': instance.name, 'tag_name': instance.name})
 
 
 @receiver(signal=post_save, sender=Status)
 def create_status_signal(sender, instance, created, *args, **kwargs):
     if created:
-        print(f'Команда - {instance.project.team.name} \n' 
-              f'Проект - {instance.project.name} \n' 
-              f'{get_current_user()} создал новый статус {instance.name}'
-        )
+        log_action(action='status_created', user=get_current_user(), project=instance.project, data={'data': instance.name})
+
 
 
 @receiver(signal=post_delete, sender=Status)
 def delete_status_signal(sender, instance, *args, **kwargs):
-    print(f'Команда - {instance.project.team.name} \n' 
-            f'Проект - {instance.project.name} \n' 
-            f'{get_current_user()} удалил статус {instance.name}'
-    )
+    log_action(action='status_deleted', user=get_current_user(), project=instance.project, data={'data': instance.name})
+
 
 
 @receiver(signal=post_save, sender=Comment)
 def create_comment_signal(sender, instance, created, *args, **kwargs):
     if created:
-        print(f'{get_current_user()} \n'
-              f'оставил комментарий к задаче {instance.task.name}: {instance.content}'
-        )
+        log_action(action='comment_created', user=get_current_user(), task=instance.task, data={'data': instance.content})
 
 
 @receiver(signal=post_delete, sender=Comment)
 def delete_comment_signal(sender, instance, *args, **kwargs):
-        print(f'Задача - {instance.task.name} \n'
-              f'{get_current_user()} удалил комментарий: {instance.content}'
-        )
+    log_action(action='comment_deleted', user=get_current_user(), task=instance.task, data={'data': instance.content})
+

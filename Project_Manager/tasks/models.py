@@ -119,7 +119,7 @@ class Color(models.Model):
 class Comment(models.Model):
     content = models.TextField()
     author = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, related_name='comcreator', null=True)
-    task = models.ForeignKey(Task, on_delete=models.SET_NULL, related_name='comments', null=True)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='comments', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

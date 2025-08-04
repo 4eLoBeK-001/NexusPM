@@ -53,14 +53,19 @@
                   {% endif %}
                   </div>
 
+                  <div> | 
                     {% if log.task %}
-                        <div> | 
-                            Задача: 
-                            <a href="" class="text-blue-600 hover:underline">
-                                {{ log.task.name }}
-                            </a>
-                        </div>
+                      Задача: 
+                      <a href="" class="text-blue-600 hover:underline">
+                          {{ log.task.name }}
+                      </a>
+                    {% else %}
+                      {% if log.data.task_name %}Задача:{%else%}{%endif%} 
+                      <a href="" class="text-blue-600 hover:underline">
+                          {{ log.data.task_name }}
+                      </a>
                     {% endif %}
+                  </div>
                 </div>
 
             </div>

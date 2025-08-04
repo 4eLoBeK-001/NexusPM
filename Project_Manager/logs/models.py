@@ -18,8 +18,8 @@ class ActionLog(models.Model):
         ('project_changed_photo', 'Изменение фото проекта'),
         ('project_changed_status', 'Изменение статуса проекта'),
         ('project_deleted', 'Удаление проекта'),
-        ('subtask_created', 'Создана задача'),
         ('task_created', 'Создана задача'),
+        ('subtask_created', 'Создана подзадача'),
         ('task_deleted', 'Задача удалена'),
         ('team_changed_name', 'Изменение названия задачи'),
         ('team_changed_description', 'Изменение описания задачи'),
@@ -101,15 +101,15 @@ class ActionLog(models.Model):
             return string
 
         if self.action_type == 'task_created':
-            string = f'{self.user.username} создал задачу {self.task.name}'
+            string = f'{self.user.username} создал задачу {self.task.name if self.task else self.data.get('task_name')}'
             return string
         
         if self.action_type == 'subtask_created':
-            string = f'{self.user.username} создал подзадачу {self.task.name} к задаче {self.task.parent_task.name}'
+            string = f'{self.user.username} создал подзадачу {self.task.name if self.task else self.data.get('task_name')}'
             return string
         
         if self.action_type == 'task_deleted':
-            string = f'{self.user.username} удалил задачу {self.task.name}'
+            string = f'{self.user.username} удалил задачу {self.task.name if self.task else self.data.get('task_name')}'
             return string
 
         if self.action_type == 'team_changed_name':
@@ -117,23 +117,23 @@ class ActionLog(models.Model):
             return string
         
         if self.action_type == 'team_changed_description':
-            string = f'{self.user.username} изменил описание задачи {self.task.name} с {self.data.get('old')} на {self.data.get('new')}'
+            string = f'{self.user.username} изменил описание задачи {self.task.name if self.task else self.data.get('task_name')} с {self.data.get('old')} на {self.data.get('new')}'
             return string
         
         if self.action_type == 'team_changed_status':
-            string = f'{self.user.username} изменил статус задачи {self.task.name} с {self.data.get('old')} на {self.data.get('new')}'
+            string = f'{self.user.username} изменил статус задачи {self.task.name if self.task else self.data.get('task_name')} с {self.data.get('old')} на {self.data.get('new')}'
             return string
         
         if self.action_type == 'team_changed_priority':
-            string = f'{self.user.username} изменил приоритет задачи {self.task.name} с {self.data.get('old')} на {self.data.get('new')}'
+            string = f'{self.user.username} изменил приоритет задачи {self.task.name if self.task else self.data.get('task_name')} с {self.data.get('old')} на {self.data.get('new')}'
             return string
 
         if self.action_type == 'task_executor_changed':
-            string = f'За задачу {self.task.name} назначены исполнители {self.data.get('data')}'
+            string = f'За задачу {self.task.name if self.task else self.data.get('task_name')} назначены исполнители {self.data.get('data')}'
             return string
 
         if self.action_type == 'task_no_executor':
-            string = f'У задачи {self.task.name} больше нет исполнителей'
+            string = f'У задачи {self.task.name if self.task else self.data.get('task_name')} больше нет исполнителей'
             return string
 
         if self.action_type == 'tag_created':
@@ -145,7 +145,7 @@ class ActionLog(models.Model):
             return string
 
         if self.action_type == 'task_tag_changed':
-            string = f'{self.user.username} в задаче {self.task.name} изменил теги: {self.data.get('data')}'
+            string = f'{self.user.username} в задаче {self.task.name if self.task else self.data.get('task_name')} изменил теги: {self.data.get('data')}'
             return string
 
         if self.action_type == 'status_created':
@@ -157,11 +157,11 @@ class ActionLog(models.Model):
             return string
 
         if self.action_type == 'comment_created':
-            string = f'{self.user.username} оставил комментарие к задаче {self.task.name}: {self.data.get('data')}'
+            string = f'{self.user.username} оставил комментарие к задаче {self.task.name if self.task else self.data.get('task_name')}: {self.data.get('data')}'
             return string
 
         if self.action_type == 'comment_deleted':
-            string = f'{self.user.username} удалил комментарий к задаче {self.task.username}'
+            string = f'{self.user.username} удалил комментарий к задаче {self.task.name if self.task else self.data.get('task_name')}'
             return string
 
     
