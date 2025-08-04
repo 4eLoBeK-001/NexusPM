@@ -25,6 +25,7 @@ def change_team_signal(sender, instance, *args, **kwargs):
 
     try:
         old_instance = Team.objects.get(pk=instance.pk)
+        user=get_current_user()
     except Team.DoesNotExist:
         return
 
@@ -39,15 +40,15 @@ def change_team_signal(sender, instance, *args, **kwargs):
 
     if changes:
         if changes.get('name'):
-            log_action(action='team_changed_name', team=instance, user=get_current_user(),
+            log_action(action='team_changed_name', team=instance, user=user,
                        data={'old': changes.get('name')[0], 'new': changes.get('name')[1], 'team_name': instance.name}
             )
         if changes.get('description'):
-            log_action(action='team_changed_description', team=instance, user=get_current_user(),
+            log_action(action='team_changed_description', team=instance, user=user,
                        data={'old': changes.get('description')[0], 'new': changes.get('description')[1], 'team_name': instance.name}
             )
         if changes.get('photo'):
-            log_action(action='team_changed_photo', team=instance, user=get_current_user(), data={'team_name': instance.name})
+            log_action(action='team_changed_photo', team=instance, user=user, data={'team_name': instance.name})
 
 
 @receiver(signal=pre_save, sender=TeamMember)

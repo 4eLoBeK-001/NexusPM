@@ -13,11 +13,12 @@ from logs.services import log_action
 @receiver(signal=post_save, sender=Task)
 def create_task_signal(sender, instance, created, *args, **kwargs):
     if created:
+        user=get_current_user()
         if instance.parent_task:
-            log_action(action='subtask_created', user=get_current_user(), task=instance, data={'task_name': instance.name})
+            log_action(action='subtask_created', user=user, task=instance, data={'task_name': instance.name})
 
         else:
-            log_action(action='task_created', user=get_current_user(), task=instance, data={'task_name': instance.name})
+            log_action(action='task_created', user=user, task=instance, data={'task_name': instance.name})
 
 
 
@@ -49,24 +50,24 @@ def change_task_signal(sender, instance, *args, **kwargs):
 
     if changes:
         if changes.get('name'):
-            log_action(action='team_changed_name', user=get_current_user(), task=instance, data={'old': old_instance.name, 'new': instance.name, 'task_name': instance.name})
+            log_action(action='team_changed_name', user=user, task=instance, data={'old': old_instance.name, 'new': instance.name, 'task_name': instance.name})
         if changes.get('description'):
-            log_action(action='team_changed_description', user=get_current_user(), task=instance, data={'old': old_instance.description, 'new': instance.description, 'task_name': instance.name})
+            log_action(action='team_changed_description', user=user, task=instance, data={'old': old_instance.description, 'new': instance.description, 'task_name': instance.name})
         if changes.get('status'):
-            print(f'{user} изменил статус задачи {instance.name} с {old_instance.status} на {instance.status}')
-            log_action(action='team_changed_status', user=get_current_user(), task=instance, data={'old': str(changes.get('status')[0]), 'new': str(changes.get('status')[1]), 'task_name': instance.name})
+            log_action(action='team_changed_status', user=user, task=instance, data={'old': str(changes.get('status')[0]), 'new': str(changes.get('status')[1]), 'task_name': instance.name})
         if changes.get('priority'):
-            log_action(action='team_changed_priority', user=get_current_user(), task=instance, data={'old': old_instance.priority, 'new': instance.priority, 'task_name': instance.name})
+            log_action(action='team_changed_priority', user=user, task=instance, data={'old': old_instance.priority, 'new': instance.priority, 'task_name': instance.name})
 
 
 @receiver(signal=m2m_changed, sender=Task.executor.through)
 def change_executor_signal(sender, instance, action, *args, **kwargs):
     if action in ['post_add', 'post_remove', 'post_clear']:
+        user = get_current_user()
         executors = [executor.username for executor in instance.executor.all()]
         if executors:
-            log_action(action='task_executor_changed', user=get_current_user(), task=instance, data={'data': ', '.join(executors), 'task_name': instance.name})
+            log_action(action='task_executor_changed', user=user, task=instance, data={'data': ', '.join(executors), 'task_name': instance.name})
         else:
-            log_action(action='task_no_executor', user=get_current_user(), task=instance, data={'task_name': instance.name})
+            log_action(action='task_no_executor', user=user, task=instance, data={'task_name': instance.name})
 
 
 @receiver(signal=post_save, sender=Tag)

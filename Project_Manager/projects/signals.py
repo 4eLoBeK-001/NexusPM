@@ -21,7 +21,8 @@ def change_project_signal(sender, instance, *args, **kwargs):
         return
 
     old_instance = Project.objects.get(pk=instance.pk)
-    
+    user = get_current_user()
+
     changes = {}
 
     if old_instance.name != instance.name:
@@ -36,13 +37,13 @@ def change_project_signal(sender, instance, *args, **kwargs):
     
     if changes:
         if changes.get('name'):
-            log_action(action='project_changed_name', user=get_current_user(), project=instance, data={'old': changes.get('name')[0], 'new': changes.get('name')[1], 'project_name': instance.name})
+            log_action(action='project_changed_name', user=user, project=instance, data={'old': changes.get('name')[0], 'new': changes.get('name')[1], 'project_name': instance.name})
         if changes.get('description'):
-            log_action(action='project_changed_description', user=get_current_user(), project=instance, data={'old': changes.get('description')[0], 'new': changes.get('description')[1], 'project_name': instance.name})
+            log_action(action='project_changed_description', user=user, project=instance, data={'old': changes.get('description')[0], 'new': changes.get('description')[1], 'project_name': instance.name})
         if changes.get('photo'):
-            log_action(action='project_changed_photo', user=get_current_user(), project=instance, data={'project_name': instance.name})
+            log_action(action='project_changed_photo', user=user, project=instance, data={'project_name': instance.name})
         if changes.get('status'):
-            log_action(action='project_changed_status', user=get_current_user(), project=instance, data={'old': changes.get('status')[0], 'new': changes.get('status')[1], 'project_name': instance.name})
+            log_action(action='project_changed_status', user=user, project=instance, data={'old': changes.get('status')[0], 'new': changes.get('status')[1], 'project_name': instance.name})
 
 
 @receiver(signal=pre_delete, sender=Project)
