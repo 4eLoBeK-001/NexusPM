@@ -156,7 +156,7 @@ def change_profile(request):
 
 
 @login_required
-def notifications(request):
+def team_invitations(request):
     invitations = TeamInvitation.objects.filter(invited_user=request.user)
     context = {
         'invitations': invitations,
@@ -166,8 +166,9 @@ def notifications(request):
 
 def search_notifications(request):
     search = request.GET.get('search_notif')
+    invitations = TeamInvitation.objects.all().first()
     context = {
-        'notifications': notifications
+        'invitations': invitations,
     }
     return render(request, 'users/includes/notifications_list.html', context)
 

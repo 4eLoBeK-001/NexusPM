@@ -69,14 +69,13 @@
     </div>
     <div class="indicator width-max">
       <a href="{% url 'history' %}" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800">
-        {% if unread_notifications %}<span class="indicator-item mt-2 badge badge-secondary">{{unread_notifications}}</span>{%else%}{%endif%}
         История
       </a>
     </div><br>
 
     <div class="indicator width-max">
-      <a href="{% url 'users:notifications' %}" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800">
-        {% if unread_notifications %}<span class="indicator-item mt-2 badge badge-secondary">{{unread_notifications}}</span>{%else%}{%endif%}
+      <a href="{% url 'users:invitations' %}" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800">
+        {% if unread_invitations %}<span class="indicator-item mt-2 badge badge-secondary">{{unread_invitations}}</span>{%else%}{%endif%}
         Приглашения
       </a>
     </div>

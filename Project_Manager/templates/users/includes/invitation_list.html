@@ -27,8 +27,7 @@
       </div>
 
       <div id="status-container-{{invitation.id}}" class="flex flex-col justify-between sm:flex-row sm:items-center  gap-2">
-
-
+        <a class="py-1 px-2 rounded-md border border-gray-500 bg-gray-100 font-bold hover:text-blue-700 visited:hover:text-red-800 text-blue-500 visited:text-red-700" href="{% url 'users:accept_invitation' invitation.id %}">{{ invitation.accepted|yesno:"Принято,Принять" }}</a>
       </div>
       
       <!-- Кнопки действий -->
