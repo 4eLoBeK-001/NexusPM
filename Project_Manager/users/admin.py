@@ -3,13 +3,11 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 
 from .models import TeamMember, TaskExecutor, ProjectMember, Profile, Tag, SocialNetwork
-from logs.models import ActionLog
 # Register your models here.
 
 admin.site.register(Profile)
 admin.site.register(Tag)
 admin.site.register(SocialNetwork)
-admin.site.register(ActionLog)
 
 @admin.register(get_user_model())
 class UserAdmin(admin.ModelAdmin):

@@ -3,7 +3,7 @@
 {% block content %}
 <div class="mx-auto px-2 py-4">
     <form method="get"
-    hx-get="{% url 'history_filter' %}"
+    hx-get="{% url 'logs:history_filter' %}"
     hx-target="#lsts"
     class="w-full hidden" 
     id="filterForm"
@@ -85,7 +85,7 @@
                     name="search_actions"
                     placeholder="Поиск..." 
                     class="input input-bordered bg-gray-50 text-gray-700 border-gray-400 w-full pl-10 pr-6 focus:border-sky-600"
-                    hx-get="{% url 'history_search' %}"
+                    hx-get="{% url 'logs:history_search' %}"
                     hx-target="#lsts"
                     hx-trigger="keyup delay:300ms"
                 />
