@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
@@ -68,3 +68,15 @@ def history_filter(request):
         'logs': logs,
     }
     return render(request, 'history_list.html', data)
+
+
+
+def team_history(request, pk):
+    team = get_object_or_404(Team, pk=pk)
+    logs = ActionLog.objects.filter(team=team)
+
+    context = {
+        'team': team,
+        'logs': logs,
+    }
+    return render(request, 'logs/team_history.html', context)
