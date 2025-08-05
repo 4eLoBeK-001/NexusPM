@@ -25,7 +25,7 @@ class Task(models.Model):
     description = models.TextField(blank=True, null=True)
     color = models.CharField(max_length=10, default=get_random_color)
     creator = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, related_name='creator', null=True)
-    project = models.ForeignKey(Project, on_delete=models.SET_NULL, related_name='tasks', null=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='tasks', null=True)
     tag = models.ManyToManyField('Tag', related_name='tags', blank=True)
     status = models.ForeignKey('Status', on_delete=models.SET_NULL, related_name='statuses', default='Новая', null=True)
     priority = models.CharField(max_length=20, choices=PriprityChoices.choices, default=PriprityChoices.NOT_SPECIFIED)

@@ -18,6 +18,7 @@ from tasks.forms import AddCommentForm, AddImageTaskForm, CreateStatusForm, Crea
 
 def task_list(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
+    executors = project.project_members.all()
     tasks = Task.objects.filter(project=project, parent_task__isnull=True)
     statuses = project.statuses.all()
     tags = project.tags.all()
@@ -30,6 +31,7 @@ def task_list(request, project_pk, *args, **kwargs):
         'statuses': statuses,
         'tags': tags,
         'priorities': priorities,
+        'executors': executors,
         'form': status_form,
         'task_form': task_form
     }
@@ -72,21 +74,23 @@ def task_filter(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     tasks = Task.objects.filter(project=project, parent_task__isnull=True)
 
-    tag = request.GET.get('tag')
-    if tag:
-        tag_id = request.GET.get('tag')
+    tag_id = request.GET.get('tag')
+    status_id = request.GET.get('status')
+    priority = request.GET.get('priority')
+    executor = request.GET.get('executor')
+
+    if tag_id:
         tasks = tasks.filter(tag__pk=tag_id)
 
-    status = request.GET.get('status')
-    if status:
-        status_id = request.GET.get('status')
+    if status_id:
         tasks = tasks.filter(status__pk=status_id)
 
-    priority = request.GET.get('priority')
     if priority:
-        priority = request.GET.get('priority')
         tasks = tasks.filter(priority=priority)
 
+    if executor:
+        tasks = tasks.filter(executor=executor)
+    
     context = {
         'tasks': tasks
     }

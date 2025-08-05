@@ -137,8 +137,8 @@ class ProjectMember(models.Model):
 
 
 class TaskExecutor(models.Model):
-    task = models.ForeignKey('tasks.Task', on_delete=models.CASCADE, related_name='exec')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='execs')
+    task = models.ForeignKey('tasks.Task', on_delete=models.CASCADE, related_name='executors')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='executed_tasks')
     
     def __str__(self):
         return f'{self.user} ответственен за {self.task}'

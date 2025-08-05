@@ -47,7 +47,9 @@
         <label class="text-sm text-gray-500 mb-1">Исполнитель</label>
         <select name="executor" class="select select-bordered bg-gray-50 text-gray-700 focus:border-blue-500">
           <option value="">Все</option>
-
+          {% for executor in executors %}
+            <option value="{{executor.pk}}">{{executor.username}}</option>
+          {% endfor %}
         </select>
       </div>
   

@@ -85,7 +85,7 @@ def change_tag_signal(sender, instance, action, *args, **kwargs):
 
 
 
-@receiver(signal=post_delete, sender=Tag)
+@receiver(signal=pre_delete, sender=Tag)
 def delete_tag_signal(sender, instance, *args, **kwargs):
         log_action(action='tag_deleted', user=get_current_user(), project=instance.project, data={'data': instance.name, 'tag_name': instance.name})
 
@@ -97,7 +97,7 @@ def create_status_signal(sender, instance, created, *args, **kwargs):
 
 
 
-@receiver(signal=post_delete, sender=Status)
+@receiver(signal=pre_delete, sender=Status)
 def delete_status_signal(sender, instance, *args, **kwargs):
     log_action(action='status_deleted', user=get_current_user(), project=instance.project, data={'data': instance.name})
 
