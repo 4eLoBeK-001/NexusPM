@@ -45,12 +45,7 @@
         <select name="action_type" class="select select-bordered bg-gray-50 text-gray-700 focus:border-blue-500">
           <option value="">Все</option>
           {% for action, action_name in action_types %}
-            {% if 'action_type' in request.GET %}
             <option value="{{action}}">{{action_name}}</option>
-                {{action_types}}.{{request.GET.action_type}}
-            {% else %}
-            <option value="{{action}}">{{action_name}}</option>
-            {% endif %}
           {% endfor %}
         </select>
       </div>
@@ -109,7 +104,7 @@
                 </svg>
             </div>
         </div>
-        <button onclick="showFilter(this);" class="btn btn-outline border-gray-400 text-gray-700 hover:bg-gray-100">
+        <button onclick="showFilter(this);" class="btn btn-outline border-gray-400 text-gray-900 hover:text-white  hover:bg-neutral-700">
             Добавить фильтры
         </button>
 

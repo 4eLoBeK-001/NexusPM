@@ -164,13 +164,14 @@ def team_invitations(request):
     return render(request, 'invitations.html', context)
 
 
-def search_notifications(request):
+def search_invitations(request):
     search = request.GET.get('search_notif')
-    invitations = TeamInvitation.objects.all().first()
+    invitations = TeamInvitation.objects.filter(team__name__icontains=search)
+    print(search)
     context = {
         'invitations': invitations,
     }
-    return render(request, 'users/includes/notifications_list.html', context)
+    return render(request, 'users/includes/invitation_list.html', context)
 
 
 def accept_invitation(request, invitation_id):
