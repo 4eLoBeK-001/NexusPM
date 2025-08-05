@@ -157,19 +157,11 @@ def change_profile(request):
 
 @login_required
 def notifications(request):
-    notifications = Notifications.objects.filter(user=request.user, is_read=False)
+    invitations = TeamInvitation.objects.filter(invited_user=request.user)
     context = {
-        'notifications': notifications,
+        'invitations': invitations,
     }
-    return render(request, 'notifications.html', context)
-
-
-def notification_list(request, read):
-    notifications = Notifications.objects.filter(user=request.user, is_read=read)
-    context = {
-        'notifications': notifications
-    }
-    return render(request, 'users/includes/notifications_list.html', context)
+    return render(request, 'invitations.html', context)
 
 
 def search_notifications(request):
@@ -179,24 +171,6 @@ def search_notifications(request):
         'notifications': notifications
     }
     return render(request, 'users/includes/notifications_list.html', context)
-
-
-def read_notification(request, notification_id):
-    notification = get_object_or_404(Notifications, pk=notification_id, user=request.user)
-    notification.is_read = not notification.is_read
-    notification.save()
-    context = {
-        'notification': notification
-    }
-    return render(request, 'users/includes/notification.html', context)
-
-
-def invitation_list(request):
-    invitations = TeamInvitation.objects.filter(invited_user=request.user)
-    context = {
-        'invitations': invitations,
-    }
-    return render(request, 'users/includes/invitation_list.html', context)
 
 
 def accept_invitation(request, invitation_id):

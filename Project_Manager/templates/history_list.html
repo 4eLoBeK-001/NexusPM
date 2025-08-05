@@ -1,0 +1,70 @@
+
+
+{% for log in logs %}
+    <div class="bg-white shadow rounded-lg p-4 border border-gray-200 relative">
+        <!-- Добавлен блок с абсолютным позиционированием в правом верхнем углу -->
+        <div class="absolute top-4 right-4 badge badge-outline text-xm">
+        {{ log.get_action_type_display }}
+        </div>
+
+        <div class="text-sm text-gray-500 mb-2">
+            {{ log.created_at|date:"d.m.Y H:i" }} —
+            {% if log.user %}
+                <span class="font-semibold text-gray-700">{{ log.user.username }}</span>
+            {% else %}
+                <span class="text-gray-400 italic">Пользователь удалён</span>
+            {% endif %}
+        </div>
+
+        <div>
+        <pre class="mt-3 text-md p-2 rounded text-gray-700 overflow-x-auto">{{ log.get_html }}</pre>
+        </div>
+
+        <div class="flex mt-3 text-xm bg-gray-50 p-2 rounded text-gray-700 overflow-x-auto">
+        <div class="">
+            {% if log.team %}
+            Команда: 
+            <a href="" class="text-blue-600 hover:underline">
+                {{ log.team.name }}
+            </a>
+            {% else %}
+            {% if log.data.team_name %}Команда: {%else%}{%endif%} 
+            <a href="" class="text-blue-600 hover:underline">
+                {{ log.data.team_name }}
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="">
+            {% if log.project %}
+             | Проект:
+            <a href="" class="text-blue-600 hover:underline">
+                    {{ log.project.name }}
+            </a>
+        {% else %}
+            {% if log.data.project_name %} | Проект: {% else %}{%endif%} 
+            <a href="" class="text-blue-600 hover:underline" title="Удалённый проект">
+            {{ log.data.project_name }}
+            </a>
+        {% endif %}
+        </div>
+
+        <div>
+            {% if log.task %}
+             |  Задача:
+            <a href="" class="text-blue-600 hover:underline">
+                {{ log.task.name }}
+            </a>
+            {% else %}
+            {% if log.data.task_name %} |  Задача: {%else%}{%endif%} 
+            <a href="" class="text-blue-600 hover:underline">
+                {{ log.data.task_name }}
+            </a>
+            {% endif %}
+        </div>
+        </div>
+
+    </div>
+{% empty %}
+    <div class="text-gray-500 italic">История пуста.</div>
+{% endfor %}
