@@ -9,8 +9,15 @@ def main_page(request):
 
 @login_required
 def history(request):
-    logs = ActionLog.objects.filter(Q(team__team_member=request.user)).distinct().order_by('-created_at')
+    logs = ActionLog.objects.filter(Q(team__team_member=request.user) | Q(participants=request.user)).distinct().order_by('-created_at')
     print(logs)
+    all_logs = []
+    for log in logs:
+        print(f'team - {log.team} | '
+        f'project - {log.project if log.project else None} | '
+        f'action - {log.action_type}')
+        ...
+    
     data = {
         'logs': logs
     }

@@ -37,15 +37,15 @@ def change_project_signal(sender, instance, *args, **kwargs):
     
     if changes:
         if changes.get('name'):
-            log_action(action='project_changed_name', user=user, project=instance, data={'old': changes.get('name')[0], 'new': changes.get('name')[1], 'project_name': instance.name})
+            log_action(action='project_changed_name', user=user, project=instance, data={'old': changes.get('name')[0], 'new': changes.get('name')[1], 'project_name': instance.name, 'team_name': instance.team.name})
         if changes.get('description'):
-            log_action(action='project_changed_description', user=user, project=instance, data={'old': changes.get('description')[0], 'new': changes.get('description')[1], 'project_name': instance.name})
+            log_action(action='project_changed_description', user=user, project=instance, data={'old': changes.get('description')[0], 'new': changes.get('description')[1], 'project_name': instance.name, 'team_name': instance.team.name})
         if changes.get('photo'):
-            log_action(action='project_changed_photo', user=user, project=instance, data={'project_name': instance.name})
+            log_action(action='project_changed_photo', user=user, project=instance, data={'project_name': instance.name, 'team_name': instance.team.name})
         if changes.get('status'):
-            log_action(action='project_changed_status', user=user, project=instance, data={'old': changes.get('status')[0], 'new': changes.get('status')[1], 'project_name': instance.name})
+            log_action(action='project_changed_status', user=user, project=instance, data={'old': changes.get('status')[0], 'new': changes.get('status')[1], 'project_name': instance.name, 'team_name': instance.team.name})
 
 
 @receiver(signal=pre_delete, sender=Project)
 def delete_project_signal(sender, instance, origin, *args, **kwargs):
-    log_action(action='project_deleted', user=get_current_user(), team=instance.team, project=instance, data={'project_name': instance.name})
+    log_action(action='project_deleted', user=get_current_user(), team=instance.team, project=instance, data={'project_name': instance.name, 'team_name': instance.team.name})

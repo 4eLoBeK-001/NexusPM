@@ -8,7 +8,6 @@
         </div>
 
         <div class="text-sm text-gray-500 mb-2">
-            {{log.tms}}
             {{ log.created_at|date:"d.m.Y H:i" }} —
             {% if log.user %}
                 <span class="font-semibold text-gray-700">{{ log.user.username }}</span>

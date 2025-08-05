@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -43,7 +44,9 @@ class ActionLog(models.Model):
     action_type = models.CharField(max_length=100, choices=ACTION_CHOICES)
     data = models.JSONField(default=dict, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-
+    participants = models.ManyToManyField(get_user_model(), blank=True, related_name='logs_visible_for')
+    
+    
     def __str__(self):
         return f'Логирование {self.user}'
     
