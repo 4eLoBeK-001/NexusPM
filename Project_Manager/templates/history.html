@@ -82,11 +82,11 @@
             <div class="relative max-w-4xl w-full mb-2">
                 <input 
                     type="text" 
-                    name="search_notif"
+                    name="search_actions"
                     placeholder="Поиск..." 
                     class="input input-bordered bg-gray-50 text-gray-700 border-gray-400 w-full pl-10 pr-6 focus:border-sky-600"
-                    hx-get="{% url 'users:search_notifications' %}"
-                    hx-target="#list-content"
+                    hx-get="{% url 'history_search' %}"
+                    hx-target="#lsts"
                     hx-trigger="keyup delay:300ms"
                 />
                 <svg 

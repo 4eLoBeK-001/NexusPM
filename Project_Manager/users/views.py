@@ -166,8 +166,7 @@ def team_invitations(request):
 
 def search_invitations(request):
     search = request.GET.get('search_notif')
-    invitations = TeamInvitation.objects.filter(team__name__icontains=search)
-    print(search)
+    invitations = TeamInvitation.objects.filter(invited_user=request.user, team__name__icontains=search)
     context = {
         'invitations': invitations,
     }

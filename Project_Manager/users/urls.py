@@ -19,7 +19,7 @@ urlpatterns = [
     path('profile/create/social/<int:network_pk>/', views.delete_social_network, name='delete_social_network'),
     
     path('invitations/', views.team_invitations, name='invitations'),
-    path('notifications/search/', views.search_invitations, name='search_notifications'),
+    path('invitations/search/', views.search_invitations, name='search_notifications'),
    
     path('invitation/<int:invitation_id>/accept/', views.accept_invitation, name='accept_invitation'),
 ]
