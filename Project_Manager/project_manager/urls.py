@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.main_page, name='home'),
     path('history/', views.history, name='history'),
+    path('history/filter/', views.history_filter, name='history_filter'),
 
     path('auth/', include('users.urls', namespace='users')),
     path('workplace/', include('teams.urls', namespace='teams')),
