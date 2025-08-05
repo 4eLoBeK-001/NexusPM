@@ -49,7 +49,7 @@ TEMPLATES = [
                 'teams.context_processors.all_teams_processor',
                 'teams.context_processors.project_form_processor',
                 'teams.context_processors.role_proccessor',
-                'users.context_processors.tracker_unread_notifications_processor',
+                'users.context_processors.tracker_unread_invitations_processor',
             ],
         },
     },
