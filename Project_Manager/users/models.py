@@ -88,26 +88,6 @@ class SocialNetwork(models.Model):
         return f'{self.network} на {self.profile.user}'
     
 
-class Notifications(models.Model):
-    name = models.CharField(max_length=254)
-    description = models.TextField(blank=True, null=True)
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
-    is_read = models.BooleanField(default=False)
-    team = models.ForeignKey('teams.Team', on_delete=models.CASCADE, blank=True, null=True)
-    project = models.ForeignKey('projects.Project', on_delete=models.CASCADE, blank=True, null=True)
-    task = models.ForeignKey('tasks.Task', on_delete=models.CASCADE, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        ordering = ('-created_at',)
-        verbose_name = 'Уведомлениеa'
-        verbose_name_plural = 'Уведомления'
-
-    def __str__(self):
-        return f'Уведомление для {self.user}'
-    
-
-
 
 
 class TeamMember(models.Model):

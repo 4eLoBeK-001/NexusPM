@@ -9,7 +9,7 @@ from django.utils.html import format_html
 
 from teams.models import TeamInvitation
 
-from .models import Notifications, SocialNetwork, Tag
+from .models import SocialNetwork, Tag
 
 from .forms import AddSocialnetworkForm, AddTagForm, ChangeProfileForm, ChangeUserForm, LoginUserForm, RegisterUserForm
 # Create your views here.
@@ -166,7 +166,6 @@ def notifications(request):
 
 def search_notifications(request):
     search = request.GET.get('search_notif')
-    notifications = Notifications.objects.filter(user=request.user, name__icontains=search)
     context = {
         'notifications': notifications
     }
