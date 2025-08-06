@@ -93,9 +93,6 @@
     </div>
     <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-neutral-50 rounded-box w-52">
         <li>
-            <a><i class="fas fa-history mr-2"></i>История изменений</a>
-        </li>
-        <li>
           {% if your_role >= ROLE_PRIORITY.MANAGER %}
           <a class="text-red-500 hover:text-white hover:bg-red-500"
             hx-post="{% url_task task 'task_delete' %}"

@@ -1,4 +1,4 @@
-{% extends 'teams/team-conf.html' %}
+{% extends 'projects/project-settings.html' %}
 
 {% block configuration_content %}
 
@@ -11,17 +11,8 @@
     >
     <div class="flex gap-6 bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
   
-      <div class="flex flex-col w-full sm:w-1/4 min-w-[140px]">
-        <label class="text-sm text-gray-500 mb-1">Проекты</label>
-        <select name="project" class="select select-bordered bg-gray-50 text-gray-700 focus:border-blue-500">
-          <option value="">Все</option>
-          {% for project in projects %}
-          <option value="{{project.pk}}">{{project.name}}</option>
-          {% endfor %}
-        </select>
-      </div>
   
-      <div class="flex flex-col w-full sm:w-1/4 min-w-[140px]">
+      <div class="flex flex-col w-full sm:w-1/3 min-w-[140px]">
         <label class="text-sm text-gray-500 mb-1">Задачи</label>
         <select name="task" class="select select-bordered bg-gray-50 text-gray-700 focus:border-blue-500">
           <option value="">Все</option>
@@ -31,7 +22,7 @@
         </select>
       </div>
   
-      <div class="flex flex-col w-full sm:w-1/4 min-w-[140px]">
+      <div class="flex flex-col w-full sm:w-1/3 min-w-[140px]">
         <label class="text-sm text-gray-500 mb-1">Действие</label>
         <select name="action_type" class="select select-bordered bg-gray-50 text-gray-700 focus:border-blue-500">
           <option value="">Все</option>
@@ -41,7 +32,7 @@
         </select>
       </div>
   
-      <div class="flex items-end w-full sm:w-1/4 min-w-[140px]">
+      <div class="flex items-end w-full sm:w-1/3 min-w-[140px]">
         <div class="flex w-full gap-1">
           <button type="reset" name="reset" value="1" class="btn btn-outline text-black w-1/2 shadow-sm text-sm hover:text-white hover:bg-neutral-700">
             Сбросить
@@ -54,7 +45,7 @@
 
     </div>
   </form>
-    <h1 class="text-2xl font-bold my-6 text-center">История {{team.name}}</h1>
+    <h1 class="text-2xl font-bold my-6 text-center">История {{project.name}}</h1>
 
     <div class="relative mb-1">
 

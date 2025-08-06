@@ -72,11 +72,36 @@ def history_filter(request):
 
 
 def team_history(request, pk):
+
     team = get_object_or_404(Team, pk=pk)
-    logs = ActionLog.objects.filter(team=team)
+    projects = team.projects.all()
+    tasks = Task.objects.filter(project_id__in=projects.values_list('id', flat=True))
+    action_types = ActionLog.ACTION_CHOICES
+
+    logs = ActionLog.objects.filter(participants=request.user, team=team)
 
     context = {
         'team': team,
+        'projects': projects,
+        'tasks': tasks,
+        'action_types': action_types,
         'logs': logs,
     }
     return render(request, 'logs/team_history.html', context)
+
+
+def project_history(request, pk, project_pk):
+
+    project = get_object_or_404(Project, pk=project_pk)
+    tasks = project.tasks.all()
+    action_types = ActionLog.ACTION_CHOICES
+    
+    logs = ActionLog.objects.filter(participants=request.user, project=project)
+
+    context = {
+        'tasks': tasks,
+        'project': project,
+        'action_types': action_types,
+        'logs': logs,
+    }
+    return render(request, 'logs/project_history.html', context)
