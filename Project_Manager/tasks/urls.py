@@ -1,31 +1,36 @@
-from django.urls import path
+from django.urls import include, path
 
 from . import views
 
 app_name = 'tasks'
 
 urlpatterns = [
-    path('<int:project_pk>/tasks/', views.task_list, name='task_list'),
-    path('<int:project_pk>/task/create/', views.create_task, name='create_task'),
-    path('<int:project_pk>/task/<int:task_pk>/subtask/create/', views.create_subtask, name='create_subtask'),
-    path('<int:project_pk>/task/<int:task_pk>/', views.task_detail, name='task_detail'),
-    path('<int:project_pk>/task/<int:task_pk>/change/', views.change_task, name='change_task'),
-    path('<int:project_pk>/task/<int:task_pk>/delete/', views.task_delete, name='task_delete'),
+    path('tasks/', views.task_list, name='task_list'),
 
-    path('<int:project_pk>/tasks/search/', views.task_search, name='task_search'),
-    path('<int:project_pk>/tasks/filter/', views.task_filter, name='task_filter'),
+    path('task/create/', views.create_task, name='create_task'),
+    path('tasks/search/', views.task_search, name='task_search'),
+    path('tasks/filter/', views.task_filter, name='task_filter'),
 
-    path('<int:project_pk>/task/<int:task_pk>/status/change/', views.change_status, name='change_status'),
+    path('task/<int:task_pk>/', include([
+        path('', views.task_detail, name='task_detail'),
 
-    path('<int:project_pk>/project/<int:task_pk>/tag/change/', views.change_tag, name='change_tag'),
+        path('subtask/create/', views.create_subtask, name='create_subtask'),
+        
+        path('change/', views.change_task, name='change_task'),
+        path('delete/', views.task_delete, name='task_delete'),
 
-    path('<int:project_pk>/task/<int:task_pk>/pchange/', views.change_priority, name='change_priority'),
+        path('status/change/', views.change_status, name='change_status'),
+        path('tag/change/', views.change_tag, name='change_tag'),
 
-    path('<int:project_pk>/task/<int:task_pk>/comment/add/', views.add_comment, name='add_comment'),
-    path('<int:project_pk>/task/<int:task_pk>/comment/<int:comm_pk>/delete/', views.delete_comment, name='delete_comment'),
+        path('pchange/', views.change_priority, name='change_priority'),
 
-    path('<int:project_pk>/task/<int:task_pk>/test/', views.add_executors, name='add_executors'),
+        path('comment/add/', views.add_comment, name='add_comment'),
+        path('comment/<int:comm_pk>/delete/', views.delete_comment, name='delete_comment'),
 
-    path('<int:project_pk>/task/<int:task_pk>/image/add/', views.processing_image, name='processing_image'),
+        path('test/', views.add_executors, name='add_executors'),
+
+        path('image/add/', views.processing_image, name='processing_image'),
+    ])),
+    
     
 ]
