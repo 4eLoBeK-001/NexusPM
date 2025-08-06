@@ -13,16 +13,19 @@
 
     <!-- Вкладки -->
     <div role="tablist" class="tabs tabs-boxed bg-gray-300 mb-6">
-      <a href="{% url 'users:profile' %}" role="tab"
+      <a href="{% url 'users:profile' user.pk %}" role="tab"
         class="tab {% if request.resolver_match.url_name == 'profile' %}tab-active{% endif %}">
         О себе
       </a>
   
-      <a href="{% url 'users:change_profile' %}" role="tab"
+      <a href="{% url 'users:change_profile' user.pk %}" role="tab"
         class="tab {% if request.resolver_match.url_name == 'change_profile' %}tab-active{% endif %}">
         Редактировать
       </a>
-      <a role="tab" class="tab">Приватность</a>
+      <a href="{% url 'users:private_profile' user.pk %}" role="tab" 
+        class="tab {% if request.resolver_match.url_name == 'private_profile' %}tab-active{% endif %}">
+        Приватность
+    </a>
     </div>
 
     <div>

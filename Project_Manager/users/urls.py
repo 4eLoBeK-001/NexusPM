@@ -9,8 +9,10 @@ urlpatterns = [
     path('register/', views.register_user, name='register'),
     path('logout/', views.logout_user, name='logout'),
 
-    path('profile/', views.profile_user, name='profile'),
-    path('change/profile/', views.change_profile, name='change_profile'),
+    path('profile/<int:user_id>/', views.profile_user, name='profile'),
+    path('change/profile/<int:user_id>/', views.change_profile, name='change_profile'),
+    path('profile/<int:user_id>/privace-settings/', views.private_profile, name='private_profile'),
+    path('profile/<int:user_id>/privace-change/', views.change_privacy_profile, name='change_privacy_profile'),
 
     path('profile/create/tag/', views.create_user_tag, name='create_user_tag'),
     path('profile/delete/tag/<int:tag_pk>/', views.delete_user_tag, name='delete_user_tag'),

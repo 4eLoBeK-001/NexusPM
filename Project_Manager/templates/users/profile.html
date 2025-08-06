@@ -38,8 +38,31 @@
 <section class="mb-8">
   <h2 class="text-2xl font-semibold mb-4">Контактная информация</h2>
   <div class="bg-white shadow rounded-lg p-6">
-    <p class="mb-2"><strong>Email:</strong> {{ user.email }}</p>
-    <p class="mb-2"><strong>Телефон:</strong> {{ profile.phone_number|default:"---" }}</p>
+
+    <div class="flex "><strong>Email:</strong> 
+    {% if profile.hide_email %}
+      <div class="stars-container w-[20%] ml-2 mt-[-5px] mb-2">
+        <p class="text-sm hidden-email-text">Скрыто пользователем</p>
+        <div class="stars"></div>
+        <div class="stars-twinkle"></div>
+      </div>
+    {% else %}
+        <p class=" text-md text-black">{{ user.email }}</p>
+    {% endif %}
+    </div>
+
+    <div class="flex "><strong>Телефон:</strong> 
+      {% if profile.hide_number %}
+        <div class="stars-container w-[20%] ml-2 mt-[-5px] mb-1">
+          <p class="text-sm hidden-email-text">Скрыто пользователем</p>
+          <div class="stars"></div>
+          <div class="stars-twinkle"></div>
+        </div>
+      {% else %}
+        <p class="mb-2"><strong>Телефон:</strong> {{ profile.phone_number|default:"---" }}</p>
+      {% endif %}
+      </div>
+    
     <div class="mb-2">
       <strong>Социальные сети:</strong>
       {% if social_links %}

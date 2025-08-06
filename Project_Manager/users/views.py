@@ -11,7 +11,7 @@ from teams.models import TeamInvitation
 
 from .models import SocialNetwork, Tag
 
-from .forms import AddSocialnetworkForm, AddTagForm, ChangeProfileForm, ChangeUserForm, LoginUserForm, RegisterUserForm
+from .forms import AddSocialnetworkForm, AddTagForm, ChangeProfileForm, ChangeUserForm, LoginUserForm, PrivateProfileForm, RegisterUserForm
 # Create your views here.
 
 def login_user(request):
@@ -48,21 +48,21 @@ def register_user(request):
             return redirect(reverse('projects:home'))
     else:
         form = RegisterUserForm()
-    data = {
+    context = {
         'form': form
     }
-    return render(request, 'users/register.html', data)
+    return render(request, 'users/register.html', context)
 
 @login_required
-def profile_user(request):
-    user = get_object_or_404(get_user_model(), pk=request.user.pk)
+def profile_user(request, user_id):
+    user = get_object_or_404(get_user_model(), pk=user_id)
     profile = user.profile
     tags = profile.tags.all()
     tag_form = AddTagForm()
     social_form = AddSocialnetworkForm()
     networks = [network[0] for network in SocialNetwork.SOCIAL_CHOICES]
     social_links = profile.social_links.all()
-    data = {
+    context = {
         'user': user,
         'profile': profile,
         'social_links': social_links,
@@ -71,7 +71,7 @@ def profile_user(request):
         'tag_form': tag_form,
         'tags': tags
     }
-    return render(request, 'users/profile.html', data)
+    return render(request, 'users/profile.html', context)
 
 
 SOCIAL_LINKS  = {
@@ -104,6 +104,31 @@ def add_social_network(request):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+def private_profile(request, user_id):
+    user = get_object_or_404(get_user_model(), pk=user_id)
+    profile = user.profile
+    social_links = profile.social_links.all()
+    form = PrivateProfileForm(instance=profile)
+    context = {
+        'user': user,
+        'profile': profile,
+        'social_links': social_links,
+        'form': form,
+    }
+    return render(request, 'users/includes/privacy-profile.html', context)
+
+
+@require_http_methods(['POST'])
+def change_privacy_profile(request, user_id):
+    user = get_object_or_404(get_user_model(), pk=user_id)
+    profile = user.profile
+    form = PrivateProfileForm(request.POST, instance=profile)
+    if form.is_valid():
+        form.save()
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+
 def delete_social_network(request, network_pk):
     network = get_object_or_404(SocialNetwork, pk=network_pk)
     network.delete()
@@ -128,11 +153,12 @@ def create_user_tag(request):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-def change_profile(request):
-    user = get_object_or_404(get_user_model(), pk=request.user.pk)
+def change_profile(request, user_id):
+    user = get_object_or_404(get_user_model(), pk=user_id)
     profile = user.profile
     user_form = ChangeUserForm(instance=user)
-    profile_form = ChangeProfileForm(instance=profile)
+    social_links = profile.social_links.all()
+    profile_form = ChangeProfileForm(instance=profile) 
 
     if request.method == 'POST':
         if 'user_form' in request.POST:
@@ -149,6 +175,7 @@ def change_profile(request):
     data = {
         'user': user,
         'profile': profile,
+        'social_links': social_links,
         'user_form': user_form,
         'profile_form': profile_form
     }

@@ -23,6 +23,9 @@ class Profile(models.Model):
     short_description = models.CharField(max_length=200, blank=True, null=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='users/profile_pictures/', null=True, blank=True)
+    hide_number = models.BooleanField(default=False)
+    hide_email = models.BooleanField(default=False)
+
 
     @property
     def get_profile_picture_url(self):

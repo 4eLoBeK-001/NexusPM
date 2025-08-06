@@ -198,3 +198,25 @@ class AddSocialnetworkForm(forms.Form):
         if SocialNetwork.objects.filter(profile=self.profile, network=network).exists():
             raise forms.ValidationError(f'{network} уже привязан к вашему профилю')
         return cleaned_data
+
+
+
+
+class PrivateProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('hide_number', 'hide_email')
+
+        labels = {
+            'hide_number': 'Скрыть номер телефона',
+            'hide_email': 'Скрыть электронную почту',
+        }
+
+        widgets = {
+            'hide_number': forms.CheckboxInput(attrs={
+                'class': 'form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out'
+            }),
+            'hide_email': forms.CheckboxInput(attrs={
+                'class': 'form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out'
+            }),
+        }

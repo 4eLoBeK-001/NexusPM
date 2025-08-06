@@ -1,0 +1,30 @@
+{% extends 'users/base-profile.html' %}
+
+{% block profile-content %}
+<div class="max-w-xl mx-auto p-6 bg-white rounded-lg shadow-md mt-8">
+    <h2 class="text-2xl font-semibold mb-6 text-gray-800">Настройки конфиденциальности</h2>
+    <p class="text-lg font-semibold mb-6 text-gray-600">Скрытую информацию никто кроме вас не будет видеть</p>
+    <form method="post" action="{% url 'users:change_privacy_profile' user.pk %}" class="space-y-5">
+        {% csrf_token %}
+
+        <div class="flex items-center space-x-3">
+            {{ form.hide_number }}
+            <label for="{{ form.hide_number.id_for_label }}" class="text-gray-700">
+                {{ form.hide_number.label }}
+            </label>
+        </div>
+
+        <div class="flex items-center space-x-3">
+            {{ form.hide_email }}
+            <label for="{{ form.hide_email.id_for_label }}" class="text-gray-700">
+                {{ form.hide_email.label }}
+            </label>
+        </div>
+
+        <button type="submit"
+            class="mt-4 px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition">
+            Сохранить
+        </button>
+    </form>
+</div>
+{% endblock profile-content %}
