@@ -1,0 +1,38 @@
+<dialog id="add_tag_modal" class="modal">
+    <div class="modal-box bg-gray-100 max-w-md p-6 rounded-lg shadow-xl">
+      <form method="post" action="{% url_task task 'change_tag' %}">{% csrf_token %}
+        
+        <a class="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition-colors" onclick="add_tag_modal.close();">✕</a>
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">Теги</h3>
+
+        <div>
+
+          <div class="flex flex-wrap gap-2">
+            {% for tag in update_tag_form.tag.field.queryset %}
+              <label class="cursor-pointer mb-2">
+                {% if your_role >= ROLE_PRIORITY.MEMBER %}
+                <input type="checkbox" name="tag" value="{{ tag.id }}"
+                      {% if tag in update_tag_form.initial.tag or tag in update_tag_form.data.tag %}checked{% endif %}
+                      class="hidden peer">
+                {% else %}
+                <input type="checkbox" name="tag" value="{{ tag.id }}"disabled  
+                      {% if tag in update_tag_form.initial.tag or tag in update_tag_form.data.tag %}checked {% endif %}
+                      class="hidden peer">
+                {% endif %}
+                <span class="peer-checked:{{tag.color.bg_color}} peer-checked:{{tag.color.text_color}} peer-checked:{{tag.color.border_color}}
+                            bg-gray-200 text-gray-700 px-3 py-1 border rounded-full transition-all duration-200">
+                  {{ tag.name }}
+                </span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        {% if your_role >= ROLE_PRIORITY.MEMBER %}
+        <div class="modal-action mt-6">
+          <button class="btn btn-primary text-sm text-white" name="update_tags" type="submit">Сохранить</button>
+        </div>
+        {% endif %}
+      </form>
+    </div>
+  </dialog>

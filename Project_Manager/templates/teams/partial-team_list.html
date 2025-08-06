@@ -28,7 +28,7 @@
                         <li><a class="rounded text-gray-600 hover:bg-gray-200"  onclick="document.getElementById('update_team_modal_{{ team.id }}').showModal()">Редактировать</a></li>
                         <li><a class="rounded text-red-500 hover:bg-red-500 hover:text-white" hx-post="{% url 'teams:delete_team' team.id %}" hx-target="#card_{{team.id}}" hx-swap="delete">Удалить</a></li>
                         {% with form=team_forms|dictkey:team.id %}
-                            {% include 'includes/update-team-modal.html' %}
+                            {% include 'teams/includes/update-team-modal.html' %}
                         {% endwith %}
                     </ul>
                     {% else %}

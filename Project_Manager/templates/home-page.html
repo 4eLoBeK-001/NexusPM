@@ -38,7 +38,7 @@
 		  </div>
 		  <div class="hidden lg:flex lg:flex-1 lg:justify-end">
             {% if user.is_authenticated %}
-				<a href="#" class="btn btn-primary text-xl font-semibold text-white mr-6">Профиль</a>
+				<a href="{% url 'users:profile' user.pk %}" class="btn btn-primary text-xl font-semibold text-white mr-6">Профиль</a>
 				<a href="{% url 'users:logout' %}" class="btn btn-primary text-xl font-semibold text-white">Выйти</a>
 			{% else %}
 				<a href="{% url 'users:login' %}" class="btn btn-primary text-xl font-semibold text-white mr-6">Войти</a>
@@ -65,13 +65,18 @@
 			<div class="mt-6 flow-root">
 			  <div class="-my-6 divide-y divide-gray-500/10">
 				<div class="space-y-2 py-6">
-				  <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Начать</a>
+				  <a href="{% url 'teams:workplace' %}" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Начать</a>
 				  <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">О возможностях</a>
 				  <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Обратная связь</a>
 				</div>
-				<div class="py-6">
-				  <a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Войти</a>
-				  <a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Зарегистрироваться</a>
+				<div class="inline-flex" >
+					{% if user.is_authenticated %}
+						<a href="{% url 'users:profile' user.pk %}" class="btn btn-primary text-xl font-semibold text-white mr-6">Профиль</a>
+						<a href="{% url 'users:logout' %}" class="btn btn-primary text-xl font-semibold text-white">Выйти</a>
+					{% else %}
+						<a href="{% url 'users:login' %}" class="btn btn-primary text-xl font-semibold text-white mr-6">Войти</a>
+						<a href="{% url 'users:register' %}" class="btn btn-primary text-xl font-semibold text-white">Зарегистрироваться</a>
+					{% endif %}
 				</div>
 			  </div>
 			</div>
@@ -87,7 +92,7 @@
                         Управляйте проектами мощно и быстро.
                     </p>
                     <div class="flex justify-center">
-                        <button class="btn btn-primary scale-125 text-xl text-white my-4">Начинаем!</button>
+                        <a href="{% url 'teams:workplace' %}" class="btn btn-primary scale-125 text-xl text-white my-4">Начинаем!</a>
                     </div>
                 </div>
                 <img

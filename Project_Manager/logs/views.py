@@ -24,7 +24,7 @@ def history(request):
         'tasks': tasks,
         'action_types': action_types
     }
-    return render(request, 'history.html', data)
+    return render(request, 'logs/history.html', data)
 
 
 def history_search(request):
@@ -42,7 +42,7 @@ def history_search(request):
     data = {
         'logs': logs.distinct().order_by('-created_at'),
     }
-    return render(request, 'history_list.html', data)
+    return render(request, 'logs/history_list.html', data)
 
 
 def history_filter(request):
@@ -67,7 +67,7 @@ def history_filter(request):
     data = {
         'logs': logs,
     }
-    return render(request, 'history_list.html', data)
+    return render(request, 'logs/history_list.html', data)
 
 
 

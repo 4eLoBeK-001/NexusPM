@@ -1,8 +1,10 @@
 
 
 <!-- Sidebar -->
-<aside class="min-w-64 bg-white shadow-md flex flex-col">
-  <div class="px-6 py-4 text-2xl font-semibold border-b">Описание</div>
+<aside class="min-w-64 max-w-70 bg-white shadow-md flex flex-col">
+  <div class="px-6 py-4 text-2xl font-semibold border-b">
+    {{ team.name|slice:":14"|default:"NexusPM" }}{% if team and team.name|length > 14 %}...{% endif %}
+    </div>
   <nav class="flex-1 px-4 py-2 space-y-2">
     <a href="{% url 'home' %}" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800">На главную</a>
     <div class="dropdown dropdown-right w-full">
@@ -53,7 +55,7 @@
       
         <!-- Список элементов с фиксированной высотой и прокруткой -->
         <div class="overflow-y-auto" id="team_list" style="max-height: 200px;">
-          {% include 'includes/team_list.html' %}
+          {% include 'teams/includes/team_list.html' %}
         </div>
         
         <!-- Кнопка внизу -->
@@ -63,7 +65,7 @@
           </svg>
           Создать команду
         </button>
-        {% include 'includes/add-team-modal.html' %}
+        {% include 'teams/includes/add-team-modal.html' %}
         
       </div>
     </div>
