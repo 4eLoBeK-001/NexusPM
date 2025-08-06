@@ -295,7 +295,8 @@
         <div id="statusDiv-{{task.pk}}">
           <h2 class="text-gray-700 font-bold mb-2">Статус</h2>
           {% include 'tasks/includes/change-status.html' %}
-        </div>
+          {% include 'tasks/includes/add-status-modal.html' with form=status_form %}
+        </div>    
     
         <div id="priority-{{task.pk}}">
           {% if your_role >= ROLE_PRIORITY.MANAGER %}

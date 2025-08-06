@@ -52,7 +52,7 @@
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const colorInputs = document.querySelectorAll('input[name="color"]');
-                    const submitButton = document.querySelector('button[name="add_tag"]');
+                    const submitButton = document.querySelector('button[name="add_status"]');
                     
                     colorInputs.forEach(input => {
                         input.addEventListener('change', function() {
@@ -70,7 +70,7 @@
             {% endif %}
             </div>
         
-        <button class="btn btn-primary text-white" name="add_tag" type="submit" disabled>Сохранить</button>
+        <button class="btn btn-primary text-white" name="add_status" type="submit" disabled>Сохранить</button>
         </form>
     </div>
 </dialog>

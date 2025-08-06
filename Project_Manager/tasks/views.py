@@ -122,6 +122,7 @@ def task_detail(request, task_pk, *args, **kwargs):
     project = task.project
     executors = task.executor.all()
     statuses = Status.objects.all()
+    status_form = CreateStatusForm()
     tags = Tag.objects.filter(project=project)
     update_tag_form = UpdateTagForm(instance=task, project=project)
     create_tag_form = CreateTagForm()
@@ -136,6 +137,7 @@ def task_detail(request, task_pk, *args, **kwargs):
         'executors': executors,
         'update_tag_form': update_tag_form,
         'create_tag_form': create_tag_form,
+        'status_form': status_form,
         'task_form': task_form,
         'project_members': project_members,
         'executor_ids': executor_ids,
