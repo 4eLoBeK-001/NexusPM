@@ -81,8 +81,8 @@ SOCIAL_LINKS  = {
 }
 
 @require_http_methods(['POST'])
-def add_social_network(request):
-    user = request.user    
+def add_social_network(request, user_id):
+    user = get_object_or_404(get_user_model(), pk=user_id)  
     profile = user.profile
     social_form = AddSocialnetworkForm(request.POST, profile=profile)
     if social_form.is_valid():
@@ -142,8 +142,8 @@ def delete_user_tag(request, tag_pk):
 
 
 @require_http_methods(['POST'])
-def create_user_tag(request):
-    user = get_object_or_404(get_user_model(), pk=request.user.pk)
+def create_user_tag(request, user_id):
+    user = get_object_or_404(get_user_model(), pk=user_id)
     profile = user.profile
     form = AddTagForm(request.POST)
     if form.is_valid():
