@@ -11,6 +11,8 @@ urlpatterns = [
     path('<int:pk>/project/', decorator_include(require_project_member, 'tasks.urls', namespace='tasks')),
 
     path('<int:pk>/projects/', views.project_list, name='project_list'),
+    path('projects/my/', views.my_projects, name='my_projects'),
+
     path('<int:pk>/search/', views.search_projects, name='search_team'),
     path('<int:pk>/project/<int:project_pk>/setting/', views.project_settings, name='project_settings'),
     

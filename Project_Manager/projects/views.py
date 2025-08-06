@@ -36,6 +36,14 @@ def project_list(request, pk):
     return render(request, 'projects/project_list.html', context)
 
 
+def my_projects(request):
+    projects = Project.objects.filter(project_members=request.user)
+    context = {
+        'projects': projects,
+        'status_choices': Project.StatusChoices,
+    }
+    return render(request, 'projects/my_projects.html', context)
+
 
 def search_projects(request, pk):
     team = get_object_or_404(Team, pk=pk)

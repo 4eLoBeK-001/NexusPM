@@ -67,11 +67,18 @@
         
       </div>
     </div>
-    <div class="indicator width-max">
+
+    <div class="">
+      <a href="{% url 'teams:projects:my_projects' %}" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800">
+        Проекты
+      </a>
+    </div>
+
+    <div class="width-max">
       <a href="{% url 'logs:history' %}" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800">
         История
       </a>
-    </div><br>
+    </div>
 
     <div class="indicator width-max">
       <a href="{% url 'users:invitations' %}" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800">
