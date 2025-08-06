@@ -9,10 +9,10 @@
 
         <!-- Аватар -->
         <div class="w-1/12 flex justify-center">
-            <div id="avatar-{{subtask.pk}}" class="avatar {% if subtask.status.is_completed %}grayscale{% endif %}">
-                <div class="w-12 h-12 bg-{{subtask.color}}-500 rounded-full ring ring-{{subtask.color}}-300 ring-offset-1"></div>
+            <div id="avatar-{{task.pk}}" class="avatar {% if task.status.is_completed %}grayscale{% endif %}">
+                <div class="w-12 h-12 bg-{{task.color}}-500 rounded-full ring ring-{{task.color}}-300 ring-offset-1"></div>
             </div>
-        </div>
+        </div>    
 
         <!-- Название и теги -->
         <div class="w-5/12">
@@ -29,10 +29,22 @@
             </div>
         </div>
 
-        <!-- Исполнители -->
-        <div class="w-2/12 flex justify-start">
-            <div id="exAvatar-{{subtask.pk}}" class="avatar {% if subtask.status.is_completed %}grayscale{% endif %}">
-                <div class="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2"></div>
+        <div class="w-2/12 flex justify-start {% if subtask.status.is_completed %}grayscale{% endif %}">
+            <div class="flex -space-x-4">
+                {% for executor in task.executor.all|slice:":3" %}
+                    <div class="avatar">
+                        <div title="{{executor.username}}" class="w-12 rounded-full border border-black border-[2px] ring ring-primary ring-2 overflow-hidden">
+                            <img src="{{executor.profile.get_profile_picture_url}}" />
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if task.executor.count > 3 %}
+                <div class="z-[20]">
+                    <div class="w-12 h-12 flex justify-center items-center rounded-full bg-neutral border border-black border-1 ring ring-primary ring-2 text-gray-100">
+                        <span class="text-center text-sm">+{{task.executor.count|add:"-3"}}</span>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
 

@@ -38,6 +38,15 @@ def task_list(request, project_pk, *args, **kwargs):
     return render(request, 'tasks/task_list.html', context)
 
 
+def my_tasks(request, *args, **kwargs):
+    tasks = Task.objects.filter(executor=request.user)
+    context = {
+        'tasks': tasks,
+    }
+    return render(request, 'tasks/my_tasks.html', context)
+
+
+
 @role_required('Member')
 @require_http_methods(['POST'])
 def create_task(request, project_pk, *args, **kwargs):

@@ -41,8 +41,8 @@
     <div class="w-2/12 flex justify-start">
         <div class="flex -space-x-4">
             {% for executor in task.executor.all|slice:":3" %}
-                <div class="avatar">
-                    <div class="w-12 rounded-full border border-black border-[2px] ring ring-primary ring-2 overflow-hidden">
+                <div class="avatar {% if task.status.is_completed %}grayscale{% endif %}">
+                    <div title="{{executor.username}}" class="w-12 rounded-full border border-black border-[2px] ring ring-primary ring-2 overflow-hidden">
                         <img src="{{executor.profile.get_profile_picture_url}}" />
                     </div>
                 </div>

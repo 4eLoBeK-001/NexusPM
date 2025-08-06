@@ -24,12 +24,12 @@
         <div class="">
             {% if log.team %}
             Команда: 
-            <a href="" class="text-blue-600 hover:underline">
+            <a href="{% url 'teams:projects:project_list' log.team.pk %}" class="text-blue-600 hover:underline">
                 {{ log.team.name }}
             </a>
             {% else %}
             {% if log.data.team_name %}Команда: {%else%}{%endif%} 
-            <a href="" class="text-blue-600 hover:underline">
+            <a title="Команда была удалена" class="text-blue-600 hover:underline">
                 {{ log.data.team_name }}
             </a>
             {% endif %}
@@ -38,12 +38,12 @@
         <div class="">
             {% if log.project %}
              | Проект:
-            <a href="" class="text-blue-600 hover:underline">
+            <a href="{% url 'teams:projects:tasks:task_list' log.team.pk log.project.pk %}" class="text-blue-600 hover:underline">
                     {{ log.project.name }}
             </a>
         {% else %}
             {% if log.data.project_name %} | Проект: {% else %}{%endif%} 
-            <a href="" class="text-blue-600 hover:underline" title="Удалённый проект">
+            <a title="Проект был удалён" class="text-blue-600 hover:underline" title="Удалённый проект">
             {{ log.data.project_name }}
             </a>
         {% endif %}
@@ -52,12 +52,12 @@
         <div>
             {% if log.task %}
              |  Задача:
-            <a href="" class="text-blue-600 hover:underline">
+            <a href="{% url 'teams:projects:tasks:task_detail' log.team.pk log.project.pk log.task.pk %}" class="text-blue-600 hover:underline">
                 {{ log.task.name }}
             </a>
             {% else %}
             {% if log.data.task_name %} |  Задача: {%else%}{%endif%} 
-            <a href="" class="text-blue-600 hover:underline">
+            <a title="Задача была удалена" class="text-blue-600 hover:underline">
                 {{ log.data.task_name }}
             </a>
             {% endif %}
