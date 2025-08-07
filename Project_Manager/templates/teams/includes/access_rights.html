@@ -8,33 +8,37 @@
     <table class="min-w-full border border-gray-200 rounded-lg table-auto">
       <thead class="bg-gray-100 text-gray-700">
         <tr>
-          <th class="text-left px-4 py-3 w-1/5">Название роли</th>
-          <th class="text-left px-4 py-3 w-3/5">Описание</th>
-          <th class="text-left px-4 py-3 w-1/5">Разрешения</th>
+          <th class="text-left px-4 py-3 w-1/6">Название роли</th>
+          <th class="text-left px-4 py-3 w-4/6">Описание</th>
+          <th class="text-left px-4 py-3 w-1/6">Разрешения</th>
         </tr>
       </thead>
       <tbody class="text-gray-800">
         {% for role in roles %}
         <tr class="hover:bg-gray-50 transition-colors">
           <td class="px-4 py-3 border-t border-gray-100 font-medium">
-            {{ role }}
+            {{ role.label }}
           </td>
           <td class="px-4 py-3 border-t border-gray-100 text-sm text-gray-600">
-            {{ role.get_role_description|default:"Нет описания" }}
+            {{ role.description|default:"Нет описания" }}
           </td>
-          <td class="flex px-4 py-3 border-t border-gray-100">
-            <button
-              class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 hover:bg-blue-200 transition"
-              title="Посмотреть разрешения"
-              onclick="openPermissionsModal()"
-            >
-              <!-- Иконка замка -->
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c.667 0 1 .333 1 1v2a1 1 0 11-2 0v-2c0-.667.333-1 1-1zm-4-3v3h8V8a4 4 0 10-8 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11h14v10H5V11z" />
-              </svg>
-            </button>Посмотреть разрешения
+          <td class="px-4 py-3 border-t border-gray-100">
+            <div class="flex items-center gap-2">
+              <button
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 hover:bg-blue-200 transition"
+                title="Посмотреть разрешения"
+                onclick="openPermissionsModal()"
+              >
+                <!-- Иконка замка -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c.667 0 1 .333 1 1v2a1 1 0 11-2 0v-2c0-.667.333-1 1-1zm-4-3v3h8V8a4 4 0 10-8 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11h14v10H5V11z" />
+                </svg>
+              </button>
+              <span class="text-sm font-bold text-blue-600">Посмотреть разрешения</span>
+            </div>
           </td>
+          
         </tr>
         {% endfor %}
       </tbody>
