@@ -40,6 +40,16 @@ def team_conf(request, pk):
     return render(request, 'teams/includes/setting.html', context)
 
 
+def access_rights(request, pk):
+    team = get_object_or_404(Team, pk=pk, team_member=request.user)
+    roles = [role[1] for role in TeamMember.RoleChoices.choices]
+    context = {
+        'team': team,
+        'roles': roles
+    }
+    return render(request, 'teams/includes/access_rights.html', context)
+
+
 @role_required('Admin')
 @require_http_methods(['POST'])
 def change_team(request, pk):

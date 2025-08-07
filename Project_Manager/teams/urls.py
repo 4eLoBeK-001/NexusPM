@@ -16,6 +16,8 @@ urlpatterns = [
         path('member/<int:member_pk>/delete/', views.deleting_team_members, name='deleting_team_members'),
         path('members/search/', views.search_team_members, name='search_team_members'),
         path('member/<int:member_pk>/role-change/', views.change_role_member, name='change_role_member'),
+
+        path('roles/', views.access_rights, name='roles'),
         
         path('change/', views.change_team, name='change_team'),
         path('delete/', views.delete_team, name='delete_team'),

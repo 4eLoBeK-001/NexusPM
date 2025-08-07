@@ -3,8 +3,10 @@
 {% block content %}
 
 <div class="flex items-center justify-center h-full w-full">
-  <div class="flex flex-wrap justify-center gap-8 border border-2 border-sky-600">
-    <div class="card w-80 bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-xl">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 p-4">
+    
+    <!-- Карточка 1 -->
+    <div class="card w-[24rem] bg-gradient-to-r from-violet-500 to-fuchsia-500 shadow-xl">
       <div class="card-body p-[1.25rem]">
         <h1 class="card-title text-2xl text-white">Создать команду</h1>
         <p class="text-white">Создайте команду, добавьте проекты, решайте задачи.</p>
@@ -16,7 +18,8 @@
       </div>
     </div>
 
-    <div class="card w-80 bg-gradient-to-r from-sky-500 to-indigo-500 shadow-xl">
+    <!-- Карточка 2 -->
+    <div class="card w-[24rem] bg-gradient-to-r from-sky-500 to-indigo-500 shadow-xl">
       <div class="card-body p-[1.25rem]">
         <h2 class="card-title text-2xl text-white">Возможности</h2>
         <p class="text-white">Узнайте, что вы можете делать в нашей системе.</p>
@@ -27,8 +30,34 @@
         </div>
       </div>
     </div>
+
+    <!-- Карточка 3 -->
+    <div class="card w-[24rem] bg-gradient-to-r from-green-400 to-emerald-600 shadow-xl">
+      <div class="card-body p-[1.25rem]">
+        <h2 class="card-title text-2xl text-white">Команды</h2>
+        <p class="text-white">Управляйте командами, отслеживайте прогресс, ставьте цели.</p>
+        <div class="card-actions justify-end">
+          <a href="{% url 'teams:team_list' %}" class="btn items-center justify-start overflow-hidden font-medium bg-green-100 rounded-lg hover:bg-transparent hover:border-white hover:border-2 group py-1.5 px-2.5">
+            <span class="text-left text-green-800 transition-colors group-hover:text-white">К командам</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Карточка 4 -->
+    <div class="card w-[24rem] bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 shadow-xl">
+      <div class="card-body p-[1.25rem]">
+        <h2 class="card-title text-2xl text-white">Обратная связь</h2>
+        <p class="text-white">Есть вопросы? Обращайтесь!</p>
+        <div class="card-actions justify-end">
+          <a class="btn items-center justify-start overflow-hidden font-medium bg-yellow-100 rounded-lg hover:bg-transparent hover:border-white hover:border-2 group py-1.5 px-2.5">
+            <span class="text-left text-yellow-800 transition-colors group-hover:text-white">Обратная связь</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
-
 
 {% endblock content %}

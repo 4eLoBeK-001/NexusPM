@@ -123,6 +123,17 @@ class TeamMember(models.Model):
 
     def __str__(self):
         return f'{self.user} в команде {self.team}'
+    
+    @property
+    def get_role_description(self):
+        descriptions = {
+            self.RoleChoices.CREATOR: 'Имеет полный доступ к команде и проектам, назначается по умолчанию создателю комнды',
+            self.RoleChoices.ADMIN: '123',
+            self.RoleChoices.MANAGER: 'asd',
+            self.RoleChoices.MEMBER: 'Имеет ограниченный доступ к проекту, может создавать задачи но не может менять настройки команды и проектов',
+            self.RoleChoices.VIEWER: 'Может только просматривать содержание команды и проектов. Может оставлять коментарии',
+        }
+        return descriptions.get(self.role)
 
 
 class ProjectMember(models.Model):
