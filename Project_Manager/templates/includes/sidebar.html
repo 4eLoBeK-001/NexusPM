@@ -3,12 +3,20 @@
 <!-- Sidebar -->
 <aside class="min-w-64 max-w-70 bg-white shadow-md flex flex-col">
   <div class="px-6 py-4 text-2xl font-semibold border-b">
-    {{ team.name|slice:":14"|default:"NexusPM" }}{% if team and team.name|length > 14 %}...{% endif %}
-    </div>
+    {% if team %}
+      {{ team.name|slice:":14"|default:"NexusPM" }}{% if team and team.name|length > 14 %}...{% endif %}
+    {% else %}
+      {{ project.team.name|slice:":14"|default:"NexusPM" }}{% if project.team and project.team.name|length > 14 %}...{% endif %}
+    {% endif %}
+  </div>
   <nav class="flex-1 px-4 py-2 space-y-2">
-    <a href="{% url 'home' %}" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800">На главную</a>
+    <a href="{% url 'home' %}" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800">
+      <i class="fa fa-home mr-1"></i> На главную
+    </a>
     <div class="dropdown dropdown-right w-full">
-      <div tabindex="0" role="button" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800 w-full text-left">Команды</div>
+      <div tabindex="0" role="button" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800 w-full text-left">
+        <i class="fas fa-user-friends mr-1"></i> Команды
+      </div>
       <!-- Заголовок -->
       <div tabindex="0" class="dropdown-content bg-white w-[34vh] rounded-box z-10 w-64 p-3 shadow-md ml-2 flex flex-col gap-2">
         <div class="flex items-center justify-between mb-2">
@@ -53,7 +61,7 @@
           
         </div>
       
-        <!-- Список элементов с фиксированной высотой и прокруткой -->
+        <!-- Список элементов -->
         <div class="overflow-y-auto" id="team_list" style="max-height: 200px;">
           {% include 'teams/includes/team_list.html' %}
         </div>
@@ -72,26 +80,26 @@
 
     <div class="">
       <a href="{% url 'my_projects' %}" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800">
-        Проекты
+        <i class="fa fa-diagram-project"></i> Проекты
       </a>
     </div>
 
     <div class="">
       <a href="{% url 'my_tasks' %}" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800">
-        Задачи
+        <i class="fas fa-tasks mr-1"></i> Задачи
       </a>
     </div>
 
     <div class="width-max">
       <a href="{% url 'logs:history' %}" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800">
-        История
+        <i class="fas fa-history"></i> История
       </a>
     </div>
 
     <div class="indicator width-max">
       <a href="{% url 'users:invitations' %}" class="block px-4 py-2 rounded hover:bg-gray-200 text-gray-800">
         {% if unread_invitations %}<span class="indicator-item mt-2 badge badge-secondary">{{unread_invitations}}</span>{%else%}{%endif%}
-        Приглашения
+        <i class="fas fa-paper-plane"></i> Приглашения
       </a>
     </div>
 

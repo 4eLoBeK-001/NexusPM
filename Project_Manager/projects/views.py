@@ -52,7 +52,7 @@ def search_projects(request, pk):
     context = {
         'projects': projects
     }
-    return render(request, 'projects/s.html', context)
+    return render(request, 'projects/projects.html', context)
 
 
 @role_required('Admin')
