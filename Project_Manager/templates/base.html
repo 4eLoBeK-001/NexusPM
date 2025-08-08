@@ -36,8 +36,8 @@
 				</button>
 			</div>
 			<div class="hidden lg:flex lg:gap-x-6 bg-gray-200 rounded-xl">
-				<a href="#" class="btn btn-neutral btn-outline text-xl font-semibold text-zinc-950 border-none">О возможностях</a>
 				<a href="{% url 'home' %}" class="btn btn-neutral btn-outline text-xl font-semibold text-zinc-950 border-none">На главную</a>
+				<a href="{% url 'teams:workplace' %}" class="btn btn-neutral btn-outline text-xl font-semibold text-zinc-950 border-none">Меню</a>
 				<a href="{% url 'feedback' %}" class="btn btn-neutral btn-outline text-xl font-semibold text-zinc-950 border-none">Обратная связь</a>
 			</div>
 			<div class="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -56,11 +56,11 @@
 			<div class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
 				<div class="flex items-center justify-between">
 					<a href="#" class="-m-1.5 p-1.5">
-						<span class="sr-only">Your</span>
+						<span class="sr-only">+</span>
 						<img class="h-8 w-auto" src="" alt="">
 					</a>
 					<button type="button" id="menu-close" class="-m-2.5 rounded-md p-2.5 text-gray-700">
-						<span class="sr-only">Close menu</span>
+						<span class="sr-only">Скрыть меню</span>
 						<svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
 						<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
 						</svg>
@@ -70,7 +70,7 @@
 					<div class="-my-6 divide-y divide-gray-500/10">
 						<div class="space-y-2 py-6">
 							<a href="{% url 'home' %}" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">На главную</a>
-							<a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">О возможностях</a>
+							<a href="{% url 'teams:workplace' %}" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Меню</a>
 							<a href="{% url 'feedback' %}" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Обратная связь</a>
 						</div>
 						<div class="py-6">
