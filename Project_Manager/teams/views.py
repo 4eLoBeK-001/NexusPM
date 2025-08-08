@@ -13,7 +13,7 @@ from users.models import User
 from .forms import AddModalTeamForm, AddTeamForm, AddTeamMemberModalForm
 from .models import Team, TeamInvitation
 from .utils.decorators import role_required
-from .utils.utils import get_role_description
+from .utils.utils import get_role_description, ROLE_PERMISSIONS, PERMISSION_LABELS
 from users.models import TeamMember
 
 
@@ -44,14 +44,22 @@ def team_conf(request, pk):
 def access_rights(request, pk):
     team = get_object_or_404(Team, pk=pk, team_member=request.user)
     roles = [
-        {'value': role.value, 'label': role.label, 'description': get_role_description(role.value)} 
+        {
+            'value': role.value, 
+            'label': role.label, 
+            'rights': ROLE_PERMISSIONS[role.value], 
+            'description': get_role_description(role.value)
+        } 
         for role in TeamMember.RoleChoices
     ]
+
     context = {
         'team': team,
-        'roles': roles
+        'roles': roles,
+        'rights_labels': PERMISSION_LABELS
     }
     return render(request, 'teams/includes/access_rights.html', context)
+
 
 
 @role_required('Admin')

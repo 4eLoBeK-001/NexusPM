@@ -123,7 +123,7 @@ class TeamMember(models.Model):
 
     def __str__(self):
         return f'{self.user} в команде {self.team}'
-    
+
 
 class ProjectMember(models.Model):
     project = models.ForeignKey('projects.Project', on_delete=models.CASCADE, related_name='pm')

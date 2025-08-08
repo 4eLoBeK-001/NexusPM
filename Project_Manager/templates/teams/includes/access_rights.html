@@ -1,5 +1,9 @@
 {% extends 'teams/team-conf.html' %}
 
+{% load dict_extras %}
+
+
+
 {% block configuration_content %}
 <div class="p-6 flex flex-col bg-gray-50">
   <h2 class="text-2xl font-semibold text-gray-800 mb-6">Список ролей</h2>
@@ -25,9 +29,9 @@
           <td class="px-4 py-3 border-t border-gray-100">
             <div class="flex items-center gap-2">
               <button
+                onclick="document.getElementById('permissions-modal-{{ role.value }}').classList.remove('hidden')"
                 class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 hover:bg-blue-200 transition"
                 title="Посмотреть разрешения"
-                onclick="openPermissionsModal()"
               >
                 <!-- Иконка замка -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -38,17 +42,62 @@
               <span class="text-sm font-bold text-blue-600">Посмотреть разрешения</span>
             </div>
           </td>
-          
         </tr>
+
+        <!-- Модальное окно для роли -->
+        <div id="permissions-modal-{{ role.value }}" class="hidden fixed inset-0 z-50 overflow-y-auto">
+          <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Фон -->
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+              <div class="absolute inset-0 bg-gray-500 opacity-75" onclick="document.getElementById('permissions-modal-{{ role.value }}').classList.add('hidden')"></div>
+            </div>
+
+            <!-- Центрирование модального окна -->
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <!-- Само модальное окно -->
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                  <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">
+                      Разрешения для роли: {{ role.label }}
+                    </h3>
+                    <div class="mt-4 space-y-3">
+                      {% for code, value in role.rights.items %}
+                        <label class="flex items-center justify-between p-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition">
+                          <span class="text-gray-800 font-medium">
+                            {% get_item rights_labels code %}
+                          </span>
+                          <input 
+                          type="radio" 
+                          class="radio radio-primary disabled:opacity-100 disabled:cursor-default" 
+                          {% if value %}checked{% endif %} 
+                          disabled
+                        >
+                        </label>
+                      {% endfor %}
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+              <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button
+                  type="button"
+                  onclick="document.getElementById('permissions-modal-{{ role.value }}').classList.add('hidden')"
+                  class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                >
+                  Закрыть
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         {% endfor %}
       </tbody>
     </table>
   </div>
 </div>
 
-<script>
-  function openPermissionsModal() {
-    alert("Показать разрешения для роли");
-  }
-</script>
 {% endblock configuration_content %}
