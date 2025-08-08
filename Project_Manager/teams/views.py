@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
@@ -31,6 +31,7 @@ def team_list(request):
     return render(request, 'teams/team_list.html', context)
 
 
+@login_required
 def team_conf(request, pk):
     team = Team.objects.get(pk=pk, team_member=request.user)
     form = AddTeamForm(instance=team)
@@ -41,6 +42,7 @@ def team_conf(request, pk):
     return render(request, 'teams/includes/setting.html', context)
 
 
+@login_required
 def access_rights(request, pk):
     team = get_object_or_404(Team, pk=pk, team_member=request.user)
     roles = [
@@ -64,6 +66,7 @@ def access_rights(request, pk):
 
 @role_required('Admin')
 @require_http_methods(['POST'])
+@login_required
 def change_team(request, pk):
     team = get_object_or_404(Team, pk=pk, team_member=request.user)
     form = AddTeamForm(request.POST, request.FILES, instance=team)
@@ -72,6 +75,7 @@ def change_team(request, pk):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def team_members(request, pk):
     team = Team.objects.get(pk=pk, team_member=request.user)
     form = AddTeamMemberModalForm()
@@ -91,6 +95,7 @@ def team_members(request, pk):
 
 @role_required('Admin')
 @require_http_methods(['POST'])
+@login_required
 def change_role_member(request, pk, member_pk, *args, **kwargs):
     team = get_object_or_404(Team, pk=pk, team_member=request.user)
     member = team.participate_in_team.select_related('user').get(user_id=member_pk)
@@ -113,6 +118,7 @@ def change_role_member(request, pk, member_pk, *args, **kwargs):
 
 @role_required('Admin')
 @require_http_methods(['POST'])
+@login_required
 def send_invitation_to_team(request, pk):
     team = get_object_or_404(Team, pk=pk)
     form = AddTeamMemberModalForm(request.POST)
@@ -146,6 +152,7 @@ def send_invitation_to_team(request, pk):
 
 @role_required('Admin')
 @require_http_methods(['POST'])
+@login_required
 def deleting_team_members(request, pk, member_pk):
     # Удаляет сначала участника из всех проектов, а потом уже из команды
     team = get_object_or_404(Team, pk=pk, team_member=request.user)
@@ -164,6 +171,7 @@ def deleting_team_members(request, pk, member_pk):
 
 @login_required
 @require_http_methods(['POST'])
+@login_required
 def create_team(request):
     form = AddModalTeamForm(request.POST, request.FILES)
     if form.is_valid():
@@ -184,6 +192,7 @@ def create_team(request):
 
 
 @require_http_methods(['GET'])
+@login_required
 def search_team(request):
     search = request.GET.get('search', '')
     queryset = Team.objects.filter(team_member=request.user, name__icontains=search)
@@ -193,6 +202,7 @@ def search_team(request):
 
 
 @require_http_methods(['GET'])
+@login_required
 def sidebar_search_team(request):
     search = request.GET.get('search', '')
     queryset = Team.objects.filter(team_member=request.user, name__icontains=search)
@@ -209,6 +219,7 @@ def get_team_and_redirect(request, pk):
 
 @role_required('Creator')
 @require_http_methods(['POST'])
+@login_required
 def delete_team(request, pk):
     team, response = get_team_and_redirect(request, pk)
     team.delete()
@@ -216,6 +227,7 @@ def delete_team(request, pk):
 
 
 @require_http_methods(['POST'])
+@login_required
 def leave_from_team(request, pk):
     team, response = get_team_and_redirect(request, pk)
     team.team_member.remove(request.user.pk)
@@ -223,6 +235,7 @@ def leave_from_team(request, pk):
 
 
 @require_http_methods(['GET'])
+@login_required
 def search_team_members(request, pk):
     team = get_object_or_404(Team, pk=pk)
     search = request.GET.get('input_search')

@@ -1,11 +1,16 @@
 from django.urls import include, path
+from django.contrib.auth.decorators import login_required
+
+from decorator_include import decorator_include
 
 from . import views
 
 app_name = 'teams'
 
 urlpatterns = [
-    path('team/<int:pk>/', include('projects.urls', namespace='projects')),
+    path('team/<int:pk>/', 
+         decorator_include(login_required, 'projects.urls', namespace='projects')
+        ),
 
     path('', views.workplace, name='workplace'),
 

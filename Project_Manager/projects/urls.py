@@ -1,4 +1,5 @@
 from django.urls import include, path
+from django.contrib.auth.decorators import login_required
 
 from decorator_include import decorator_include
 
@@ -9,7 +10,13 @@ from tasks import views as tviews
 app_name = 'projects'
 
 urlpatterns = [
-    path('project/<int:project_pk>/', decorator_include(require_project_member, 'tasks.urls', namespace='tasks')),
+    path('project/<int:project_pk>/', 
+         decorator_include(
+            [login_required, require_project_member], 
+            'tasks.urls', 
+            namespace='tasks'
+            )
+        ),
 
     path('projects/', views.project_list, name='project_list'),
 

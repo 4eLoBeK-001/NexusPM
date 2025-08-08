@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.contrib import messages
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import login_required
 from django.utils.html import format_html
 from django.http import HttpResponse
 
@@ -12,7 +12,7 @@ from projects.models import Project
 
 from tasks.utils.decorators import require_project_member
 from tasks.models import Comment, Status, Tag, Task, TaskImage
-from tasks.forms import AddCommentForm, AddImageTaskForm, CreateStatusForm, CreateSubtaskForm, CreateTagForm, CreateTaskForm, UpdateTagForm, UpdateTaskForm
+from tasks.forms import AddCommentForm, CreateStatusForm, CreateSubtaskForm, CreateTagForm, CreateTaskForm, UpdateTagForm, UpdateTaskForm
 
 
 
@@ -38,6 +38,7 @@ def task_list(request, project_pk, *args, **kwargs):
     return render(request, 'tasks/task_list.html', context)
 
 
+@login_required
 def my_tasks(request, *args, **kwargs):
     tasks = Task.objects.filter(executor=request.user)
     context = {

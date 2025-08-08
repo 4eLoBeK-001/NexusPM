@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import login_required
 
 from users.models import ProjectMember, TeamMember
 
@@ -36,6 +36,7 @@ def project_list(request, pk):
     return render(request, 'projects/project_list.html', context)
 
 
+@login_required
 def my_projects(request):
     projects = Project.objects.filter(project_members=request.user)
     context = {

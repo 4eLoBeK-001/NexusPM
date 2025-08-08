@@ -2,6 +2,9 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.decorators import login_required
+
+from decorator_include import decorator_include
 
 from project_manager import views
 
@@ -16,7 +19,7 @@ urlpatterns = [
     path('tasks/my/', tviews.my_tasks, name='my_tasks'),
 
 
-    path('history/', include('logs.urls', namespace='logs')),
+    path('history/', decorator_include(login_required, 'logs.urls', namespace='logs')),
     path('feedback/', views.feedback, name='feedback'),
 
     path('auth/', include('users.urls', namespace='users')),
