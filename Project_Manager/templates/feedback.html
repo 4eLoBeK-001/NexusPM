@@ -9,19 +9,24 @@
         СВЯЖИТЕСЬ С НАМИ
       </h1>
       <p class="text-gray-500 text-lg max-w-2xl mx-auto">
-        Ваше сообщение — <span class="font-semibold text-gray-700">искра</span>, которая запустит наш диалог!
+        У вас есть вопросы или предложения? Мы всегда рады помочь! Не стесняйтесь обращаться к нам по любым вопросам.
+        <br>Ваше сообщение — <span class="font-semibold text-gray-700">искра</span>, которая запустит наш диалог!
       </p>
     </div>
 
+    <p class="mb-1 text-gray-700 text-xl text-center max-w-2xl mx-auto">
+        Вы можете связаться с нами через почту и телеграм:
+    </p>
     <!-- Контакты -->
     <div class="mb-12 grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="p-5 bg-gray-50 rounded-xl border border-gray-100 hover:shadow-[0_0_15px_rgba(124,58,237,0.2)] transition-all duration-300 group">
+        <div class="p-5 bg-gray-50 rounded-xl border border-gray-100 hover:shadow-[0_0_15px_rgba(124,58,237,0.2)] transition-all duration-300 group">
         <div class="flex items-center">
           <div class="bg-gradient-to-r from-purple-500 to-cyan-400 p-3 rounded-lg mr-4 group-hover:rotate-6 transition-transform">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
+          
           <div>
             <h3 class="font-medium text-gray-500">Email</h3>
             <p class="text-lg font-semibold text-gray-800">Kostantin.ef@gmail.com</p>
@@ -36,14 +41,17 @@
           </div>
           <div>
             <h3 class="font-medium text-gray-500">Telegram</h3>
-            <p class="text-lg font-semibold text-gray-800">тг</p>
+            <a href="https://t.me/Kostya24752" target="_blank" class="text-lg font-semibold text-gray-800 hover:text-blue-500">Kostya24752</a>
           </div>
         </div>
       </div>
     </div>
+    
+    <p class="text-gray-700 text-xl text-center max-w-2xl mx-auto">
+        Или через форму обратной связи:
+    </p>
 
-
-    <div class="space-y-8">
+    <form method="post" class="space-y-8">{% csrf_token %}
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="relative">
           {{ form.username }}
@@ -83,7 +91,7 @@
         ОТПРАВИТЬ СООБЩЕНИЕ
         <span class="ml-2">→</span>
       </button>
-    </div>
+    </form>
   </div>
 </div>
 {% endblock content %}
