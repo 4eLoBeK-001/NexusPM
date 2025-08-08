@@ -46,29 +46,24 @@ def history_search(request):
 
 
 def history_filter(request):
-    team_id = request.GET.get('team', '')
-    project_id = request.GET.get('project', '')
-    task_id = request.GET.get('task', '')
-    action_type = request.GET.get('action_type', '')
+    filters = {
+        'team__id': request.GET.get('team', ''),
+        'project__id': request.GET.get('project', ''),
+        'task__id': request.GET.get('task', ''),
+        'action_type': request.GET.get('action_type', ''),
+    }
 
-    logs = ActionLog.objects.filter(participants=request.user)
-    
-    if team_id:
-        logs = logs.filter(team_id=team_id)
-    if project_id:
-        logs = logs.filter(project_id=project_id)
-    if task_id:
-        logs = logs.filter(task_id=task_id)
-    if action_type:
-        logs = logs.filter(action_type=action_type)
-    
-    logs = logs.distinct().order_by('-created_at')
+    filters = {k: v for k, v in filters.items() if v}
+
+    logs = ActionLog.objects.filter(
+        participants=request.user,
+        **filters
+    ).distinct().order_by('-created_at')
     
     data = {
         'logs': logs,
     }
     return render(request, 'logs/history_list.html', data)
-
 
 
 def team_history(request, pk):

@@ -1,3 +1,5 @@
+{% load task_url %}
+
 <dialog id="add_tag_modal" class="modal">
     <div class="modal-box bg-gray-100 max-w-md p-6 rounded-lg shadow-xl">
       <form method="post" action="{% url_task task 'change_tag' %}">{% csrf_token %}

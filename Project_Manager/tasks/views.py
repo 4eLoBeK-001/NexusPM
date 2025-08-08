@@ -82,25 +82,21 @@ def task_search(request, project_pk, *args, **kwargs):
 
 def task_filter(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
-    tasks = Task.objects.filter(project=project, parent_task__isnull=True)
 
-    tag_id = request.GET.get('tag')
-    status_id = request.GET.get('status')
-    priority = request.GET.get('priority')
-    executor = request.GET.get('executor')
-
-    if tag_id:
-        tasks = tasks.filter(tag__pk=tag_id)
-
-    if status_id:
-        tasks = tasks.filter(status__pk=status_id)
-
-    if priority:
-        tasks = tasks.filter(priority=priority)
-
-    if executor:
-        tasks = tasks.filter(executor=executor)
+    filters = {
+        'tag__pk': request.GET.get('tag'),
+        'status__pk': request.GET.get('status'),
+        'priority': request.GET.get('priority'),
+        'executor': request.GET.get('executor'),
+    }
+    filters = {k: v for k, v in filters.items() if v}
     
+    tasks = Task.objects.filter(
+        project=project, 
+        parent_task__isnull=True,
+        **filters
+    )
+
     context = {
         'tasks': tasks
     }
