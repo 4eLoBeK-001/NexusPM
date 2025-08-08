@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 
 from users.widgets import CustomImageField
 
-from .models import Profile, SocialNetwork, Tag, User
+from .models import Feedback, Profile, SocialNetwork, Tag, User
 
 CLASS_FOR_FIELDS = 'w-full px-4 py-3 text-slate-200 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition'
 
@@ -219,4 +219,23 @@ class PrivateProfileForm(forms.ModelForm):
             'hide_email': forms.CheckboxInput(attrs={
                 'class': 'form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out'
             }),
+        }
+
+
+class FeedBackForm(forms.ModelForm):
+    class Meta:
+        CLASS_FOR_FIELDS = 'w-full px-4 py-3 text-slate-700 bg-transparent border-b-2 border-gray-300 outline-none peer transition-colors'
+        model = Feedback
+        fields = ('username', 'email', 'content')
+
+        widgets = {
+            'username': forms.TextInput(attrs={'class': f'{CLASS_FOR_FIELDS} focus:border-purple-500', 'placeholder': ' '}),
+            'email': forms.EmailInput(attrs={'class': f'{CLASS_FOR_FIELDS} focus:border-cyan-500', 'placeholder': ' '}),
+            'content': forms.Textarea(attrs={'rows': 4, 'class': 'w-full px-4 py-3 text-slate-700 bg-transparent border-b-2 border-gray-300 focus:border-blue-500 outline-none peer transition-colors resize-none'}),
+        }
+
+        labels = {
+            'username': 'Ваше имя',
+            'email': 'Ваш email',
+            'content': 'Ваше сообщение',
         }

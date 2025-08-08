@@ -35,7 +35,7 @@
 		  <div class="hidden lg:flex lg:gap-x-6 bg-gray-200 rounded-xl">
 			<a href="{% url 'teams:workplace' %}" class="btn btn-neutral btn-outline text-xl font-semibold text-white border-none animate-pulse bg-purple-500">Начать</a>
 			<a href="#" class="btn btn-neutral btn-outline text-xl font-semibold text-zinc-950 border-none">О возможностях</a>
-			<a href="#" class="btn btn-neutral btn-outline text-xl font-semibold text-zinc-950 border-none">Обратная связь</a>
+			<a href="{% url 'feedback' %}" class="btn btn-neutral btn-outline text-xl font-semibold text-zinc-950 border-none">Обратная связь</a>
 		  </div>
 		  <div class="hidden lg:flex lg:flex-1 lg:justify-end">
             {% if user.is_authenticated %}
@@ -68,7 +68,7 @@
 				<div class="space-y-2 py-6">
 				  <a href="{% url 'teams:workplace' %}" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Начать</a>
 				  <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">О возможностях</a>
-				  <a href="#" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Обратная связь</a>
+				  <a href="{% url 'feedback' %}" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Обратная связь</a>
 				</div>
 				<div class="inline-flex" >
 					{% if user.is_authenticated %}

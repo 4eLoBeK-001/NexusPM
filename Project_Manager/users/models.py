@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.templatetags.static import static
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 from project_manager import settings
 
@@ -145,3 +146,33 @@ class TaskExecutor(models.Model):
     
     def __str__(self):
         return f'{self.user} ответственен за {self.task}'
+
+
+
+class Feedback(models.Model):
+    username = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255)
+    content = models.TextField()
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='feedbacks', blank=True, null=True)
+    is_answered = models.BooleanField(default=False, help_text='Отметьте, если на это сообщение был дан ответ')
+    created_at = models.DateTimeField(auto_now_add=True) 
+    updated_at = models.DateTimeField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
+            instance = Feedback.objects.get(pk=self.pk)
+
+            if instance.is_answered != self.is_answered:
+                self.updated_at = timezone.now()
+        else:
+            self.updated_at = timezone.now()
+        
+        super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ('-created_at', 'is_answered')
+        verbose_name = 'Обратная связь'
+        verbose_name_plural = 'Обратные связи'
+
+    def __str__(self):
+        return f'Сообщение обратной связи от {self.username if self.username else self.email}'

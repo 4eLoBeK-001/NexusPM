@@ -17,6 +17,7 @@ urlpatterns = [
 
 
     path('history/', include('logs.urls', namespace='logs')),
+    path('feedback/', views.feedback, name='feedback'),
 
     path('auth/', include('users.urls', namespace='users')),
     path('workplace/', include('teams.urls', namespace='teams')),
