@@ -6,6 +6,8 @@ from .models import Team, TeamMember, TeamInvitation
 class OrderItemInline(admin.TabularInline):
     model = TeamMember
     extra = 4
+    max_num = 10
+
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
