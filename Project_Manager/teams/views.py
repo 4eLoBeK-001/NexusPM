@@ -206,7 +206,7 @@ def search_team(request):
 def sidebar_search_team(request):
     search = request.GET.get('search', '')
     queryset = Team.objects.is_member(request.user).filter(name__icontains=search)
-    return render(request, 'includes/team_list.html', {'context_teams': queryset})
+    return render(request, 'teams/includes/team_list.html', {'context_teams': queryset})
 
 
 def get_team_and_redirect(request, pk):

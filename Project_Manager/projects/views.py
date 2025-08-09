@@ -25,7 +25,7 @@ from tasks.utils.decorators import require_project_member
 
 def project_list(request, pk):
     team = get_object_or_404(Team, pk=pk)
-    projects = Project.objects.filter(team=team, project_members=request.user)
+    projects = Project.objects.for_team(team).filter(project_members=request.user)
     form = AddModalProjectForm()
     context = {
         'team': team,
@@ -49,7 +49,7 @@ def my_projects(request):
 def search_projects(request, pk):
     team = get_object_or_404(Team, pk=pk)
     search = request.GET.get('search1', '')
-    projects = Project.objects.filter(team=team, name__icontains=search, project_members=request.user)
+    projects = Project.objects.for_team(team).filter(name__icontains=search, project_members=request.user)
     context = {
         'projects': projects
     }

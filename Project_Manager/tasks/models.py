@@ -12,6 +12,12 @@ def get_random_color():
     return random.choice(get_colors())
 
 
+class TaskQuerySet(models.QuerySet):
+    def for_project(self, project):
+        return self.filter(project=project)
+
+
+
 class Task(models.Model):
     class PriprityChoices(models.TextChoices):
         HIGHEST = 'Самый высокий'
@@ -34,6 +40,8 @@ class Task(models.Model):
     parent_task = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subtasks')
     executor = models.ManyToManyField(get_user_model(), through='users.TaskExecutor', related_name='assigned_tasks', blank=True)
 
+
+    objects = TaskQuerySet.as_manager()
 
     class Meta:
         ordering = ('-created_at', 'name')

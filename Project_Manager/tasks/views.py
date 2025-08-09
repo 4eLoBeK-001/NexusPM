@@ -19,7 +19,7 @@ from tasks.forms import AddCommentForm, CreateStatusForm, CreateSubtaskForm, Cre
 def task_list(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     executors = project.project_members.all()
-    tasks = Task.objects.filter(project=project, parent_task__isnull=True)
+    tasks = Task.objects.for_project(project).filter(parent_task__isnull=True)
     statuses = project.statuses.all()
     tags = project.tags.all()
     priorities = Task.PriprityChoices
@@ -72,7 +72,7 @@ def task_search(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
 
     text = request.GET.get('input_search')
-    tasks = Task.objects.filter(project=project, parent_task__isnull=True, name__icontains=text)
+    tasks = Task.objects.for_project(project).filter(parent_task__isnull=True, name__icontains=text)
 
     context = {
         'tasks': tasks
@@ -91,8 +91,7 @@ def task_filter(request, project_pk, *args, **kwargs):
     }
     filters = {k: v for k, v in filters.items() if v}
     
-    tasks = Task.objects.filter(
-        project=project, 
+    tasks = Task.objects.for_project(project).filter(
         parent_task__isnull=True,
         **filters
     )

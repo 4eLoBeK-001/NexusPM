@@ -12,6 +12,12 @@ def get_colors():
 def get_random_color():
     return random.choice(get_colors())
 
+
+class ProjectQuerySet(models.QuerySet):
+    def for_team(self, team):
+        return self.filter(team=team)
+
+
 class Project(models.Model):
     class StatusChoices(models.TextChoices):
         IN_WORK = 'В работе'
@@ -27,6 +33,8 @@ class Project(models.Model):
     project_members = models.ManyToManyField(get_user_model(), through='users.ProjectMember', related_name='project_membership', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
+
+    objects = ProjectQuerySet.as_manager()
 
     class Meta:
         ordering = ('-created_at', 'name')
