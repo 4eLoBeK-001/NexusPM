@@ -22,7 +22,7 @@ def workplace(request):
 
 @login_required
 def team_list(request):
-    teams = Team.objects.filter(team_member=request.user)
+    teams = Team.objects.is_member(request.user)
     team_forms = {team.id: AddModalTeamForm(instance=team) for team in teams}
     context = {
         'teams': teams,
@@ -195,7 +195,7 @@ def create_team(request):
 @login_required
 def search_team(request):
     search = request.GET.get('search', '')
-    queryset = Team.objects.filter(team_member=request.user, name__icontains=search)
+    queryset = Team.objects.is_member(request.user).filter(name__icontains=search)
     team_forms = {team.id: AddModalTeamForm(instance=team) for team in queryset}
 
     return render(request, 'teams/partial-team_list.html', {'teams': queryset, 'team_forms': team_forms})
@@ -205,7 +205,7 @@ def search_team(request):
 @login_required
 def sidebar_search_team(request):
     search = request.GET.get('search', '')
-    queryset = Team.objects.filter(team_member=request.user, name__icontains=search)
+    queryset = Team.objects.is_member(request.user).filter(name__icontains=search)
     return render(request, 'includes/team_list.html', {'context_teams': queryset})
 
 

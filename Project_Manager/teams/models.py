@@ -4,12 +4,17 @@ from django.db import models
 
 from users.models import TeamMember
 
-
 def get_colors():
     return ['sky', 'blue', 'red', 'orange', 'lime', 'teal', 'violet', 'zinc']
 
 def get_random_color():
     return random.choice(get_colors())
+
+
+class TeamQuerySet(models.QuerySet):
+    def is_member(self, user):
+        return self.filter(team_member=user)
+
 
 class Team(models.Model):
     name = models.CharField(max_length=150)
@@ -22,6 +27,9 @@ class Team(models.Model):
     color = models.CharField(max_length=10, default=get_random_color)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+
+    objects = TeamQuerySet.as_manager()
 
     class Meta:
         ordering = ('-created_at', 'name')
