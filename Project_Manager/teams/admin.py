@@ -1,6 +1,48 @@
 from django.contrib import admin
+from django.db.models import Count
+from django.utils.html import format_html
 
 from .models import Team, TeamMember, TeamInvitation
+
+class ProjectsCountFilter(admin.SimpleListFilter):
+    title = 'Кол-во проектов / участников'
+    parameter_name = 'count_filter'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('p_0', 'Нет проектов'),
+            ('p_1>', 'Есть хотя бы один проект'),
+            ('p_5>', 'Проекты: ≥ 5'),
+            ('p_15>', 'Проекты: ≥ 15'),
+            ('p_30>', 'Проекты: ≥ 30'),
+            ('m_0', 'Нет участников (кроме автора)'),
+            ('m_1>', 'Есть хотя бы один участник'),
+            ('m_5>', 'Участники: ≥ 5'),
+            ('m_15>', 'Участники: ≥ 15'),
+            ('m_30>', 'Участники: ≥ 30'),
+        )
+    
+    def queryset(self, request, queryset):
+        if self.value() == 'p_0':
+            return queryset.annotate(projects_count=Count('projects')).filter(projects_count=0)
+        if self.value() == 'p_1>':
+            return queryset.annotate(projects_count=Count('projects')).filter(projects_count__gte=1)
+        if self.value() == 'p_5>':
+            return queryset.annotate(projects_count=Count('projects')).filter(projects_count__gte=5)
+        if self.value() == 'p_15>':
+            return queryset.annotate(projects_count=Count('projects')).filter(projects_count__gte=15)
+        if self.value() == 'p_30>':
+            return queryset.annotate(projects_count=Count('projects')).filter(projects_count__gte=30)
+        if self.value() == 'm_0':
+            return queryset.annotate(team_members=Count('team_member')).filter(team_members=1)
+        if self.value() == 'm_1>':
+            return queryset.annotate(team_members=Count('team_member')).filter(team_members__gt=1)
+        if self.value() == 'm_5>':
+            return queryset.annotate(team_members=Count('team_member')).filter(team_members__gte=5)
+        if self.value() == 'm_15>':
+            return queryset.annotate(team_members=Count('team_member')).filter(team_members__gte=15)
+        if self.value() == 'm_30>':
+            return queryset.annotate(team_members=Count('team_member')).filter(team_members__gte=30)
 
 
 class OrderItemInline(admin.TabularInline):
@@ -11,15 +53,27 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ('name', 'get_short_description', 'author', 'created_at')
+    list_display = ('name', 'projects_and_members', 'get_short_description', 'author', 'created_at')
     list_display_links = ('name', 'author')
     ordering = ('-created_at',)
-    list_filter = ('author__username',)
+    list_filter = (ProjectsCountFilter,)
     search_fields = ('name', 'author__username')
 
     fields = ('name', 'description', 'author', 'image', 'created_at', 'updated_at')
     readonly_fields = ('created_at', 'updated_at')
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.annotate(_projects_count=Count('projects'), _team_members=Count('team_member'))
+    
+    @admin.display(description="Проекты | Участники")
+    def projects_and_members(self, obj):
+        return format_html(
+            '<span style="color:green;">{}</span> | <span style="color:blue;">{}</span>',
+            obj._projects_count,
+            obj._team_members
+        )
+    
     @admin.display(description='Description')
     def get_short_description(self, obj):
         return obj.description[:50] + '...' if len(obj.description) > 50 else obj.description
