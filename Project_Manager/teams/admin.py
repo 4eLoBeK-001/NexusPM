@@ -23,31 +23,30 @@ class ProjectsCountFilter(admin.SimpleListFilter):
         )
     
     def queryset(self, request, queryset):
-        if self.value() == 'p_0':
-            return queryset.annotate(projects_count=Count('projects')).filter(projects_count=0)
-        if self.value() == 'p_1>':
-            return queryset.annotate(projects_count=Count('projects')).filter(projects_count__gte=1)
-        if self.value() == 'p_5>':
-            return queryset.annotate(projects_count=Count('projects')).filter(projects_count__gte=5)
-        if self.value() == 'p_15>':
-            return queryset.annotate(projects_count=Count('projects')).filter(projects_count__gte=15)
-        if self.value() == 'p_30>':
-            return queryset.annotate(projects_count=Count('projects')).filter(projects_count__gte=30)
-        if self.value() == 'm_0':
-            return queryset.annotate(team_members=Count('team_member')).filter(team_members=1)
-        if self.value() == 'm_1>':
-            return queryset.annotate(team_members=Count('team_member')).filter(team_members__gt=1)
-        if self.value() == 'm_5>':
-            return queryset.annotate(team_members=Count('team_member')).filter(team_members__gte=5)
-        if self.value() == 'm_15>':
-            return queryset.annotate(team_members=Count('team_member')).filter(team_members__gte=15)
-        if self.value() == 'm_30>':
-            return queryset.annotate(team_members=Count('team_member')).filter(team_members__gte=30)
+
+        value = self.value()
+        if not value:
+            return queryset
+
+        kind, threshold = value.split('_')
+        threshold_int = int(threshold.replace('>', ''))
+
+        queryset = queryset.annotate(projects_count=Count('projects'), team_members=Count('team_member'))
+
+        if kind == 'p':
+            if '>' in threshold:
+                return queryset.filter(projects_count__gte=threshold_int)
+            return queryset.filter(projects_count=0)
+        
+        if kind == 'm':
+            if '>' in threshold:
+                return queryset.filter(team_members__gte=threshold_int)
+            return queryset.filter(team_members=1)
 
 
-class OrderItemInline(admin.TabularInline):
+class TeamMemberInline(admin.TabularInline):
     model = TeamMember
-    extra = 4
+    extra = 1
     max_num = 10
 
 
@@ -66,7 +65,7 @@ class TeamAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         return qs.annotate(_projects_count=Count('projects'), _team_members=Count('team_member'))
     
-    @admin.display(description="Проекты | Участники")
+    @admin.display(description="Проекты | Участники", ordering="_projects_count")
     def projects_and_members(self, obj):
         return format_html(
             '<span style="color:green;">{}</span> | <span style="color:blue;">{}</span>',
@@ -79,7 +78,7 @@ class TeamAdmin(admin.ModelAdmin):
         return obj.description[:50] + '...' if len(obj.description) > 50 else obj.description
 
     inlines = [
-        OrderItemInline
+        TeamMemberInline
     ]
 
 
