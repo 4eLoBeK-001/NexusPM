@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.db.models import Count
 
+from users.models import TaskExecutor
 from tasks.models import Task, Tag, Status, Color, Comment, TaskImage
 
 # Register your models here.
@@ -122,3 +123,10 @@ class CommentAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at',)
 
 admin.site.register(TaskImage)
+
+@admin.register(TaskExecutor)
+class TaskExecutorAdmin(admin.ModelAdmin):
+    list_display = ('task', 'user')
+
+
+TaskExecutor._meta.app_label = 'tasks'

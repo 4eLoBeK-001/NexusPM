@@ -1,9 +1,10 @@
 from django.contrib import admin
 
 from .models import Project
+from users.models import ProjectMember
 
 
-class ProjectMember(admin.TabularInline):
+class ProjectMembers(admin.TabularInline):
     model = Project.project_members.through
     extra = 4
     max_num = 10
@@ -21,9 +22,18 @@ class ProjectAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
 
     inlines = [
-        ProjectMember
+        ProjectMembers
     ]
 
     @admin.display(description='Description')
     def short_description(self, obj):
         return obj.description[:50] + '...' if len(obj.description) > 50 else obj.description
+
+
+@admin.register(ProjectMember)
+class ProjectMemberAdmin(admin.ModelAdmin):
+    list_display = ('project', 'user')
+    readonly_fields = ('date_joining',)
+
+
+ProjectMember._meta.app_label = 'projects'

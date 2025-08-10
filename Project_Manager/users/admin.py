@@ -9,7 +9,7 @@ from .models import TaskExecutor, ProjectMember, Profile, Tag, SocialNetwork, Fe
 @admin.register(get_user_model())
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'is_active', 'is_staff', 'is_superuser')
-    list_display_links = ('email',)
+    list_display_links = ('username', 'email',)
     list_filter = ('is_active', 'is_staff', 'is_superuser')
     search_fields = ('username', 'email')
 
@@ -17,7 +17,7 @@ class UserAdmin(admin.ModelAdmin):
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user__username', 'user__email', 'phone_number', 'short_description')
-    list_display_links = ('user__email',)
+    list_display_links = ('user__username', 'user__email',)
     list_filter = ('phone_number', 'short_description')
     search_fields = ('user__username', 'short_description')
 
@@ -39,20 +39,10 @@ class SocialNetworkAdmin(admin.ModelAdmin):
 @admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'content', 'user__username', 'is_answered', 'created_at')
-    list_display_links = ('username', 'user__username',)
+    list_display_links = ('username', 'email', 'user__username',)
     list_filter = ('email', 'is_answered', 'created_at')
     search_fields = ('username', 'user__username', 'email')
 
     fields = ('username', 'email', 'content', 'user', 'is_answered', 'created_at', 'updated_at')
     readonly_fields = ('created_at',)
 
-
-@admin.register(ProjectMember)
-class ProjectMemberAdmin(admin.ModelAdmin):
-    list_display = ('project', 'user')
-    readonly_fields = ('date_joining',)
-
-
-@admin.register(TaskExecutor)
-class TaskExecutorAdmin(admin.ModelAdmin):
-    list_display = ('task', 'user')
