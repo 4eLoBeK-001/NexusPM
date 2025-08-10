@@ -4,6 +4,23 @@ from django.utils.html import format_html
 
 from .models import Team, TeamMember, TeamInvitation
 
+
+@admin.display(description='Удалить всех участников из проекта (кроме создателя)')
+def delete_all_members(modeladmin, request, queryset):
+    if queryset.model == Team:
+        for team in queryset:
+            if team.author:
+                team.team_member.set([team.author])
+            else:
+                team.team_member.clear()
+
+@admin.display(description='Сделать всех наблюдателями')
+def make_everyone_viewer(modeladmin, request, queryset):
+    if queryset.model == Team:
+        for team in queryset:
+            team.participate_in_team.update(role=TeamMember.RoleChoices.VIEWER)
+
+
 class ProjectsCountFilter(admin.SimpleListFilter):
     title = 'Кол-во проектов / участников'
     parameter_name = 'count_filter'
@@ -57,6 +74,8 @@ class TeamAdmin(admin.ModelAdmin):
     ordering = ('-created_at',)
     list_filter = (ProjectsCountFilter,)
     search_fields = ('name', 'author__username')
+
+    actions = (delete_all_members, make_everyone_viewer)
 
     fields = ('name', 'description', 'author', 'image', 'created_at', 'updated_at')
     readonly_fields = ('created_at', 'updated_at')
