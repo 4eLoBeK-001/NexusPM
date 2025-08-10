@@ -1,18 +1,51 @@
 from django.contrib import admin
+from django.db.models import Count
 
 from tasks.models import Task, Tag, Status, Color, Comment, TaskImage
 
 # Register your models here.
 
+class ExecutorsCountFilter(admin.SimpleListFilter):
+    title = 'Кол-во исполнителей'
+    parameter_name = 'executorsa'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('e_0', 'Нет исполнителей'),
+            ('e_1>', 'Есть хотя бы один исполнителей'),
+            ('e_5>', 'Исполнителей: ≥ 5'),
+            ('e_15>', 'Исполнителей: ≥ 15'),
+            ('e_30>', 'Исполнителей: ≥ 30'),
+        )
+    
+    def queryset(self, request, queryset):
+        value = self.value()
+        if not value:
+            return queryset
+        
+        queryset = queryset.annotate(exec_count=Count('executor'))
+
+        if value == 'e_0':
+            return queryset.filter(exec_count=0)
+        if value == 'e_1>':
+            return queryset.filter(exec_count__gte=1)
+        if value == 'e_5>':
+            return queryset.filter(exec_count__gte=5)
+        if value == 'e_15>':
+            return queryset.filter(exec_count__gte=15)
+        if value == 'e_30>':
+            return queryset.filter(exec_count__gte=30)
+
+
 class TagTabularInline(admin.TabularInline):
     model = Task.tag.through
-    extra = 4
+    extra = 2
     max_num = 8
     classes = ('collapse',)
 
 class ExecutorTabularInline(admin.TabularInline):
     model = Task.executor.through
-    extra = 4
+    extra = 2
     max_num = 8
     classes = ('collapse',)
 
@@ -22,7 +55,7 @@ class TaskAdmin(admin.ModelAdmin):
     list_display = ('name', 'creator', 'project', 'priority', 'created_at', 'updated_at')
     list_display_links = ('name', 'creator', 'project')
     ordering = ('-created_at',)
-    list_filter = ('project__name', 'created_at')
+    list_filter = (ExecutorsCountFilter, 'priority', 'created_at',)
     search_fields = ('name', 'project__name', 'creator')
 
     fieldsets = (
