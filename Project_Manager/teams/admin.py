@@ -12,6 +12,7 @@ class OrderItemInline(admin.TabularInline):
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
     list_display = ('name', 'get_short_description', 'author', 'created_at')
+    list_display_links = ('name', 'author')
     ordering = ('-created_at',)
     list_filter = ('author__username',)
     search_fields = ('name', 'author__username')
@@ -31,6 +32,7 @@ class TeamAdmin(admin.ModelAdmin):
 @admin.register(TeamInvitation)
 class TeamInvitationAdmin(admin.ModelAdmin):
     list_display = ('team__name', 'invited_by', 'invited_user', 'accepted', 'created_at')
+    list_display_links = ('team__name', 'invited_by', 'invited_user')
     ordering = ('-created_at',)
     list_filter = ('accepted',)
     search_fields = ('team', 'invited_by', 'invited_user')
@@ -42,6 +44,7 @@ class TeamInvitationAdmin(admin.ModelAdmin):
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):
     list_display = ('team__name', 'user', 'date_joining')
+    list_display_links = ('team__name', 'user')
     ordering = ('-date_joining',)
     list_filter = ('team__name', 'user__username',)
     search_fields = ('team__name', 'user__username')

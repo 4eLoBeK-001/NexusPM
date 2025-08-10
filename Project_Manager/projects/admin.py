@@ -11,7 +11,8 @@ class ProjectMember(admin.TabularInline):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'short_description', 'team', 'created_at', 'updated_at')
+    list_display = ('name', 'short_description', 'team__name', 'created_at', 'updated_at')
+    list_display_links = ('name', 'team__name')
     ordering = ('-created_at',)
     list_filter = ('team',)
     search_fields = ('name', 'team__name')

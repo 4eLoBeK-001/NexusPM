@@ -20,6 +20,7 @@ class ExecutorTabularInline(admin.TabularInline):
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('name', 'creator', 'project', 'priority', 'created_at', 'updated_at')
+    list_display_links = ('name', 'creator', 'project')
     ordering = ('-created_at',)
     list_filter = ('project__name', 'created_at')
     search_fields = ('name', 'project__name', 'creator')
@@ -50,6 +51,7 @@ class TaskAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'color', 'project')
+    list_display_links = ('name', 'project')
     list_filter = ('name', 'project__name')
     search_fields = ('name', 'project__name')
 
@@ -59,6 +61,7 @@ class TagAdmin(admin.ModelAdmin):
 @admin.register(Status)
 class StatusAdmin(admin.ModelAdmin):
     list_display = ('name', 'project', 'is_completed', 'color')
+    list_display_links = ('name', 'project')
     list_filter = ('is_completed', 'project__name')
     search_fields = ('name', 'project__name')
     
@@ -77,6 +80,7 @@ class ColorAdmin(admin.ModelAdmin):
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('content', 'author', 'task', 'created_at')
+    list_display_links = ('content', 'author', 'task')
     ordering = ('-created_at',)
     list_filter = ('content', 'author__username', 'task__name')
     search_fields = ('content', 'author__username', 'task__name')
