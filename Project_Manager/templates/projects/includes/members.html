@@ -65,7 +65,9 @@
             </tr>
         </thead>
         <tbody id="member-list" class="text-gray-600 text-sm font-light">
+            {% for member in project_members %}
             {% include 'projects/includes/member.html' %}
+            {% endfor %}
         </tbody>
     </table>
 </div>
