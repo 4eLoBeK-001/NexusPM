@@ -1,6 +1,6 @@
 import re
 from django import forms
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 
 from users.widgets import CustomImageField
@@ -12,7 +12,7 @@ CLASS_FOR_FIELDS = 'w-full px-4 py-3 text-slate-200 rounded-lg border border-gra
 class LoginUserForm(AuthenticationForm):
     
     username = forms.CharField(
-        label='Логин', 
+        label='Логин или email', 
         max_length=150, 
         widget=forms.TextInput(attrs=
             {'class': CLASS_FOR_FIELDS,
@@ -32,11 +32,27 @@ class LoginUserForm(AuthenticationForm):
              })
     )
 
+    def clean(self):
+        username_or_email = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+    
+        if username_or_email and '@' in username_or_email:
+            try:
+                user = User.objects.get(email=username_or_email)
+                self.cleaned_data['username'] = user.username
+            except User.DoesNotExist:
+                raise forms.ValidationError("Пользователь с таким email не найден.")
+
+        return super().clean()
+
+
+
 class RegisterUserForm(forms.ModelForm):
 
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'w-full px-4 py-3 text-slate-200 input-field rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition', 'fas': 'fa-lock'}))
     password2 = forms.CharField(label='Подтвердите пароль', widget=forms.PasswordInput(attrs={'class': 'w-full px-4 py-3 text-slate-200 input-field rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition', 'fas': 'fa-lock'}))
-
+    email = forms.EmailField(label='Почта', required=True, widget=forms.TextInput(attrs={'class': CLASS_FOR_FIELDS + ' input-field', 'id': 'email', 'fas': 'fa-envelope', 'placeholder': 'Введите почту'}))
+    
     def clean_password2(self):
         cd = self.cleaned_data
         if cd['password1'] != cd['password2']:
@@ -64,19 +80,12 @@ class RegisterUserForm(forms.ModelForm):
                  'fas': 'fa-user-edit',
                  'placeholder': 'Введите логин',
             }),
-            'email': forms.TextInput(attrs=
-                {'class': CLASS_FOR_FIELDS + ' input-field',
-                 'id': 'email',
-                 'fas': 'fa-envelope',
-                 'placeholder': 'Введите почту',
-            }),
         }
 
         labels = {
             'first_name': 'Имя',
             'last_name': 'Фамилия',
             'username': 'Логин',
-            'email': 'Почта'
         }
 
 

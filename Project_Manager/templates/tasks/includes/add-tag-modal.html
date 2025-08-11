@@ -3,8 +3,7 @@
 <dialog id="add_tag_modal" class="modal">
     <div class="modal-box bg-gray-100 max-w-md p-6 rounded-lg shadow-xl">
       <form method="post" action="{% url_task task 'change_tag' %}">{% csrf_token %}
-        
-        <a class="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition-colors" onclick="add_tag_modal.close();">✕</a>
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 text-gray-600 hover:text-gray-900 hover:bg-gray-200 transition-colors" onclick="this.closest('dialog').close();">✕</button>
         <h3 class="text-2xl font-bold text-gray-800 mb-4">Теги</h3>
 
         <div>

@@ -5,6 +5,8 @@ from teams.middleware import get_current_user
 
 from .models import Project
 
+from tasks.models import Status
+
 from logs.services import log_action
 
 
@@ -12,6 +14,9 @@ from logs.services import log_action
 def create_project_signal(sender, instance, created, *args, **kwargs):
     if created:
         log_action(action='project_created', user=get_current_user(), team=instance.team, project=instance, data={'project_name': instance.name})
+        Status.objects.create(project=instance, name='Новая', color_id=3)
+        Status.objects.create(project=instance, name='Завершена', is_completed=True, color_id=1)
+
 
 
 

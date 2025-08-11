@@ -38,6 +38,14 @@
             </button>
         </form>
         
+        {% if form.non_field_errors %}
+        <div class="form_error text-center mb-3">
+            {% for error in form.non_field_errors %}
+                <p class="text-red-600">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
         <!-- Подвал -->
         <div class="bg-gray-50 px-8 py-6 text-center">
             <p class="text-gray-600 text-base">
@@ -48,8 +56,6 @@
             </p>
         </div>
     </div>
-    
-    <!-- Авторизация через социальные сети (реализовать) -->
 
 </div>
 

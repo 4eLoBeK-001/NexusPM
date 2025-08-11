@@ -43,14 +43,15 @@
                     {% endif %}
                     
                     <div>
-                        <label class="block text-gray-700 text-sm font-medium mb-2" for="{{ field.id_for_label }}">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ field.id_for_label }}">
                             {{ field.label }}
+                            {% if field.name in 'username email password1 password2' %}<span class="text-red-500">*</span>{% endif %}
                         </label>
                         <div class="input-group">
                             <i class="fas fa-user input-icon"></i>
                             {{ field }}
-                            <div class="form_error">{{ field.errors }} </div>
                         </div>
+                            <div class="form_error">{{ field.errors }} </div>
                     </div>
                     
                     {% if forloop.counter == 2 %}
@@ -58,24 +59,22 @@
                     {% endif %}
                 {% else %}
                     <div class="{{ field.field.widget.attrs.cls|default:'mb-6' }}">
-                        <label class="block text-gray-700 text-sm font-medium mb-2" for="{{ field.id_for_label }}">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ field.id_for_label }}">
                             {{ field.label }}
+                            {% if field.name in 'username email password1 password2' %}<span class="text-red-500">*</span>{% endif %}
                         </label>
                         <div class="input-group">
-                            <i class="fas {{ field.field.widget.attrs.fas }} input-icon">
-                            </i>
+                            <i class="fas {{ field.field.widget.attrs.fas }} input-icon"></i>
                             {{ field }}
-                            <div class="form_error">{{ field.errors }} </div>
                         </div>
                         {% if field.name == 'password1' %}
                             <p class="text-xs text-gray-500 mt-2">Минимум 8 символов</p>
                         {% endif %}
+                        <div class="form_error">{{ field.errors }} </div>
                     </div>
                 {% endif %}
             {% endfor %}
-                
-            
-            
+
             <button 
                 type="submit"
                 class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200 transform hover:scale-105"

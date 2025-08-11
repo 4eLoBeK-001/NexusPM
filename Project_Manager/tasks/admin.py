@@ -116,7 +116,7 @@ class ColorAdmin(admin.ModelAdmin):
     list_filter = ('name', 'color_name')
     search_fields = ('name', 'color_name')
     
-    readonly_fields = ('name', 'color_name', 'bg_color', 'text_color', 'border_color')
+    # readonly_fields = ('name', 'color_name', 'bg_color', 'text_color', 'border_color')
 
 
 @admin.register(Comment)
