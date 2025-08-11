@@ -4,11 +4,17 @@ from django.db.models import Count
 from users.models import TaskExecutor
 from tasks.models import Task, Tag, Status, Color, Comment, TaskImage
 
-# Register your models here.
+
+@admin.display(description='Удалить всех исполнителей')
+def delete_all_executors(modeladmin, request, queryset):
+    if queryset.model == Task:
+        for task in queryset:
+            task.executor.clear()
+
 
 class ExecutorsCountFilter(admin.SimpleListFilter):
     title = 'Кол-во исполнителей'
-    parameter_name = 'executorsa'
+    parameter_name = 'executors'
 
     def lookups(self, request, model_admin):
         return (
@@ -58,6 +64,8 @@ class TaskAdmin(admin.ModelAdmin):
     ordering = ('-created_at',)
     list_filter = (ExecutorsCountFilter, 'priority', 'created_at',)
     search_fields = ('name', 'project__name', 'creator')
+
+    actions = (delete_all_executors,)
 
     fieldsets = (
         (None, {

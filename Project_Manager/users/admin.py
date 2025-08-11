@@ -1,9 +1,39 @@
-from django.contrib import admin
-
+from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 
 from .models import TaskExecutor, ProjectMember, Profile, Tag, SocialNetwork, Feedback
 # Register your models here.
+
+
+def make_users(modeladmin, request, queryset, status):
+    if queryset.model == get_user_model():
+            updated_count = queryset.update(is_active=status)
+            action = "разблокированы" if status else "заблокированы"
+            messages.success(request, f"{updated_count} пользователь(ей) {action}.")
+
+@admin.display(description='Заблокировать пользователей')
+def block_users(modeladmin, request, queryset):
+    make_users(modeladmin, request, queryset, False)
+
+@admin.display(description='Разблокировать пользователей')
+def unblock_users(modeladmin, request, queryset):
+    make_users(modeladmin, request, queryset, True)
+
+
+def make_staff_status(modeladmin, request, queryset, status):
+    if queryset.model == get_user_model():
+        updated_count = queryset.update(is_staff=status)
+        action = 'выдан статус персонала' if status else 'втобран статус персонала'
+        messages.success(request, f'{updated_count} пользователь(ям) {action}')
+
+@admin.display(description='Забрать статус персонала')
+def took_staff_status(modeladmin, request, queryset):
+    make_staff_status(modeladmin, request, queryset, False)
+
+@admin.display(description='Выдать статус персонала')
+def give_staff_status(modeladmin, request, queryset):
+    make_staff_status(modeladmin, request, queryset, True)
+
 
 
 @admin.register(get_user_model())
@@ -12,6 +42,8 @@ class UserAdmin(admin.ModelAdmin):
     list_display_links = ('username', 'email',)
     list_filter = ('is_active', 'is_staff', 'is_superuser')
     search_fields = ('username', 'email')
+
+    actions = (block_users, unblock_users, took_staff_status, give_staff_status)
 
 
 @admin.register(Profile)

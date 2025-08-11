@@ -4,6 +4,13 @@ from .models import Project
 from users.models import ProjectMember
 
 
+@admin.display(description='Удалить всех участников')
+def delete_all_members(modeladmin, request, queryset):
+    if queryset.model == Project:
+        for project in queryset:
+            project.project_members.clear()
+
+
 class ProjectMembers(admin.TabularInline):
     model = Project.project_members.through
     extra = 4
@@ -17,6 +24,8 @@ class ProjectAdmin(admin.ModelAdmin):
     ordering = ('-created_at',)
     list_filter = ('team',)
     search_fields = ('name', 'team__name')
+
+    actions = (delete_all_members,)
 
     fields = ('name', 'description', 'team', 'created_at', 'updated_at')
     readonly_fields = ('created_at', 'updated_at')
