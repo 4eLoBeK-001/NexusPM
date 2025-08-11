@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>403 — Ты куда?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .scolding-finger {
+            animation: shake 0.5s ease-in-out infinite alternate;
+        }
+        @keyframes shake {
+            from { transform: rotate(10deg); }
+            to { transform: rotate(-10deg); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-amber-50">
+    <div class="text-center p-8 max-w-md bg-white rounded-xl shadow-2xl border-4 border-red-400">
+        <div class="scolding-finger text-7xl mb-4">👆</div>
+        <h1 class="text-5xl font-bold text-red-600 mb-2">403</h1>
+        <h2 class="text-2xl font-semibold text-amber-800">Ай-яй-яй, как нехорошо!</h2>
+        <p class="mt-4 text-gray-600">Похоже, ты пытаешься зайти туда, куда тебя не звали.</p>
+        <div class="mt-6">
+            <a href="/" class="inline-block px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-full transition-all hover:scale-105">
+                Вернуться в безопасную зону
+            </a>
+        </div>
+        <p class="mt-8 text-sm text-gray-400">P.S. Попробуйте убедить админа, что вы не шпион.</p>
+    </div>
+</body>
+</html>

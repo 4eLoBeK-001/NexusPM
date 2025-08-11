@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>500 — Сервер в недоумении</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glitch {
+            animation: glitch-effect 2s infinite linear;
+        }
+        @keyframes glitch-effect {
+            0% { text-shadow: -2px 0 red, 2px 0 blue; }
+            25% { text-shadow: 2px 0 red, -2px 0 blue; }
+            50% { text-shadow: -3px 0 green, 3px 0 yellow; }
+            75% { text-shadow: 1px 0 pink, -1px 0 purple; }
+            100% { text-shadow: -2px 0 red, 2px 0 blue; }
+        }
+        .matrix-bg {
+            background-color: #000;
+            background-image: 
+                radial-gradient(at 20% 30%, #0f0 0px, transparent 50%),
+                radial-gradient(at 80% 70%, #00f 0px, transparent 50%);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen matrix-bg text-green-400 font-mono">
+    <div class="text-center p-8 max-w-md border-2 border-red-500 glow">
+        <div class="text-6xl mb-4 glitch">🤖🔥</div>
+        <h1 class="text-4xl font-bold mb-2 glitch">SYSTEM FAILURE</h1>
+        <h2 class="text-xl text-red-400 mb-4">Внутренняя ошибка сервера</h2>
+        
+        <div class="mt-6 p-4 bg-black bg-opacity-70 border border-green-400">
+            <p class="text-sm">> root@server:~$ status --system</p>
+            <p class="text-red-400 text-xs mt-2">ERROR 500: CORE_DUMP</p>
+            <p class="text-yellow-300 text-xs">REASON: UNKNOWN</p>
+            <p class="text-green-300 text-xs mt-2">$ sudo make_coffee --fix-all</p>
+            <p class="text-red-500 text-xs">COMMAND_NOT_FOUND</p>
+        </div>
+
+        <div class="mt-8 grid gap-3">
+            <a href="/" class="px-4 py-2 bg-green-900 hover:bg-green-800 border border-green-400 text-center transition">
+                >> Эвакуироваться
+            </a>
+            <button onclick="location.reload()" class="text-xs text-red-400 hover:text-red-300 underline">
+                [ Попытка перезагрузки ]
+            </button>
+        </div>
+
+        <div class="mt-6 text-xs text-gray-500">
+            <p>WARNING: Система может не пережить ещё одну ошибку</p>
+        </div>
+    </div>
+</body>
+</html>

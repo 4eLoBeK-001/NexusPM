@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>404 — Страница исчезла в чёрной дыре</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .alien-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .stars {
+            background-image: radial-gradient(white 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-900 stars">
+    <div class="text-center p-8 max-w-md bg-gray-800 rounded-lg border border-purple-500 text-white relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500"></div>
+        
+        <div class="alien-float text-6xl mb-4">👽</div>
+        <h1 class="text-4xl font-mono font-bold text-purple-400 mb-2">ОШИБКА 404</h1>
+        <h2 class="text-xl text-blue-300">Страница пропала в межгалактическом пространстве</h2>
+        
+        <div class="mt-6 bg-gray-900 p-4 rounded border border-gray-700">
+            <p class="text-sm text-blue-200">Сканер сообщает:</p>
+            <p class="font-mono text-xs mt-2 text-red-400">> ERROR: PAGE_NOT_FOUND</p>
+            <p class="font-mono text-xs text-green-300">> REASON: ABDUCTED_BY_ALIENS</p>
+            <p class="font-mono text-xs text-yellow-300 mt-2">// Страница не найдена</p>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 gap-4">
+            <a href="/" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded transition flex items-center justify-center">
+                <span>На базу</span> 🚀
+            </a>
+        </div>
+
+        <p class="mt-6 text-xs text-gray-500">*Поисковые дроны уже в пути</p>
+    </div>
+</body>
+</html>
