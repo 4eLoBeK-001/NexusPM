@@ -1,7 +1,7 @@
 from django.db.models import F, Q, Count    
 from django.db.models import Subquery, OuterRef
 
-from django.db.transaction import commit
+from django.db.transaction import commit, atomic
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
@@ -136,24 +136,30 @@ def project_members(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     team = project.team
     roles = TeamMember.RoleChoices.choices
-
+    
+    # формируется подзапрос для подсчёта количества проектов в команде,
+    # в которых участвует конкретный пользователь
     project_count_subquery = ProjectMember.objects.filter(
         user=OuterRef('pk'),
         project__team=team
     ).values('user').annotate(count=Count('project')).values('count')
 
-    project_membersa = project.project_members.annotate(
+    # Тут в queryset добавляется:
+    # Количество проектов в командде, где участвует пользователь
+    # Дату присоединения к проекту
+    project_members = project.project_members.annotate(
         projects_count=Subquery(project_count_subquery),
         date_joining=F('members_projects__date_joining')
     ).select_related('profile')
 
+    # Cписок всех участников команды
     team_members = team.team_member.select_related('profile')
 
     data = {
         'team': team,
         'project': project,
-        'project_members': project_membersa,
-        'project_member_ids': project_membersa.values_list('id', flat=True),
+        'project_members': project_members,
+        'project_member_ids': project_members.values_list('id', flat=True),
         'team_members': team_members,
         'roles': roles
     }
@@ -166,8 +172,14 @@ def project_members(request, project_pk, *args, **kwargs):
 def delete_project_members(request, project_pk, member_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     member = get_object_or_404(get_user_model(), pk=member_pk)
+
+    # Убирается пользователь из участников проекта
     project.project_members.remove(member_pk)
+    
+    # Переменная содержит все задачи в проекте, где этот пользователь является исполнителем
     tasks_where_user_is_executor = member.assigned_tasks.filter(project=project)
+
+    # Удаляются все исполнители
     for task in tasks_where_user_is_executor:
         task.executor.remove(member_pk)
 
@@ -190,11 +202,15 @@ def search_members(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     text = request.GET.get('input_search')
     team = project.team
+
+    # Формируется подзапрос для подсчёта количества проектов в команде,
+    # в которых участвует конкретный пользователь
     project_count_subquery = ProjectMember.objects.filter(
         user=OuterRef('pk'),
         project__team=team
     ).values('user').annotate(count=Count('project')).values('count')
 
+    # Фильтрация участников проекта по username и email
     project_members = project.project_members.annotate(
         projects_count=Subquery(project_count_subquery),
         date_joining=F('members_projects__date_joining')
