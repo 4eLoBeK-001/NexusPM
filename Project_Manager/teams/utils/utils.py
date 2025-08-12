@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from teams.models import Team
 
 def redirect_back(request, fallback='teams:team_list'):

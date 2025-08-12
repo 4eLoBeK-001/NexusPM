@@ -18,8 +18,6 @@ def create_project_signal(sender, instance, created, *args, **kwargs):
         Status.objects.create(project=instance, name='Завершена', is_completed=True, color_id=1)
 
 
-
-
 @receiver(signal=pre_save, sender=Project)
 def change_project_signal(sender, instance, *args, **kwargs):
     if not instance.pk:

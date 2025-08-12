@@ -18,6 +18,8 @@ def project_form_processor(request):
     return {'context_form': AddModalTeamForm()}
 
 
+# Контекстный процессор нужен для того, 
+# чтобы в в шаблоне всегда можно было узнать роль текущего юзера
 def role_proccessor(request):
     team_pk = None
     if hasattr(request, 'resolver_match'):

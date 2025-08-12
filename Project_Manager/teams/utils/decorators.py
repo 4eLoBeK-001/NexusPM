@@ -5,6 +5,8 @@ from django.shortcuts import get_object_or_404
 
 from users.models import TeamMember
 
+# Декоратор ограничивает различные действия, 
+# если переданная роль min_role_required ниже по приоритету чем роль участника
 def role_required(min_role_required):
     def decorator(view_func):
         @wraps(view_func)

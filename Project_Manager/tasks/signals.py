@@ -21,11 +21,9 @@ def create_task_signal(sender, instance, created, *args, **kwargs):
             log_action(action='task_created', user=user, task=instance, data={'task_name': instance.name})
 
 
-
 @receiver(signal=pre_delete, sender=Task)
 def delete_task_signal(sender, instance, *args, **kwargs):
     log_action(action='task_deleted', user=get_current_user(), task=instance, data={'task_name': instance.name})
-
 
 
 @receiver(signal=pre_save, sender=Task)
@@ -84,7 +82,6 @@ def change_tag_signal(sender, instance, action, *args, **kwargs):
         log_action(action='task_tag_changed', user=get_current_user(), task=instance, data={'data': ', '.join(tags_list), 'tag_name': ', '.join(tags_list)})
 
 
-
 @receiver(signal=pre_delete, sender=Tag)
 def delete_tag_signal(sender, instance, *args, **kwargs):
         log_action(action='tag_deleted', user=get_current_user(), project=instance.project, data={'data': instance.name, 'tag_name': instance.name})
@@ -96,11 +93,9 @@ def create_status_signal(sender, instance, created, *args, **kwargs):
         log_action(action='status_created', user=get_current_user(), project=instance.project, data={'data': instance.name})
 
 
-
 @receiver(signal=pre_delete, sender=Status)
 def delete_status_signal(sender, instance, *args, **kwargs):
     log_action(action='status_deleted', user=get_current_user(), project=instance.project, data={'data': instance.name})
-
 
 
 @receiver(signal=post_save, sender=Comment)
@@ -112,4 +107,3 @@ def create_comment_signal(sender, instance, created, *args, **kwargs):
 @receiver(signal=pre_delete, sender=Comment)
 def delete_comment_signal(sender, instance, *args, **kwargs):
     log_action(action='comment_deleted', user=get_current_user(), task=instance.task, data={'data': instance.content})
-
