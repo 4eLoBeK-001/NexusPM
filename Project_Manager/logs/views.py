@@ -10,7 +10,9 @@ from logs.models import ActionLog
 
 @login_required
 def history(request):
-    logs = ActionLog.objects.filter(participants=request.user).distinct().order_by('-created_at')
+    logs = ActionLog.objects.filter(participants=request.user
+    ).select_related('team', 'project', 'task', 'user'
+    ).distinct().order_by('-created_at')
     
     teams = Team.objects.filter(id__in=logs.values_list('team', flat=True)).distinct()
     projects = Project.objects.filter(id__in=logs.values_list('project', flat=True)).distinct()
@@ -73,7 +75,9 @@ def team_history(request, pk):
     tasks = Task.objects.filter(project_id__in=projects.values_list('id', flat=True))
     action_types = ActionLog.ACTION_CHOICES
 
-    logs = ActionLog.objects.filter(participants=request.user, team=team)
+    logs = ActionLog.objects.filter(
+        participants=request.user, team=team
+    ).select_related('team', 'project', 'task', 'user')
 
     context = {
         'team': team,
@@ -91,7 +95,9 @@ def project_history(request, pk, project_pk):
     tasks = project.tasks.all()
     action_types = ActionLog.ACTION_CHOICES
     
-    logs = ActionLog.objects.filter(participants=request.user, project=project)
+    logs = ActionLog.objects.filter(
+        participants=request.user, project=project
+    ).select_related('team', 'project', 'task', 'user')
 
     context = {
         'tasks': tasks,

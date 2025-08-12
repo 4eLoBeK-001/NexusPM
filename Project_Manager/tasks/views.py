@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
@@ -6,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.html import format_html
 from django.http import HttpResponse
 
+from users.models import ProjectMember
 from teams.utils.decorators import role_required
 
 from projects.models import Project
@@ -17,11 +19,21 @@ from tasks.forms import AddCommentForm, CreateStatusForm, CreateSubtaskForm, Cre
 
 
 def task_list(request, project_pk, *args, **kwargs):
-    project = get_object_or_404(Project, pk=project_pk)
-    executors = project.project_members.all()
-    tasks = Task.objects.for_project(project).filter(parent_task__isnull=True)
-    statuses = project.statuses.all()
-    tags = project.tags.all()
+    project = get_object_or_404(Project.objects.select_related('team'), pk=project_pk)
+    executors = ProjectMember.objects.filter(project=project)
+    tasks = (
+    Task.objects.for_project(project)
+    .filter(parent_task__isnull=True)
+    .select_related('status__color', 'project__team')
+    .prefetch_related(
+        'tag__color',
+        'executor__profile',
+        'subtasks',
+        )
+    )
+
+    statuses = project.statuses.select_related('color')
+    tags = project.tags.select_related('color')
     priorities = Task.PriprityChoices
     status_form = CreateStatusForm()
     task_form = CreateTaskForm()
@@ -40,7 +52,10 @@ def task_list(request, project_pk, *args, **kwargs):
 
 @login_required
 def my_tasks(request, *args, **kwargs):
-    tasks = Task.objects.filter(executor=request.user)
+    tasks = Task.objects.filter(
+        executor=request.user
+    ).select_related('project__team', 'status__color'
+    ).prefetch_related('executor__profile', 'tag__color', 'subtasks')
     context = {
         'tasks': tasks,
     }
@@ -120,15 +135,33 @@ def change_status(request, task_pk, *args, **kwargs):
 
 
 def task_detail(request, task_pk, *args, **kwargs):
-    task = get_object_or_404(Task, pk=task_pk)
-    project_members = task.project.project_members.all()
-    executor_ids = task.executor.values_list('id', flat=True)
-    create_subtask_form = CreateSubtaskForm()
+    task = get_object_or_404(
+        Task.objects
+        .select_related(
+            'project__team', 
+            'status__color',
+            'status__project', 
+            'creator'
+        )
+        .prefetch_related(
+            'executor__profile', 
+            Prefetch('tag', queryset=Tag.objects.select_related('color')),
+            'subtasks',
+            'images'
+        ), 
+        pk=task_pk
+    )
+    
     project = task.project
+    project_members = project.project_members.select_related('profile')
+    executor_ids = task.executor.values_list('id', flat=True)
     executors = task.executor.all()
-    statuses = Status.objects.all()
+    tags = task.tag.all()
+    statuses = Status.objects.filter(project=project).select_related('color')
+    
+    # Формы
+    create_subtask_form = CreateSubtaskForm()
     status_form = CreateStatusForm()
-    tags = Tag.objects.filter(project=project)
     update_tag_form = UpdateTagForm(instance=task, project=project)
     create_tag_form = CreateTagForm()
     comment_form = AddCommentForm()

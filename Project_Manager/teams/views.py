@@ -22,7 +22,7 @@ def workplace(request):
 
 @login_required
 def team_list(request):
-    teams = Team.objects.is_member(request.user)
+    teams = Team.objects.is_member(request.user).select_related('author')
     team_forms = {team.id: AddModalTeamForm(instance=team) for team in teams}
     context = {
         'teams': teams,
@@ -83,7 +83,7 @@ def team_members(request, pk):
     team_members = team.team_member.annotate(
         projects_count=Count('project_membership', filter=Q(project_membership__team=team)),
         member_date_joining=F('members_teams__date_joining'),
-    ).all()
+    ).select_related('profile')
     context = {
         'team': team,
         'form': form,

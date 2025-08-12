@@ -25,7 +25,9 @@ from tasks.utils.decorators import require_project_member
 
 def project_list(request, pk):
     team = get_object_or_404(Team, pk=pk)
-    projects = Project.objects.for_team(team).filter(project_members=request.user)
+    projects = Project.objects.for_team(team).filter(
+        project_members=request.user
+    ).select_related('team')
     form = AddModalProjectForm()
     context = {
         'team': team,
@@ -143,9 +145,9 @@ def project_members(request, project_pk, *args, **kwargs):
     project_membersa = project.project_members.annotate(
         projects_count=Subquery(project_count_subquery),
         date_joining=F('members_projects__date_joining')
-    ).all()
+    ).select_related('profile')
 
-    team_members = team.team_member.all()
+    team_members = team.team_member.select_related('profile')
 
     data = {
         'team': team,
@@ -208,7 +210,7 @@ def search_members(request, project_pk, *args, **kwargs):
 @require_project_member
 def project_tags(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
-    tags = project.tags.all()
+    tags = project.tags.select_related('color')
     form = CreateTagForm()
     data = {
         'project': project,
@@ -262,7 +264,7 @@ def create_tag(request, project_pk, *args, **kwargs):
 @require_project_member
 def project_statuses(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
-    statuses = project.statuses.all()
+    statuses = project.statuses.select_related('color')
     form = CreateStatusForm()
     data = {
         'project': project,
