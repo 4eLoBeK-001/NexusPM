@@ -1,3 +1,17 @@
+from django.shortcuts import get_object_or_404, redirect, render
+from teams.models import Team
+
+def redirect_back(request, fallback='teams:team_list'):
+    return redirect(request.META.get('HTTP_REFERER', fallback))
+
+
+def get_team_and_redirect(request, pk):
+    response = redirect(request.META.get('HTTP_REFERER'))
+    team = get_object_or_404(Team, pk=pk, team_member=request.user)
+    if request.GET.get('trigger') == 'detail':
+        response = redirect('teams:team_list')
+    return team, response
+
 
 PERMISSION_LABELS = {
     'can_delete_team': 'Может удалить команду',

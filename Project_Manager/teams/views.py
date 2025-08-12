@@ -6,16 +6,16 @@ from django.views.decorators.http import require_http_methods
 from django.contrib import messages
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.db.models import Q, F, Count, Sum
-
-from users.models import User
+from django.db.models import Q, F, Count
 
 from .forms import AddModalTeamForm, AddTeamForm, AddTeamMemberModalForm
 from .models import Team, TeamInvitation
 from .utils.decorators import role_required
-from .utils.utils import get_role_description, ROLE_PERMISSIONS, PERMISSION_LABELS
+from .utils.utils import redirect_back, get_team_and_redirect, get_role_description, ROLE_PERMISSIONS, PERMISSION_LABELS
 from users.models import TeamMember
 
+
+# ====== VIEWS ======
 
 def workplace(request):
     return render(request, 'teams/workplace.html')
@@ -45,6 +45,11 @@ def team_conf(request, pk):
 @login_required
 def access_rights(request, pk):
     team = get_object_or_404(Team, pk=pk, team_member=request.user)
+    # Функция формирует список словарей с информацией о каждой роли:
+    # - value: значение роли в модели
+    # - label: название роли для отображения
+    # - rights: описание прав доступа
+    # - description: описание роли
     roles = [
         {
             'value': role.value, 
@@ -72,7 +77,7 @@ def change_team(request, pk):
     form = AddTeamForm(request.POST, request.FILES, instance=team)
     if form.is_valid():
         form.save()
-    return redirect(request.META.get('HTTP_REFERER'))
+    return redirect_back(request)
 
 
 @login_required
@@ -98,11 +103,14 @@ def team_members(request, pk):
 @login_required
 def change_role_member(request, pk, member_pk, *args, **kwargs):
     team = get_object_or_404(Team, pk=pk, team_member=request.user)
-    member = team.participate_in_team.select_related('user').get(user_id=member_pk)
+    member = team.participate_in_team.get(user_id=member_pk)
     selected_role = request.POST.get('selected_role')
     member.role = selected_role
     roles = TeamMember.RoleChoices.choices
     member.save()
+    # С аннотацией получаем дополнительно поля: 
+    # projects_count - в скольких проектах участвует каждый участник
+    # member_date_joining - когда присоединился
     team_member = team.team_member.annotate(
         projects_count=Count('project_membership', filter=Q(project_membership__team=team)),
         member_date_joining=F('members_teams__date_joining')
@@ -129,7 +137,7 @@ def send_invitation_to_team(request, pk):
             user = get_user_model().objects.filter(email=email).first()
 
             if user: 
-                # проверка, что пользователь не уже участник и не приглашён
+                # проверка, что пользователь не состоит в команде и не приглашён
                 already_invited = TeamInvitation.objects.filter(team=team, invited_user=user, accepted=False).exists()
                 already_member = user.members_teams.filter(team=team).exists()
                 if not already_member and not already_invited:
@@ -147,29 +155,31 @@ def send_invitation_to_team(request, pk):
             return render(request, 'teams/includes/team_members.html', {'form': form, 'team': team})
     else:
         return render(request, 'teams/includes/team_members.html', {'form': form, 'team': team})
-    return redirect(request.META.get('HTTP_REFERER'))
+    return redirect_back(request)
 
 
 @role_required('Admin')
 @require_http_methods(['POST'])
 @login_required
 def deleting_team_members(request, pk, member_pk):
-    # Удаляет сначала участника из всех проектов, а потом уже из команды
     team = get_object_or_404(Team, pk=pk, team_member=request.user)
-    project_members_list = team.projects.filter(project_members__id=member_pk) # Все проекты в которых он присутствует
+    project_members_list = team.projects.filter(project_members__id=member_pk)
     member = get_object_or_404(get_user_model(), pk=member_pk)
 
+    # Чтобы не осталось зависимостей (мера предосторожности)
+    # Сначала снимаем пользователя со всех задач где он исполнитель
+    # Удалеяем его из всех проектов команды
     for project in project_members_list:
         tasks = member.assigned_tasks.filter(project=project)
         for task in tasks:
             task.executor.remove(member_pk)
         project.project_members.remove(member_pk)
 
+    # И в последнюю очередь удаляем из команды
     team.team_member.remove(member_pk)
     return render(request, 'teams/includes/team_members_list.html')
 
 
-@login_required
 @require_http_methods(['POST'])
 @login_required
 def create_team(request):
@@ -186,8 +196,8 @@ def create_team(request):
                 team.name
             ),
         )
-        return redirect(request.META.get('HTTP_REFERER'))
-    return redirect(request.META.get('HTTP_REFERER'))
+        return redirect_back(request)
+    return redirect_back(request)
 
 
 
@@ -208,13 +218,6 @@ def sidebar_search_team(request):
     queryset = Team.objects.is_member(request.user).filter(name__icontains=search)
     return render(request, 'teams/includes/team_list.html', {'context_teams': queryset})
 
-
-def get_team_and_redirect(request, pk):
-    response = redirect(request.META.get('HTTP_REFERER'))
-    team = get_object_or_404(Team, pk=pk, team_member=request.user)
-    if request.GET.get('trigger') == 'detail':
-        response = redirect('teams:team_list')
-    return team, response
 
 
 @role_required('Creator')
@@ -240,10 +243,10 @@ def search_team_members(request, pk):
     team = get_object_or_404(Team, pk=pk)
     search = request.GET.get('input_search')
     roles = TeamMember.RoleChoices.choices
+    # Поиск участников по username и email
     team_members = team.team_member.annotate(
         projects_count=Count('project_membership', filter=Q(project_membership__team=team)),
-        member_date_joining=F('members_teams__date_joining'),
-        member_pks=F('members_teams__user_id')
+        member_date_joining=F('members_teams__date_joining')
     ).filter(Q(username__icontains=search) | Q(email__icontains=search))
     context = {
         'team_members': team_members,
