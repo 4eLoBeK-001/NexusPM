@@ -12,7 +12,6 @@ from teams.utils.decorators import role_required
 
 from projects.models import Project
 
-from tasks.utils.decorators import require_project_member
 from tasks.models import Comment, Status, Tag, Task, TaskImage
 from tasks.forms import AddCommentForm, CreateStatusForm, CreateSubtaskForm, CreateTagForm, CreateTaskForm, UpdateTagForm, UpdateTaskForm
 
@@ -23,7 +22,7 @@ def task_list(request, project_pk, *args, **kwargs):
     executors = ProjectMember.objects.filter(project=project)
     tasks = (
     Task.objects.for_project(project)
-    .filter(parent_task__isnull=True)
+    .filter(parent_task__isnull=True) # Только корневые задачи (не подзадачи)
     .select_related('status__color', 'project__team')
     .prefetch_related(
         'tag__color',
@@ -104,6 +103,7 @@ def task_filter(request, project_pk, *args, **kwargs):
         'priority': request.GET.get('priority'),
         'executor': request.GET.get('executor'),
     }
+    # Удаляются пустые значения из фильтров
     filters = {k: v for k, v in filters.items() if v}
     
     tasks = Task.objects.for_project(project).filter(
@@ -224,11 +224,13 @@ def create_subtask(request, task_pk, *args, **kwargs):
 @role_required('Manager')
 @require_http_methods(['POST'])
 def task_delete(request, task_pk, *args, **kwargs):
+    # task_pk может приходить в двух вариантах - из списка задач или со страницы самой задачи
     task_pk = request.POST.get('task_pk') or request.POST.get('detail_task_pk')
     task = get_object_or_404(Task, pk=task_pk)
     task.delete()
 
     if 'detail_task_pk' in request.POST:
+        # если удаление произошло со страницы детали задачи, то возарвщаем URL для списка задач
         return reverse('teams:projects:tasks:task_list', args=[task.project.team.pk, task.project.pk, task.pk])
     else:
         return redirect(request.META.get('HTTP_REFERER'))

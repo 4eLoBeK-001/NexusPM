@@ -14,9 +14,11 @@ def history(request):
     ).select_related('team', 'project', 'task', 'user'
     ).distinct().order_by('-created_at')
     
+    # Получаем уникальные команды/проекты/задачи из логов
     teams = Team.objects.filter(id__in=logs.values_list('team', flat=True)).distinct()
     projects = Project.objects.filter(id__in=logs.values_list('project', flat=True)).distinct()
     tasks = Task.objects.filter(id__in=logs.values_list('task', flat=True)).distinct()
+    
     action_types = ActionLog.ACTION_CHOICES
 
     data = {
@@ -55,6 +57,7 @@ def history_filter(request):
         'action_type': request.GET.get('action_type', ''),
     }
 
+    # Удаляются пустые значения из фильтров
     filters = {k: v for k, v in filters.items() if v}
 
     logs = ActionLog.objects.filter(
