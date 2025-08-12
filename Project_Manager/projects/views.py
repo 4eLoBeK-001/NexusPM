@@ -51,6 +51,8 @@ def search_projects(request, pk):
     search = request.GET.get('search1', '')
     projects = Project.objects.for_team(team).filter(name__icontains=search, project_members=request.user)
     context = {
+        'team': team,
+        'status_choices': Project.StatusChoices,
         'projects': projects
     }
     return render(request, 'projects/projects.html', context)

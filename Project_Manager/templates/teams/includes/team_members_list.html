@@ -1,8 +1,9 @@
+{% for member in team_members %}
 <tr id="team-member-{{member.pk}}" class="border-b border-gray-200 hover:bg-gray-100 transition-colors {% cycle 'bg-white' 'bg-gray-50' %}">
     <td class="w-10 py-1 px-3 text-center whitespace-nowrap">{{ forloop.counter }}</td>
     <td class="py-1 px-6 text-left font-bold">{{ member.username }}</td>
     <td class="py-1 px-6 text-left">{% if not member.profile.hide_email %}{{ member.email|default:"---" }}{%else%}Почта скрыта{%endif%}</td>
-    <td class="py-1 px-6 text-left">{{member.projects_count }}</td>
+    <td class="py-1 px-6 text-left">{{member.projects_count }} {{member.member.pk}}</td>
     <td class="py-1 px-6 text-left">
         {% if member != team.author and your_role >= ROLE_PRIORITY.ADMIN %}
         <div class="dropdown">
@@ -11,7 +12,7 @@
                 {% for role, name_role in roles %}
                 <li>
                   <a 
-                  hx-post="{% url 'teams:change_role_member' team.pk member.pk%}"
+                  hx-post="{% url 'teams:change_role_member' team.pk member.pk %}"
                   hx-target="#team-member-{{member.pk}}"
                   hx-swap="outerHTML"
                   hx-vals='{"selected_role": "{{role}}"}'>
@@ -32,7 +33,7 @@
     {% if member != request.user and member != team.author and your_role >= ROLE_PRIORITY.ADMIN %}
     <td class="" title="Исключить из команды">
         <a 
-        hx-post="{% url 'teams:deleting_team_members' pk=team.pk member_pk=member.pk %}"
+        hx-post="{% url 'teams:deleting_team_members' team.pk member.pk %}"
         hx-target="#team-member-{{member.pk}}"
         hx-swap="delete"
         class="py-5 px-6 rounded-xl hover:bg-red-500 cursor-pointer hover:text-white group-hover:text-white">
@@ -43,3 +44,4 @@
     <td></td>
     {% endif %}
 </tr>
+{% endfor %}

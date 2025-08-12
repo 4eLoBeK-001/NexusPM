@@ -1,6 +1,6 @@
 
-
-    <tr id="pp-{{member.pk}}" class="border-b border-gray-200 hover:bg-gray-100 transition-colors {% cycle 'bg-white' 'bg-gray-50' %}">
+{% for member in project_members %}
+<tr id="pp-{{member.pk}}" class="border-b border-gray-200 hover:bg-gray-100 transition-colors {% cycle 'bg-white' 'bg-gray-50' %}">
         <td class="w-10 py-1 px-3 text-center whitespace-nowrap">{{ forloop.counter }}</td>
         <td class="py-1 px-6 text-left font-bold">{{ member.username }}</td>
         <td class="py-1 px-6 text-left">{% if not member.profile.hide_email %}{{ member.email|default:"---" }}{%else%}Почта скрыта{%endif%}</td>
@@ -42,3 +42,4 @@
         <td></td>
         {% endif %}
     </tr>
+{% endfor %}

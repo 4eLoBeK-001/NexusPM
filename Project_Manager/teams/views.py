@@ -82,7 +82,7 @@ def team_members(request, pk):
     roles = TeamMember.RoleChoices.choices
     team_members = team.team_member.annotate(
         projects_count=Count('project_membership', filter=Q(project_membership__team=team)),
-        member_date_joining=F('members_teams__date_joining')
+        member_date_joining=F('members_teams__date_joining'),
     ).all()
     context = {
         'team': team,
@@ -239,12 +239,15 @@ def leave_from_team(request, pk):
 def search_team_members(request, pk):
     team = get_object_or_404(Team, pk=pk)
     search = request.GET.get('input_search')
+    roles = TeamMember.RoleChoices.choices
     team_members = team.team_member.annotate(
         projects_count=Count('project_membership', filter=Q(project_membership__team=team)),
-        member_date_joining=F('members_teams__date_joining')
+        member_date_joining=F('members_teams__date_joining'),
+        member_pks=F('members_teams__user_id')
     ).filter(Q(username__icontains=search) | Q(email__icontains=search))
     context = {
         'team_members': team_members,
-        'team': team
+        'team': team,
+        'roles': roles
     }
     return render(request, 'teams/includes/team_members_list.html', context)
