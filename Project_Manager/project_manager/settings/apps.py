@@ -17,6 +17,8 @@ INSTALLED_APPS = [
     'logs',
     'django_extensions',
     'debug_toolbar',
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
