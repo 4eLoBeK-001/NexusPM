@@ -1,3 +1,4 @@
+from datetime import timedelta
 from .base import BASE_DIR
 
 
@@ -77,3 +78,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+# Время жизни токена
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=360), # СМЕНИТЬ С 360 НА 30 после окончания проекта
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7), # СМЕНИТЬ С 7 НА 1 после окончания проекта
+
+}
