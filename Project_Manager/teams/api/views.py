@@ -1,12 +1,14 @@
 from django.shortcuts import get_object_or_404
 from django.template.context_processors import request
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 
 from teams.models import Team
 from teams.api.serializers import TeamListSerializer, TeamDetailSerializer
+from teams.services import get_team_roles
 
 
 class TeamListCreateAPIView(generics.ListCreateAPIView):
@@ -33,3 +35,11 @@ class TeamListCreateAPIView(generics.ListCreateAPIView):
 class TeamDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Team.objects.all()
     serializer_class = TeamDetailSerializer
+
+
+class TeamRolesAPIView(APIView):
+    def get(self, request):
+        data = get_team_roles(request)
+        response = Response(data)
+        response['X-Header'] = 'Team roles info'
+        return response

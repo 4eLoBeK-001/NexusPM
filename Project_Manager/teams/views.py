@@ -12,6 +12,7 @@ from .forms import AddModalTeamForm, AddTeamForm, AddTeamMemberModalForm
 from .models import Team, TeamInvitation
 from .utils.decorators import role_required
 from .utils.utils import redirect_back, get_team_and_redirect, get_role_description, ROLE_PERMISSIONS, PERMISSION_LABELS
+from .services import get_team_roles
 from users.models import TeamMember
 
 
@@ -44,27 +45,7 @@ def team_conf(request, pk):
 
 @login_required
 def access_rights(request, pk):
-    team = get_object_or_404(Team, pk=pk, team_member=request.user)
-    # Функция формирует список словарей с информацией о каждой роли:
-    # - value: значение роли в модели
-    # - label: название роли для отображения
-    # - rights: описание прав доступа
-    # - description: описание роли
-    roles = [
-        {
-            'value': role.value, 
-            'label': role.label, 
-            'rights': ROLE_PERMISSIONS[role.value], 
-            'description': get_role_description(role.value)
-        } 
-        for role in TeamMember.RoleChoices
-    ]
-
-    context = {
-        'team': team,
-        'roles': roles,
-        'rights_labels': PERMISSION_LABELS
-    }
+    context = get_team_roles(request, pk)
     return render(request, 'teams/includes/access_rights.html', context)
 
 

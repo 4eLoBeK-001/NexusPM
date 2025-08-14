@@ -5,6 +5,7 @@ from teams.api import views
 
 urlpatterns = [
     path('teams/', views.TeamListCreateAPIView.as_view(), name='team_list'),
-    path('team/<int:pk>/', views.TeamDetailAPIView.as_view(), name='team_detail')
+    path('team/<int:pk>/', views.TeamDetailAPIView.as_view(), name='team_detail'),
+    path('roles/', views.TeamRolesAPIView.as_view(), name='roles'),
 ]
 
