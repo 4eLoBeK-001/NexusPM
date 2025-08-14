@@ -83,7 +83,13 @@ def team_members(request, pk):
 @require_http_methods(['POST'])
 @login_required
 def change_role_member(request, pk, member_pk, *args, **kwargs):
-    context = change_member_role(request, pk, member_pk, *args, **kwargs)
+    result = change_member_role(request, pk, member_pk, *args, **kwargs)
+    roles = TeamMember.RoleChoices.choices
+    context = {
+        'team': result['team'],
+        'member': result['member'],
+        'roles': roles
+    }
     return render(request, 'teams/includes/team_members_list.html', context)
 
 

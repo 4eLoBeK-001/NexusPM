@@ -36,13 +36,15 @@ def get_team_roles(request, pk=None):
 
 
 
-def change_member_role(request, pk, member_pk, *args, **kwargs):
+def change_member_role(request, pk, member_pk, new_role=None, *args, **kwargs):
     team = get_object_or_404(Team, pk=pk, team_member=request.user)
     member = team.participate_in_team.get(user_id=member_pk)
-    selected_role = request.POST.get('selected_role')
+    if new_role is None:
+        selected_role = request.POST.get('selected_role')
+    else:
+        selected_role = new_role
     member.role = selected_role
     member.save()
-    roles = TeamMember.RoleChoices.choices
     # С аннотацией получаем дополнительно поля: 
     # projects_count - в скольких проектах участвует каждый участник
     # member_date_joining - когда присоединился
@@ -53,6 +55,6 @@ def change_member_role(request, pk, member_pk, *args, **kwargs):
     context = {
         'team': team,
         'member': team_member,
-        'roles': roles
     }
+    print(context)
     return context

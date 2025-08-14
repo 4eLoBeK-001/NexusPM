@@ -47,19 +47,18 @@ class TeamRolesAPIView(APIView):
 
 
 class ChangeMemberRoleAPIView(APIView):
-    permission_classes = [IsAuthenticated]  # Или твой кастомный permission
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, pk, member_pk):
         new_role = request.data.get('selected_role')
         if not new_role:
             return Response({"error": "selected_role is required"}, status=status.HTTP_400_BAD_REQUEST)
-        
-        result = change_member_role(request.user, pk, member_pk, new_role)
+        result = change_member_role(request, pk, member_pk, new_role)
         return Response({
-            "team_id": result['team'].pk,
-            "member_id": result['member'].pk,
-            "new_role": new_role
-        })
+            'team_id': result['team'].pk,
+            'member_id': result['member'].pk,
+            'new_role': new_role,
+        }, status=status.HTTP_200_OK)
 
 
 
