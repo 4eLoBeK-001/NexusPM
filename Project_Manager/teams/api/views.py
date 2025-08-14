@@ -6,8 +6,9 @@ from rest_framework.decorators import api_view
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 
+from users.models import TeamMember
 from teams.models import Team
-from teams.api.serializers import TeamListSerializer, TeamDetailSerializer
+from teams.api.serializers import TeamListSerializer, TeamDetailSerializer, TeamMemberSerializer
 from teams.services import get_team_roles
 
 
@@ -43,3 +44,8 @@ class TeamRolesAPIView(APIView):
         response = Response(data)
         response['X-Header'] = 'Team roles info'
         return response
+
+
+class TeamsDetailAPIView(generics.ListAPIView):
+    queryset = TeamMember.objects.all()
+    serializer_class = TeamMemberSerializer
