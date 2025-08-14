@@ -94,7 +94,9 @@ class TeamAdmin(admin.ModelAdmin):
     
     @admin.display(description='Description')
     def get_short_description(self, obj):
-        return obj.description[:50] + '...' if len(obj.description) > 50 else obj.description
+        if obj.description:
+            return obj.description[:50] + '...' if len(obj.description) > 50 else obj.description
+        return ''
 
     inlines = [
         TeamMemberInline
