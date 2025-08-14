@@ -4,6 +4,7 @@ from teams.api import views
 
 
 urlpatterns = [
-    path('teams/', views.get_teams, name='team_list')
+    path('teams/', views.TeamListAPIView.as_view(), name='team_list'),
+    path('team/<int:pk>/', views.TeamDetailAPIView.as_view(), name='team_detail')
 ]
 
