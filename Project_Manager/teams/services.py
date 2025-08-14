@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, render
+from django.db.models import Q, F, Sum, Count
 
 from .models import Team
 from .utils.utils import get_role_description, ROLE_PERMISSIONS, PERMISSION_LABELS
@@ -31,4 +32,27 @@ def get_team_roles(request, pk=None):
         team = get_object_or_404(Team, pk=pk, team_member=request.user)
         context.update({'team': team})
 
+    return context
+
+
+
+def change_member_role(request, pk, member_pk, *args, **kwargs):
+    team = get_object_or_404(Team, pk=pk, team_member=request.user)
+    member = team.participate_in_team.get(user_id=member_pk)
+    selected_role = request.POST.get('selected_role')
+    member.role = selected_role
+    member.save()
+    roles = TeamMember.RoleChoices.choices
+    # С аннотацией получаем дополнительно поля: 
+    # projects_count - в скольких проектах участвует каждый участник
+    # member_date_joining - когда присоединился
+    team_member = team.team_member.annotate(
+        projects_count=Count('project_membership', filter=Q(project_membership__team=team)),
+        member_date_joining=F('members_teams__date_joining')
+    ).get(pk=member.user.pk)
+    context = {
+        'team': team,
+        'member': team_member,
+        'roles': roles
+    }
     return context

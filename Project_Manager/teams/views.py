@@ -12,7 +12,7 @@ from .forms import AddModalTeamForm, AddTeamForm, AddTeamMemberModalForm
 from .models import Team, TeamInvitation
 from .utils.decorators import role_required
 from .utils.utils import redirect_back, get_team_and_redirect, get_role_description, ROLE_PERMISSIONS, PERMISSION_LABELS
-from .services import get_team_roles
+from .services import change_member_role, get_team_roles
 from users.models import TeamMember
 
 
@@ -83,26 +83,8 @@ def team_members(request, pk):
 @require_http_methods(['POST'])
 @login_required
 def change_role_member(request, pk, member_pk, *args, **kwargs):
-    team = get_object_or_404(Team, pk=pk, team_member=request.user)
-    member = team.participate_in_team.get(user_id=member_pk)
-    selected_role = request.POST.get('selected_role')
-    member.role = selected_role
-    roles = TeamMember.RoleChoices.choices
-    member.save()
-    # С аннотацией получаем дополнительно поля: 
-    # projects_count - в скольких проектах участвует каждый участник
-    # member_date_joining - когда присоединился
-    team_member = team.team_member.annotate(
-        projects_count=Count('project_membership', filter=Q(project_membership__team=team)),
-        member_date_joining=F('members_teams__date_joining')
-    ).get(pk=member.user.pk)
-    context = {
-        'team': team,
-        'member': team_member,
-        'roles': roles
-    }
+    context = change_member_role(request, pk, member_pk, *args, **kwargs)
     return render(request, 'teams/includes/team_members_list.html', context)
-
 
 
 @role_required('Admin')
