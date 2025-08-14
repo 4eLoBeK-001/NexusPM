@@ -14,7 +14,7 @@ from tasks import views as tviews
 
 
 urlpatterns = [
-    path('api/', include('teams.api.urls')),
+    path('api/', include('project_manager.api_urls')),
 
     path('admin/', admin.site.urls),
     path('', views.main_page, name='home'),
