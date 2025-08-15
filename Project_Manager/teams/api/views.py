@@ -5,8 +5,11 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework import generics, status, permissions
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 from teams.api.permissions import HasTeamRole
+from teams.api.filters import TeamFilter
 from users.models import TeamMember
 from teams.models import Team
 from teams.api.serializers import TeamListSerializer, TeamDetailSerializer, TeamMemberSerializer
@@ -18,6 +21,13 @@ class TeamListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = TeamListSerializer
     permission_classes = [IsAuthenticated, HasTeamRole]
     required_role = 'Admin'
+    filterset_class = TeamFilter
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+    ]
+    ordering_fields = ['created_at']
+    filterset_fields = ['author']
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
