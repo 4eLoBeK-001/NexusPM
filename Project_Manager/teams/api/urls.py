@@ -1,10 +1,7 @@
 from django.urls import path
 
 from teams.api import views
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+
 
 urlpatterns = [
     path('teams/', views.TeamListCreateAPIView.as_view(), name='team_list'),
@@ -15,8 +12,6 @@ urlpatterns = [
     path('team/<int:pk>/leave/', views.LeaveFromTeamApiView.as_view(), name='leave_from_team_api'),
 
     
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     path('a/', views.TeamsDetailAPIView.as_view(), name='a'), # ПОТОМ УДАЛИТЬ
 ]
