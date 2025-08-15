@@ -9,7 +9,7 @@ from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 
 from teams.api.permissions import HasTeamRole
-from teams.api.filters import TeamFilter
+from teams.api.filters import TeamFilter, TeamMemberFilter
 from users.models import TeamMember
 from teams.models import Team
 from teams.api.serializers import TeamListSerializer, TeamDetailSerializer, TeamMemberSerializer
@@ -49,6 +49,15 @@ class TeamMembersAPIView(generics.ListAPIView):
     queryset = TeamMember.objects.all()
     serializer_class = TeamMemberSerializer
     permission_classes = [IsAuthenticated]
+    filterset_class = TeamMemberFilter
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+    ]
+    filterset_fields = {
+        'user__username': ['exact', 'icontains'],
+    }
+    ordering_fields = ['date_joining']
 
     def get_queryset(self):
         qs = super().get_queryset()
