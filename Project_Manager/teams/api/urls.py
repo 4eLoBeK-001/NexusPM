@@ -1,9 +1,11 @@
-from django.urls import path
+from django.urls import include, path
 
 from teams.api import views
 
 
 urlpatterns = [
+    path('', include('projects.api.urls', namespace='projects')),
+
     path('teams/', views.TeamListCreateAPIView.as_view(), name='team_list'),
     path('team/<int:pk>/', views.TeamDetailAPIView.as_view(), name='team_detail'),
 
