@@ -16,7 +16,8 @@ from teams.services import get_team_roles, change_member_role
 class TeamListCreateAPIView(generics.ListCreateAPIView):
     queryset = Team.objects.all()
     serializer_class = TeamListSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, HasTeamRole]
+    required_role = 'Admin'
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -34,9 +35,53 @@ class TeamListCreateAPIView(generics.ListCreateAPIView):
         return response
 
 
+class TeamMembersAPIView(generics.ListAPIView):
+    queryset = TeamMember.objects.all()
+    serializer_class = TeamMemberSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        team_pk = self.kwargs['pk']
+        return qs.filter(team_id=team_pk)
+
+
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        response['X-Header'] = 'List of team members'
+
+        team_pk = self.kwargs['pk']
+        team = Team.objects.get(pk=team_pk)
+
+        response.data = {
+            'team': {'id': team.id, 'name': team.name},
+            'members': response.data
+        }
+        return response
+
+
 class TeamDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated, HasTeamRole]
     queryset = Team.objects.all()
     serializer_class = TeamDetailSerializer
+    required_role = 'Admin'
+
+
+class LeaveFromTeamApiView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        team = get_object_or_404(Team, pk=pk)
+        membership = get_object_or_404(TeamMember, team=team, user=request.user)
+
+        if membership.role == TeamMember.RoleChoices.CREATOR:
+            return Response(
+                {'detail': 'Создатель команды не может выйти. Передайте права другому пользователю'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        membership.delete()
+        return Response({'detail': 'Вы успешно покинули команду'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class TeamRolesAPIView(APIView):

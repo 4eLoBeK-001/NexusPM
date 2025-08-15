@@ -7,6 +7,9 @@ from users.models import TeamMember
 
 class HasTeamRole(permissions.BasePermission):
     def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+    
         min_role = getattr(view, 'required_role')
         if not min_role:
             return True

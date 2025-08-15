@@ -29,6 +29,12 @@ GET  http://127.0.0.1:8000/api/teams/ HTTP/1.1
 Authorization: Bearer {{rootAccessToken}}
 Content-Type: application/json
 
+### Покинуть команду
+POST http://127.0.0.1:8000/api/team/198/leave/ HTTP/1.1
+Authorization: Bearer {{4elAccessToken}}
+Content-Type: application/json
+
+
 ### Изменить участника на Admin
 
 POST  http://127.0.0.1:8000/api/team/198/member/9/role-change/ HTTP/1.1
