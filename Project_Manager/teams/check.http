@@ -1,38 +1,51 @@
+@baseUrl = http://127.0.0.1:8000/api
+@username = root
+@password = 1234
+@rootAccessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU1Mjk0NTA0LCJpYXQiOjE3NTUyNzI5MDQsImp0aSI6IjE3NDBhMzhlZTgzZDQ4M2RhYzJkZTExOTMxNjBmOTgyIiwidXNlcl9pZCI6IjEifQ.NIUlI-gArxYVGDya_nyX3_889Xbiuf-EP2x7jPyjB5k
+@4elAccessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU1Mjk0NTU1LCJpYXQiOjE3NTUyNzI5NTUsImp0aSI6IjJlNGNmN2YzZTJkMjRjNWY5YmQ3MjYwMzA3YmZjOTllIiwidXNlcl9pZCI6IjkifQ.Ey3LVmaUMCwgsg6JazN2X1BCHkK4SFBugtYsZvViz-g
+
 
 ### Получение токена для root
-
-POST  http://127.0.0.1:8000/api/token/ HTTP/1.1
+POST  {{baseUrl}}/token/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "username": "root",
-    "password": "1234"
+    "username": "{{username}}",
+    "password": "{{password}}"
 }
+### Получение токена для 4el
+POST  {{baseUrl}}/token/ HTTP/1.1
+Content-Type: application/json
 
+{
+    "username": "4el",
+    "password": "{{password}}"
+}
 
 ###
 
+###
 GET  http://127.0.0.1:8000/api/teams/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU1MjI5MzU4LCJpYXQiOjE3NTUyMDc3NTgsImp0aSI6Ijc3ODRjNDExNWRlMzQ4MDBhN2Q3MjBkZTUzZGVkNjBlIiwidXNlcl9pZCI6IjEifQ.HX7-iCNvX2TggFwVs_dwyCAhUMLsUbtyZUk9HPlJYs0
+Authorization: Bearer {{rootAccessToken}}
 Content-Type: application/json
 
 ### Изменить участника на Admin
 
 POST  http://127.0.0.1:8000/api/team/198/member/9/role-change/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU1MjI5MzU4LCJpYXQiOjE3NTUyMDc3NTgsImp0aSI6Ijc3ODRjNDExNWRlMzQ4MDBhN2Q3MjBkZTUzZGVkNjBlIiwidXNlcl9pZCI6IjEifQ.HX7-iCNvX2TggFwVs_dwyCAhUMLsUbtyZUk9HPlJYs0
-Content-Type: application/json
-
-{
-    "selected_role": "Admin"
-}
-
-### И заного заменить на Member
-
-POST  http://127.0.0.1:8000/api/team/198/member/9/role-change/ HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU1MjI5MzU4LCJpYXQiOjE3NTUyMDc3NTgsImp0aSI6Ijc3ODRjNDExNWRlMzQ4MDBhN2Q3MjBkZTUzZGVkNjBlIiwidXNlcl9pZCI6IjEifQ.HX7-iCNvX2TggFwVs_dwyCAhUMLsUbtyZUk9HPlJYs0
+Authorization: Bearer {{rootAccessToken}}
 Content-Type: application/json
 
 {
     "selected_role": "Member"
+}
+
+### И заного заменить на Member
+
+POST  http://127.0.0.1:8000/api/team/198/member/1/role-change/ HTTP/1.1
+Authorization: Bearer {{rootAccessToken}}
+Content-Type: application/json
+
+{
+    "selected_role": "Creator"
 }
 ###

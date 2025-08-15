@@ -56,5 +56,4 @@ def change_member_role(request, pk, member_pk, new_role=None, *args, **kwargs):
         'team': team,
         'member': team_member,
     }
-    print(context)
     return context

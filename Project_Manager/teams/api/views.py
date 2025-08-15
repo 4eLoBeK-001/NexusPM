@@ -3,9 +3,10 @@ from django.template.context_processors import request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 
+from teams.api.permissions import HasTeamRole
 from users.models import TeamMember
 from teams.models import Team
 from teams.api.serializers import TeamListSerializer, TeamDetailSerializer, TeamMemberSerializer
@@ -47,17 +48,19 @@ class TeamRolesAPIView(APIView):
 
 
 class ChangeMemberRoleAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, HasTeamRole]
+    required_role = 'Admin'
 
     def post(self, request, pk, member_pk):
         new_role = request.data.get('selected_role')
         if not new_role:
-            return Response({"error": "selected_role is required"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "selected_role is required"}, status=400)
+
         result = change_member_role(request, pk, member_pk, new_role)
         return Response({
-            'team_id': result['team'].pk,
-            'member_id': result['member'].pk,
-            'new_role': new_role,
+            "team_id": result['team'].pk,
+            "member_id": result['member'].pk,
+            "new_role": new_role
         }, status=status.HTTP_200_OK)
 
 

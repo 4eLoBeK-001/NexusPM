@@ -28,7 +28,8 @@ class TeamListSerializer(serializers.ModelSerializer):
 
 
 class TeamDetailSerializer(serializers.ModelSerializer):
+    memberships = TeamMemberSerializer(source='participate_in_team', many=True, read_only=True)
     class Meta:
         model = Team
-        fields = '__all__'
+        fields = ('id', 'name', 'description', 'author', 'memberships', 'image', 'color', 'updated_at', 'created_at')
         read_only_fields = ('author', 'color',)
