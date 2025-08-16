@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 
 from teams.models import Team
 from users.api.serializers import UserSerializer
@@ -33,3 +35,27 @@ class TeamDetailSerializer(serializers.ModelSerializer):
         model = Team
         fields = ('id', 'name', 'description', 'author', 'memberships', 'image', 'color', 'updated_at', 'created_at')
         read_only_fields = ('author', 'color',)
+
+
+class SendInvitationSerializer(serializers.Serializer):
+    emails = serializers.CharField()
+
+    def validate_emails(self, value):
+        emails = [email.strip() for email in value.split(',')]
+        valid_emails = []
+        invalid_emails = []
+
+        if not emails:
+            raise serializers.ValidationError('Введите хотя-бы один email адрес')
+
+        for email in emails:
+            try:
+                validate_email(email)
+                valid_emails.append(email)
+            except ValidationError:
+                invalid_emails.append(email)
+
+        return {
+            'valid_emails': valid_emails,
+            'invalid_emails': invalid_emails,
+        }

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from teams.models import Team
+from teams.models import Team, TeamInvitation
 from users.models import User, Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -26,3 +26,9 @@ class UserSerializer(serializers.ModelSerializer):
         if obj.profile.hide_email:
             return 'Почта скрыта'
         return obj.email
+
+
+class TeamInvitationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeamInvitation
+        fields = ('team', 'invited_by', 'invited_user', 'created_at', 'accepted')

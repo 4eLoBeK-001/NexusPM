@@ -10,9 +10,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from teams.api.permissions import HasTeamRole
 from teams.api.filters import TeamFilter, TeamMemberFilter
-from users.models import TeamMember
-from teams.models import Team
-from teams.api.serializers import TeamListSerializer, TeamDetailSerializer, TeamMemberSerializer
+from users.models import TeamMember, User
+from teams.models import Team, TeamInvitation
+from teams.api.serializers import SendInvitationSerializer, TeamListSerializer, TeamDetailSerializer, TeamMemberSerializer
 from teams.services import get_team_roles, change_member_role
 
 
@@ -132,3 +132,37 @@ class ChangeMemberRoleAPIView(APIView):
 class TeamsDetailAPIView(generics.ListAPIView):
     queryset = TeamMember.objects.all()
     serializer_class = TeamMemberSerializer
+
+
+class SendInvitationToTeamAPIView(APIView):
+    serializer_class = SendInvitationSerializer
+
+    def post(self, request, pk):
+        serializer = self.serializer_class(data=request.data)
+        team = get_object_or_404(Team, pk=pk)
+        if serializer.is_valid():
+            emails = serializer.validated_data.get('emails')
+            valid_emails = emails.get('valid_emails')
+            invalid_emails = emails.get('invalid_emails')
+
+            new_valid_emails = []
+
+            for email in valid_emails:
+                user = User.objects.filter(email=email).first()
+                already_invited = TeamInvitation.objects.filter(team=team, invited_user=user, accepted=False).exists()
+                
+                if (not user) or (user in team.team_member.all()) or (already_invited):
+                    invalid_emails.append(email)
+                else:
+                    new_valid_emails.append(email)
+                    TeamInvitation.objects.create(team=team, invited_by=request.user, invited_user=user)
+    
+            return Response(
+                {
+                    'Отправлено приглашение': f'{len(new_valid_emails)} адресам',
+                    'valid_emails': new_valid_emails, 
+                    'Не удалось пригласить участников': f'{len(invalid_emails)} адресов',
+                    'invalid_emails': invalid_emails,
+                 }
+                , status=200)
+        return Response(serializer.errors, status=400)
