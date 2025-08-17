@@ -9,3 +9,4 @@ class ProjectsListSerializer(serializers.ModelSerializer):
         # Добавить человеческой отображение project_members, вместо айдишников
         model = Project
         fields = ('id', 'name', 'status', 'project_members')
+        read_only_fields = ('status',)
