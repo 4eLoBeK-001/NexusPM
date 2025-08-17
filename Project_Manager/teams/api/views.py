@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.template.context_processors import request
+from django.core.exceptions import ObjectDoesNotExist
+
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
@@ -166,3 +168,19 @@ class SendInvitationToTeamAPIView(APIView):
                  }
                 , status=200)
         return Response(serializer.errors, status=400)
+
+
+class AcceptInvitationAPIView(generics.UpdateAPIView):
+    queryset = TeamInvitation.objects.all()
+
+    def update(self, request, pk, *args, **kwargs):
+        try:
+            team = get_object_or_404(Team, pk=pk)
+            invitation = TeamInvitation.objects.get(team=team, invited_user=request.user, accepted=False)
+            invitation.accepted=True
+            invitation.save()
+            team.team_member.add(request.user)
+            return Response({'message':f'Приглашение принято. Вы успешно вступили в команду: {team.name}'})
+        
+        except ObjectDoesNotExist:
+            return Response({'message': 'У вас нет приглашений в эту команду'}, status=status.HTTP_404_NOT_FOUND)

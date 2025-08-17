@@ -14,6 +14,8 @@ urlpatterns = [
     path('team/<int:pk>/leave/', views.LeaveFromTeamApiView.as_view(), name='leave_from_team_api'),
 
     path('team/<int:pk>/send/', views.SendInvitationToTeamAPIView.as_view(), name='send_invitation_to_team_api'),
+
+    path('team/<int:pk>/invitations/accept/', views.AcceptInvitationAPIView.as_view(), name='invitation_accept_api'),
     
 
     path('a/', views.TeamsDetailAPIView.as_view(), name='a'), # ПОТОМ УДАЛИТЬ

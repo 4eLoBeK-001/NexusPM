@@ -2,7 +2,13 @@
 @username = root
 @password = 1234
 @rootAccessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU1Mjk0NTA0LCJpYXQiOjE3NTUyNzI5MDQsImp0aSI6IjE3NDBhMzhlZTgzZDQ4M2RhYzJkZTExOTMxNjBmOTgyIiwidXNlcl9pZCI6IjEifQ.NIUlI-gArxYVGDya_nyX3_889Xbiuf-EP2x7jPyjB5k
-@4elAccessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU1Mjk0NTU1LCJpYXQiOjE3NTUyNzI5NTUsImp0aSI6IjJlNGNmN2YzZTJkMjRjNWY5YmQ3MjYwMzA3YmZjOTllIiwidXNlcl9pZCI6IjkifQ.Ey3LVmaUMCwgsg6JazN2X1BCHkK4SFBugtYsZvViz-g
+@4elAccessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU1NDc5MDI4LCJpYXQiOjE3NTU0NTc0MjgsImp0aSI6IjMwMWY5ZjhjNzM4MTRlMGI4NDA0NzYyYWIxNGI4MDk5IiwidXNlcl9pZCI6IjkifQ.bbufEd1c_0bxxrwL5UIhE3IhZU13jZAhc8SK020ukaM
+
+###
+
+PUT http://127.0.0.1:8000/api/team/198/invitations/accept/ HTTP/1.1
+Authorization: Bearer {{4elAccessToken}}
+Content-Type: application/json
 
 
 ### Получение токена для root
