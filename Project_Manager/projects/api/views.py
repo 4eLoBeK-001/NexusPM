@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 
 from teams.api.permissions import HasTeamRole
 from teams.models import Team
-from projects.api.serializers import ProjectsListSerializer
+from projects.api.serializers import ProjectsDetailSerializer, ProjectsListSerializer
 from projects.models import Project
 
 class ProjectList(generics.ListCreateAPIView):
@@ -56,4 +56,17 @@ class ProjectList(generics.ListCreateAPIView):
         }
         return response
 
-    
+
+class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectsDetailSerializer
+    required_role = 'Admin'
+    # Кастомный метод проверки того, в команде ли участник
+    def get_permissions(self):
+        if self.request.method in permissions.SAFE_METHODS:
+            return [IsAuthenticated()]
+        return [IsAuthenticated(), HasTeamRole()]
+
+    def get_object(self):
+        project_id = self.kwargs.get('project_id')
+        return get_object_or_404(Project, id=project_id)

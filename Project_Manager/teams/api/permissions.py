@@ -10,7 +10,7 @@ class HasTeamRole(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
     
-        min_role = getattr(view, 'required_role')
+        min_role = getattr(view, 'required_role', None)
         if not min_role:
             return True
 
