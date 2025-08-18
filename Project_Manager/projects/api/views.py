@@ -11,7 +11,7 @@ from users.models import ProjectMember, User
 from users.api.serializers import UserSerializer
 from teams.api.permissions import HasTeamRole
 from teams.models import Team
-from projects.api.serializers import ProjectStatusesSerializer, ProjectTagsSerializer, ProjectsDetailSerializer, ProjectsListSerializer, ProjectsMembersSerializer
+from projects.api.serializers import AddMemberProjectSerializer, ProjectStatusesSerializer, ProjectTagsSerializer, ProjectsDetailSerializer, ProjectsListSerializer, ProjectsMembersSerializer
 from projects.models import Project
 
 class ProjectList(generics.ListCreateAPIView):
@@ -78,14 +78,35 @@ class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 class ProjectMembersAPIView(generics.ListCreateAPIView):
     queryset = ProjectMember.objects.all()
-    serializer_class = ProjectsMembersSerializer
     permission_classes = [HasProjectMember]
     required_role = 'Admin'
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, context={'view': self})
+        if serializer.is_valid():
+            project = get_object_or_404(Project, id=self.kwargs.get('project_id'))
+            found_logins = serializer.validated_data.get('found_list')
+
+            for user in found_logins:
+                project.project_members.add(user)
+            
+            return Response({
+                    'added': [user.username for user in serializer.validated_data['found_list']],
+                    'not_found': serializer.validated_data['not_found_list']
+                   })
+        return Response('')
+
 
     def get_permissions(self):
         if self.request.method == 'POST':
             return [HasProjectMember(), HasTeamRole()]
         return [HasProjectMember()]
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return AddMemberProjectSerializer
+        return ProjectsMembersSerializer
+
 
     def get_queryset(self):
         qs = super().get_queryset()
