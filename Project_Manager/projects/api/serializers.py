@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from tasks.models import Status, Tag
+from tasks.models import Color, Status, Tag
 from users.api.serializers import UserSerializer
 from projects.models import Project
 from users.models import ProjectMember, User
@@ -30,20 +30,30 @@ class ProjectsMembersSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectMember
         fields = ('user', 'date_joining')
+        read_only_fields = ('date_joining',)
 
 
 class ProjectStatusesSerializer(serializers.ModelSerializer):
-    color_name = serializers.CharField(source='color.name')
+    color = serializers.CharField(source='color.color_name')
 
     class Meta:
         model = Status
-        fields = ('name', 'color_name', 'is_completed')
+        fields = ('name', 'color', 'is_completed')
 
+    def create(self, validated_data):
+        color_name = validated_data.pop('color')['color_name']
+        color = Color.objects.get(name=color_name)
+        return Status.objects.create(color=color, **validated_data)
 
 
 class ProjectTagsSerializer(serializers.ModelSerializer):
-    color_name = serializers.CharField(source='color.name')
+    color = serializers.CharField(source='color.color_name')
 
     class Meta:
         model = Tag
-        fields = ('name', 'color_name')
+        fields = ('name', 'color')
+    
+    def create(self, validated_data):
+        color_name = validated_data.pop('color')['color_name']
+        color = Color.objects.get(name=color_name)
+        return Tag.objects.create(color=color, **validated_data)

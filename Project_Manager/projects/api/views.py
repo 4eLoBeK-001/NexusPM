@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import generics, permissions
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 
+from projects.api.permissions import HasProjectMember
 from tasks.models import Status, Tag
 from users.models import ProjectMember, User
 from users.api.serializers import UserSerializer
@@ -75,9 +76,16 @@ class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         return get_object_or_404(Project, id=project_id)
 
 
-class ProjectMembersAPIView(generics.ListAPIView):
+class ProjectMembersAPIView(generics.ListCreateAPIView):
     queryset = ProjectMember.objects.all()
     serializer_class = ProjectsMembersSerializer
+    permission_classes = [HasProjectMember]
+    required_role = 'Admin'
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [HasProjectMember(), HasTeamRole()]
+        return [HasProjectMember()]
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -94,9 +102,19 @@ class ProjectMembersAPIView(generics.ListAPIView):
 
 
 
-class ProjectStatusesAPIView(generics.ListAPIView):
+class ProjectStatusesAPIView(generics.ListCreateAPIView):
     queryset = Status.objects.all()
     serializer_class = ProjectStatusesSerializer
+    required_role = 'Manager'
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [HasProjectMember(), HasTeamRole()]
+        return [HasProjectMember()]
+    
+    def perform_create(self, serializer):
+        project = get_object_or_404(Project, id=self.kwargs.get('project_id'))
+        serializer.save(project=project)
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -112,9 +130,20 @@ class ProjectStatusesAPIView(generics.ListAPIView):
         return response
 
 
-class ProjectTagsAPIView(generics.ListAPIView):
+class ProjectTagsAPIView(generics.ListCreateAPIView):
     queryset = Tag.objects.all()
     serializer_class = ProjectTagsSerializer
+    permission_classes = [HasProjectMember]
+    required_role = 'Member'
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [HasProjectMember(), HasTeamRole()]
+        return [HasProjectMember()]
+    
+    def perform_create(self, serializer):
+        project = get_object_or_404(Project, id=self.kwargs.get('project_id'))
+        serializer.save(project=project)
 
     def get_queryset(self):
         qs = super().get_queryset()
