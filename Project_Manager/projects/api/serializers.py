@@ -37,7 +37,7 @@ class ProjectsMembersSerializer(serializers.ModelSerializer):
 
 
 class AddMemberProjectSerializer(serializers.Serializer):
-    logins = serializers.CharField()
+    logins = serializers.CharField(help_text='Введите список логинов через запятую')
 
     def validate(self, data):
         logins = data['logins']
@@ -60,7 +60,15 @@ class AddMemberProjectSerializer(serializers.Serializer):
 
         data['found_list'] = found_list
         data['not_found_list'] = not_found_list
+        data['project'] = project
         return data
+    
+    def save(self, **kwargs):
+        project = self.validated_data['project']
+        found_users = self.validated_data['found_list']
+        not_found_logins = self.validated_data['not_found_list']
+        project.project_members.add(*found_users)
+        return found_users, not_found_logins
 
     
 

@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 
 from projects.api.permissions import HasProjectMember
@@ -83,19 +83,14 @@ class ProjectMembersAPIView(generics.ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, context={'view': self})
-        if serializer.is_valid():
-            project = get_object_or_404(Project, id=self.kwargs.get('project_id'))
-            found_logins = serializer.validated_data.get('found_list')
+        serializer.is_valid(raise_exception=True)
 
-            for user in found_logins:
-                project.project_members.add(user)
-            
-            return Response({
-                    'added': [user.username for user in serializer.validated_data['found_list']],
-                    'not_found': serializer.validated_data['not_found_list']
-                   })
-        return Response('')
+        added_users, not_found_logins = serializer.save()
 
+        return Response({
+            'added': [user.username for user in added_users],
+            'not_found': not_found_logins
+        }, status=status.HTTP_201_CREATED)
 
     def get_permissions(self):
         if self.request.method == 'POST':
@@ -107,20 +102,22 @@ class ProjectMembersAPIView(generics.ListCreateAPIView):
             return AddMemberProjectSerializer
         return ProjectsMembersSerializer
 
-
     def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.filter(project_id=self.kwargs.get('project_id'))
+        return super().get_queryset().filter(project_id=self.kwargs['project_id'])
     
     def list(self, request, *args, **kwargs):
-        project = get_object_or_404(Project, id=self.kwargs.get('project_id'))
+        project = self._get_project()
         response = super().list(request, *args, **kwargs)
         response.data = {
             'project': {'project_id': project.id, 'project_name': project.name},
             'members': response.data
         }
         return response
-
+    
+    def _get_project(self):
+        """Получить проект по ID из URL параметров"""
+        project_id = self.kwargs.get('project_id')
+        return get_object_or_404(Project, id=project_id)
 
 
 class ProjectStatusesAPIView(generics.ListCreateAPIView):
