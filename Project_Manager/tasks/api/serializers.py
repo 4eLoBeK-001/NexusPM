@@ -7,8 +7,8 @@ from users.api.serializers import UserSerializer
 
 class TaskListSerializer(serializers.ModelSerializer):
     executor = UserSerializer(many=True, read_only=True)
-    status = serializers.CharField(source='status.name')
-    tag = ProjectTagsSerializer(many=True)
+    status = serializers.CharField(source='status.name', read_only=True)
+    tag = ProjectTagsSerializer(many=True, read_only=True)
     
     class Meta:
         model = Task
