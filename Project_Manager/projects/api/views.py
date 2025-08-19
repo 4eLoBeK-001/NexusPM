@@ -2,9 +2,11 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, filters
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
+from django_filters.rest_framework import DjangoFilterBackend
 
+from projects.api.filters import ProjectFilter, ProjectMemberFilter
 from projects.api.permissions import HasProjectMember
 from tasks.models import Status, Tag
 from users.models import ProjectMember, User
@@ -17,6 +19,13 @@ from projects.models import Project
 class ProjectList(generics.ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectsListSerializer
+    filterset_class = ProjectFilter
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        
+    ]
+    ordering_fields = ['-created_at']
     required_role = 'Admin'
 
     def get_permissions(self):
@@ -79,6 +88,10 @@ class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 class ProjectMembersAPIView(generics.ListCreateAPIView):
     queryset = ProjectMember.objects.all()
     permission_classes = [HasProjectMember]
+    filterset_class = ProjectMemberFilter
+    filter_backends = [
+        DjangoFilterBackend,
+    ]
     required_role = 'Admin'
 
     def create(self, request, *args, **kwargs):
