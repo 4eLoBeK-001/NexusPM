@@ -1,13 +1,14 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
 
 from teams.api.permissions import HasTeamRole
 
 from projects.api.permissions import HasProjectMember
 from projects.models import Project
 
-from tasks.api.serializers import TaskDetailSerializer, TaskListSerializer
-from tasks.models import Task
+from tasks.api.serializers import CommentSerializer, TaskDetailSerializer, TaskListSerializer
+from tasks.models import Comment, Task
 
 
 class TaskListAPIView(generics.ListCreateAPIView):
@@ -53,3 +54,33 @@ class TaskDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         if self.request.method in ['PUT', 'PATCH', 'DELETE']:
             return [HasProjectMember(), HasTeamRole()]
         return [HasProjectMember()]
+
+
+class CommentListAPIView(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    required_role = 'Viewer'
+
+    def perform_create(self, serializer):
+        task = get_object_or_404(Task, pk=self.kwargs.get('task_id'))
+        serializer.save(author=self.request.user, task=task)
+
+    def get_permissions(self):
+        if self.request.method in ['POST']:
+            return [HasProjectMember(), HasTeamRole()]
+        return [HasProjectMember()]
+
+
+class CommentDeleteAPIView(generics.DestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [HasTeamRole, HasProjectMember]
+    required_role = 'Manager'
+    lookup_url_kwarg = 'comment_id'
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(
+            {'detail': 'Комментарий успешно удалён'}
+        )
