@@ -6,7 +6,7 @@ from teams.api.permissions import HasTeamRole
 from projects.api.permissions import HasProjectMember
 from projects.models import Project
 
-from tasks.api.serializers import TaskListSerializer
+from tasks.api.serializers import TaskDetailSerializer, TaskListSerializer
 from tasks.models import Task
 
 
@@ -31,3 +31,25 @@ class TaskListAPIView(generics.ListCreateAPIView):
             'tasks': response.data
         }
         return response
+
+
+class TaskDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskDetailSerializer
+    lookup_url_kwarg = 'task_id'
+
+    method_required_roles = {
+        'DELETE': 'Manager',
+        'PUT': 'Member',
+        'PATCH': 'Member',
+    }
+
+    def get_required_role(self):
+        return self.method_required_roles.get(self.request.method, 'Member')
+
+    def get_permissions(self):
+        self.required_role = self.get_required_role()
+
+        if self.request.method in ['PUT', 'PATCH', 'DELETE']:
+            return [HasProjectMember(), HasTeamRole()]
+        return [HasProjectMember()]

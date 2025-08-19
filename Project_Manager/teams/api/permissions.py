@@ -9,7 +9,7 @@ class HasTeamRole(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
-    
+
         min_role = getattr(view, 'required_role', None)
         if not min_role:
             return True
@@ -17,9 +17,7 @@ class HasTeamRole(permissions.BasePermission):
         team_pk = view.kwargs.get('pk')
         if not team_pk:
             return False
-        
+
         my_role = get_object_or_404(TeamMember, user=request.user, team_id=team_pk).role
-        
-        if TeamMember.RoleChoices.get_priority(my_role) >= TeamMember.RoleChoices.get_priority(min_role):
-            return True
-        return False
+
+        return TeamMember.RoleChoices.get_priority(my_role) >= TeamMember.RoleChoices.get_priority(min_role)
