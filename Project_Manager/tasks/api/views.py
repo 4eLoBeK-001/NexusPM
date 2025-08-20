@@ -12,7 +12,7 @@ from tasks.models import Comment, Task
 
 
 class TaskListAPIView(generics.ListCreateAPIView):
-    queryset = Task.objects.all()
+    queryset = Task.objects.all().select_related('status__color', 'parent_task').prefetch_related('tag__color', 'executor__profile')
     serializer_class = TaskListSerializer
     required_role = 'Member'
 
@@ -69,6 +69,15 @@ class CommentListAPIView(generics.ListCreateAPIView):
         if self.request.method in ['POST']:
             return [HasProjectMember(), HasTeamRole()]
         return [HasProjectMember()]
+        
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        task = get_object_or_404(Task, pk=self.kwargs.get('task_id'))
+        response.data = {
+            'task': {'task_id': task.id, 'task_name': task.name},
+            'comments': response.data
+        }
+        return response
 
 
 class CommentDeleteAPIView(generics.DestroyAPIView):
