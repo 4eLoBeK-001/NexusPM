@@ -73,26 +73,30 @@ class AddMemberProjectSerializer(serializers.Serializer):
     
 
 class ProjectStatusesSerializer(serializers.ModelSerializer):
-    color = serializers.CharField(source='color.color_name')
+    color_name = serializers.CharField(source='color.color_name', read_only=True)
+    color = serializers.PrimaryKeyRelatedField(
+        queryset=Color.objects.all()
+    )
 
     class Meta:
         model = Status
-        fields = ('name', 'color', 'is_completed')
+        fields = ('name', 'color', 'color_name', 'is_completed')
 
     def create(self, validated_data):
-        color_name = validated_data.pop('color')['color_name']
-        color = Color.objects.get(name=color_name)
+        color = validated_data.pop('color')
         return Status.objects.create(color=color, **validated_data)
 
 
 class ProjectTagsSerializer(serializers.ModelSerializer):
-    color = serializers.CharField(source='color.color_name')
+    color_name = serializers.CharField(source='color.color_name', read_only=True)
+    color = serializers.PrimaryKeyRelatedField(
+        queryset=Color.objects.all()
+    )
 
     class Meta:
         model = Tag
-        fields = ('name', 'color')
+        fields = ('name', 'color', 'color_name')
     
     def create(self, validated_data):
-        color_name = validated_data.pop('color')['color_name']
-        color = Color.objects.get(name=color_name)
+        color = validated_data.pop('color')
         return Tag.objects.create(color=color, **validated_data)

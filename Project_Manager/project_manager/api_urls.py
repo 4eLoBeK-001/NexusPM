@@ -12,6 +12,7 @@ urlpatterns = [
 
     path('', include('teams.api.urls')),
     path('', include('users.api.urls')),
+    path('', include('logs.api.urls')),
 
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
