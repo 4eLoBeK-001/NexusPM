@@ -18,6 +18,14 @@ class HasTeamRole(permissions.BasePermission):
         if not team_pk:
             return False
 
-        my_role = get_object_or_404(TeamMember, user=request.user, team_id=team_pk).role
+        # кэшируется
+        if not hasattr(view, "_cached_team_member"):
+            try:
+                view._cached_team_member = TeamMember.objects.get(
+                    user=request.user, team_id=team_pk
+                )
+            except TeamMember.DoesNotExist:
+                return False
 
+        my_role = view._cached_team_member.role
         return TeamMember.RoleChoices.get_priority(my_role) >= TeamMember.RoleChoices.get_priority(min_role)

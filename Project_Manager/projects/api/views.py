@@ -58,7 +58,7 @@ class ProjectList(generics.ListCreateAPIView):
         team = self.get_team()
         if not team.team_member.filter(pk=self.request.user.pk).exists():
             raise Http404("Команда не найдена")
-        return qs.filter(team=team, project_members=self.request.user)
+        return qs.filter(team=team, project_members=self.request.user).prefetch_related('project_members__profile')
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
@@ -74,7 +74,7 @@ class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectsDetailSerializer
     required_role = 'Admin'
-    # Кастомный метод проверки того, в команде ли участник
+
     def get_permissions(self):
         if self.request.method in permissions.SAFE_METHODS:
             return [IsAuthenticated()]
@@ -82,7 +82,7 @@ class ProjectDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         project_id = self.kwargs.get('project_id')
-        return get_object_or_404(Project, id=project_id)
+        return get_object_or_404(Project.objects.prefetch_related('project_members__profile'), id=project_id)
 
 
 class ProjectMembersAPIView(generics.ListCreateAPIView):
@@ -116,7 +116,7 @@ class ProjectMembersAPIView(generics.ListCreateAPIView):
         return ProjectsMembersSerializer
 
     def get_queryset(self):
-        return super().get_queryset().filter(project_id=self.kwargs['project_id'])
+        return super().get_queryset().filter(project_id=self.kwargs['project_id']).select_related('user').prefetch_related('user__profile')
     
     def list(self, request, *args, **kwargs):
         project = self._get_project()
@@ -134,7 +134,7 @@ class ProjectMembersAPIView(generics.ListCreateAPIView):
 
 
 class ProjectStatusesAPIView(generics.ListCreateAPIView):
-    queryset = Status.objects.all()
+    queryset = Status.objects.all().select_related('color', 'project')
     serializer_class = ProjectStatusesSerializer
     required_role = 'Manager'
 
@@ -162,7 +162,7 @@ class ProjectStatusesAPIView(generics.ListCreateAPIView):
 
 
 class ProjectTagsAPIView(generics.ListCreateAPIView):
-    queryset = Tag.objects.all()
+    queryset = Tag.objects.all().select_related('color', 'project')
     serializer_class = ProjectTagsSerializer
     permission_classes = [HasProjectMember]
     required_role = 'Member'

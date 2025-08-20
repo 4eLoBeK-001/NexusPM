@@ -37,6 +37,7 @@ class TeamListCreateAPIView(generics.ListCreateAPIView):
     def get_queryset(self):
         qs = super().get_queryset()
         user = self.request.user
+        qs = qs.select_related('author').prefetch_related('participate_in_team__user__profile')
         if user.is_superuser:
             return qs
         return qs.filter(team_member=user)
@@ -64,7 +65,7 @@ class TeamMembersAPIView(generics.ListAPIView):
     def get_queryset(self):
         qs = super().get_queryset()
         team_pk = self.kwargs['pk']
-        return qs.filter(team_id=team_pk)
+        return qs.filter(team_id=team_pk).prefetch_related('user__profile')
 
 
     def list(self, request, *args, **kwargs):
@@ -83,7 +84,7 @@ class TeamMembersAPIView(generics.ListAPIView):
 
 class TeamDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, HasTeamRole]
-    queryset = Team.objects.all()
+    queryset = Team.objects.all().prefetch_related('participate_in_team__user__profile')
     serializer_class = TeamDetailSerializer
     required_role = 'Admin'
 
