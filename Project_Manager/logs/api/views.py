@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 
+from project_manager.pagination import ExtendedPagination
 from logs.api.filters import LogsFilter
 from logs.api.serializers import LogActionsSerializer
 from logs.models import ActionLog
@@ -18,8 +19,10 @@ class LogActionsAPIView(generics.ListAPIView):
     filterset_class = LogsFilter
     filter_backends = [
         DjangoFilterBackend,
-        filters.OrderingFilter]
+        filters.OrderingFilter
+    ]
     ordering_fields = ['created_at']
+    pagination_class = ExtendedPagination
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -40,8 +43,10 @@ class TeamHistoryAPIView(generics.ListAPIView):
     filterset_class = LogsFilter
     filter_backends = [
         DjangoFilterBackend,
-        filters.OrderingFilter]
+        filters.OrderingFilter
+    ]
     ordering_fields = ['created_at']
+    pagination_class = ExtendedPagination
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -60,8 +65,10 @@ class ProjectHistoryAPIView(generics.ListAPIView):
     filterset_class = LogsFilter
     filter_backends = [
         DjangoFilterBackend,
-        filters.OrderingFilter]
+        filters.OrderingFilter
+    ]
     ordering_fields = ['created_at']
+    pagination_class = ExtendedPagination
 
     def get_queryset(self):
         qs = super().get_queryset()
