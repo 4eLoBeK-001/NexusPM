@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
 
 from users.models import ProjectMember, TeamMember
 
@@ -19,8 +21,6 @@ from projects.forms import AddModalProjectForm, UpdateProjectForm
 from tasks.models import Status, Tag
 from tasks.forms import CreateStatusForm, CreateTagForm
 from tasks.utils.decorators import require_project_member
-
-
 
 
 def project_list(request, pk):
@@ -130,36 +130,50 @@ def change_project(request, project_pk, *args, **kwargs):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-# @require_project_member
-
 def project_members(request, project_pk, *args, **kwargs):
     project = get_object_or_404(Project, pk=project_pk)
     team = project.team
     roles = TeamMember.RoleChoices.choices
-    
-    # формируется подзапрос для подсчёта количества проектов в команде,
-    # в которых участвует конкретный пользователь
-    project_count_subquery = ProjectMember.objects.filter(
-        user=OuterRef('pk'),
-        project__team=team
-    ).values('user').annotate(count=Count('project')).values('count')
 
-    # Тут в queryset добавляется:
-    # Количество проектов в командде, где участвует пользователь
-    # Дату присоединения к проекту
-    project_members = project.project_members.annotate(
-        projects_count=Subquery(project_count_subquery),
-        date_joining=F('members_projects__date_joining')
-    ).select_related('profile')
+    project_cache_key = f'project_{project_pk}_members'
+    project_members = cache.get(project_cache_key)
 
-    # Cписок всех участников команды
-    team_members = team.team_member.select_related('profile')
+    if project_members is None:
+        # формируется подзапрос для подсчёта количества проектов в команде,
+        # в которых участвует конкретный пользователь
+        project_count_subquery = ProjectMember.objects.filter(
+            user=OuterRef('pk'),
+            project__team=team
+        ).values('user').annotate(count=Count('project')).values('count')
+
+        # Тут в queryset добавляется:
+        # Количество проектов в командде, где участвует пользователь
+        # Дату присоединения к проекту
+        project_members_qs = project.project_members.annotate(
+            projects_count=Subquery(project_count_subquery),
+            date_joining=F('members_projects__date_joining')
+        ).select_related('profile')
+
+        project_members = list(project_members_qs)
+
+        cache.set(project_cache_key, project_members, timeout=60*30)
+
+    project_member_ids = [p.id for p in project_members]
+
+    team_cache_key = f'team_{team.id}_members'
+    team_members = cache.get(team_cache_key)
+
+    if team_members is None:
+        # Cписок всех участников команды
+        team_members = list(team.team_member.select_related('profile'))
+        cache.set(team_cache_key, team_members, timeout=60*30)
+
 
     data = {
         'team': team,
         'project': project,
         'project_members': project_members,
-        'project_member_ids': project_members.values_list('id', flat=True),
+        'project_member_ids': project_member_ids,
         'team_members': team_members,
         'roles': roles
     }

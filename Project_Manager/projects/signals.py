@@ -1,13 +1,21 @@
-from django.db.models.signals import post_save, pre_save, pre_delete, post_delete
+from django.db.models.signals import post_save, pre_save, pre_delete, post_delete, m2m_changed
 from django.dispatch import receiver
-
+from django.core.cache import cache
 from teams.middleware import get_current_user
 
 from .models import Project
 
+from users.models import ProjectMember
+
 from tasks.models import Status
 
 from logs.services import log_action
+
+
+@receiver(m2m_changed, sender=Project.project_members.through)
+def invalidate_project_members_cache(sender, instance, **kwargs):
+    cache_key = f'project_{instance.id}_members'
+    cache.delete(cache_key)
 
 
 @receiver(signal=post_save, sender=Project)
