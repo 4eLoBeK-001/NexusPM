@@ -1,10 +1,17 @@
-from django.db.models.signals import post_save, pre_save, pre_delete
+from django.db.models.signals import post_save, pre_save, pre_delete, post_delete
 from django.dispatch import receiver
+from django.core.cache import cache
 
 from .models import Team
 from teams.middleware import get_current_user
 from users.models import TeamMember, User
 from logs.services import log_action
+
+
+@receiver([post_save, post_delete], sender=TeamMember)
+def invalidate_team_members_cache(sender, instance, **kwargs):
+    team_id = instance.team_id
+    cache.delete(f'team_{team_id}_members')
 
 
 @receiver(signal=post_save, sender=Team)

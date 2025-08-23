@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.db.models import Q, F, Count
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
 
 from .forms import AddModalTeamForm, AddTeamForm, AddTeamMemberModalForm
 from .models import Team, TeamInvitation
@@ -66,10 +68,19 @@ def team_members(request, pk):
     team = Team.objects.get(pk=pk, team_member=request.user)
     form = AddTeamMemberModalForm()
     roles = TeamMember.RoleChoices.choices
-    team_members = team.team_member.annotate(
-        projects_count=Count('project_membership', filter=Q(project_membership__team=team)),
-        member_date_joining=F('members_teams__date_joining'),
-    ).select_related('profile')
+
+    cache_key = f'team_{pk}_members'
+    team_members = cache.get(cache_key)
+
+    if team_members is None:
+        team_members = list(
+            team.team_member.annotate(
+                projects_count=Count('project_membership', filter=Q(project_membership__team=team)),
+                member_date_joining=F('members_teams__date_joining'),
+            ).select_related('profile')
+        )
+        cache.set(cache_key, team_members, timeout=60*30)
+
     context = {
         'team': team,
         'form': form,
