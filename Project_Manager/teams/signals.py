@@ -8,6 +8,11 @@ from users.models import TeamMember, User
 from logs.services import log_action
 
 
+@receiver([post_save, post_delete], sender=Team)
+def invalidate_team_members_cache(sender, instance, **kwargs):
+    cache.delete_pattern('teams_list_hash_*')
+
+
 @receiver([post_save, post_delete], sender=TeamMember)
 def invalidate_team_members_cache(sender, instance, **kwargs):
     team_id = instance.team_id

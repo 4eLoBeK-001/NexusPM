@@ -1,8 +1,8 @@
 @baseUrl = http://127.0.0.1:8000/api
 @username = root
 @password = 1234
-@rootAccessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU1Mjk0NTA0LCJpYXQiOjE3NTUyNzI5MDQsImp0aSI6IjE3NDBhMzhlZTgzZDQ4M2RhYzJkZTExOTMxNjBmOTgyIiwidXNlcl9pZCI6IjEifQ.NIUlI-gArxYVGDya_nyX3_889Xbiuf-EP2x7jPyjB5k
-@4elAccessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU1NDc5MDI4LCJpYXQiOjE3NTU0NTc0MjgsImp0aSI6IjMwMWY5ZjhjNzM4MTRlMGI4NDA0NzYyYWIxNGI4MDk5IiwidXNlcl9pZCI6IjkifQ.bbufEd1c_0bxxrwL5UIhE3IhZU13jZAhc8SK020ukaM
+@rootAccessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU2MjMyNjIxLCJpYXQiOjE3NTU5NzM0MjEsImp0aSI6IjA5ZGIwZjgwNjZjYjRhOWZhZGM5ODM4OTAzMDhmZjk1IiwidXNlcl9pZCI6IjEifQ.Ruee1dt3NjaWK_o9Mlg7O1rtlMExYq3H1fugKGzdMr0
+@4elAccessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU2MjMyNjM2LCJpYXQiOjE3NTU5NzM0MzYsImp0aSI6ImE1ODAxY2EzMDViYzQxYWY4NDQ5MGQ2MWVmZTAzYWNiIiwidXNlcl9pZCI6IjkifQ.Jnf8KFVHZvs8NnCf1VvzFdGa2iIBoLF7IOR2wpRQ-Ys
 
 ###
 
@@ -34,6 +34,12 @@ Content-Type: application/json
 GET  http://127.0.0.1:8000/api/teams/ HTTP/1.1
 Authorization: Bearer {{rootAccessToken}}
 Content-Type: application/json
+
+### ыфы
+GET http://127.0.0.1:8000/api/team/204/ HTTP/1.1
+Authorization: Bearer {{4elAccessToken}}
+Content-Type: application/json
+
 
 ### Покинуть команду
 POST http://127.0.0.1:8000/api/team/198/leave/ HTTP/1.1

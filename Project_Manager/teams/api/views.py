@@ -1,6 +1,12 @@
+import hashlib
+
 from django.shortcuts import get_object_or_404
 from django.template.context_processors import request
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_headers
+from django.core.cache import cache
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -42,8 +48,27 @@ class TeamListCreateAPIView(generics.ListCreateAPIView):
             return qs
         return qs.filter(team_member=user)
 
+    # @method_decorator(cache_page(60*60))
+    # @method_decorator(vary_on_headers('Authorization'))
     def list(self, request, *args, **kwargs):
+
+        if request.query_params:
+            return super().list(request, *args, **kwargs)
+
+        user = request.user
+        team_ids = list(user.member_teams.all().values_list('id', flat=True))
+        team_ids.sort()
+        teams_hash = hashlib.md5(str(team_ids).encode()).hexdigest()
+        cache_key = f'teams_list_hash_{teams_hash}'
+
+        cached_data = cache.get(cache_key)
+        if cached_data is not None:
+            response = Response(cached_data)
+            response['X-Header'] = 'Creating and listing teams'
+            return response
+
         response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, timeout=60 * 60)
         response['X-Header'] = 'Creating and listing teams'
         return response
 
