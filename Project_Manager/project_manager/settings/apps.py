@@ -89,6 +89,16 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
+
+    "DEFAULT_THROTTLE_CLASSES": [
+        "project_manager.throttles.RoleBasedRateThrottle",
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        "anon": "20/minute",
+        "user": "80/minute",
+        "staff": "200/minute",
+        "superuser": "1000/minute",
+    }
 }
 
 SPECTACULAR_SETTINGS = {
