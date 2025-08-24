@@ -1,4 +1,7 @@
+import hashlib
 from django.shortcuts import get_object_or_404
+from django.core.cache import cache
+
 from rest_framework import generics, status
 from rest_framework.response import Response
 
@@ -23,19 +26,42 @@ class TaskListAPIView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
+    
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(project_id=self.kwargs.get('project_id'))
 
     def list(self, request, *args, **kwargs):
-        response = super().list(request, *args, **kwargs)
         project = get_object_or_404(Project, pk=kwargs.get('project_id'))
+
+        if request.query_params:
+            response = super().list(request, *args, **kwargs)
+            return Response({
+                'project': {'project_id': project.id, 'project_name': project.name},
+                'tasks': response.data
+            })
+
+        project_hash = hashlib.md5(str(project.id).encode()).hexdigest()
+
+        cache_key = f'tasks_list_hash_{project_hash}'
+        cached_data = cache.get(cache_key)
+
+        if cached_data is not None:
+            return Response(cached_data)
+    
+        response = super().list(request, *args, **kwargs)
         response.data = {
             'project': {'project_id': project.id, 'project_name': project.name},
             'tasks': response.data
         }
+        cache.set(cache_key, response.data, timeout=60*60)
         return response
 
 
 class TaskDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Task.objects.all()
+    queryset = Task.objects.all(
+    ).select_related('creator', 'project', 'status', 'parent_task'
+    ).prefetch_related('tag__color', 'executor__profile', 'comments')
     serializer_class = TaskDetailSerializer
     lookup_url_kwarg = 'task_id'
 
@@ -54,6 +80,18 @@ class TaskDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         if self.request.method in ['PUT', 'PATCH', 'DELETE']:
             return [HasProjectMember(), HasTeamRole()]
         return [HasProjectMember()]
+    
+    def retrieve(self, request, *args, **kwargs):
+        task_hash = hashlib.md5(str(kwargs.get('task_id')).encode()).hexdigest()
+        cache_key = f'task_detail_{task_hash}'
+
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            return Response(cached_data)
+    
+        response = super().retrieve(request, *args, **kwargs)
+        cache.set(cache_key, response.data, timeout=60*60)
+        return response
 
 
 class CommentListAPIView(generics.ListCreateAPIView):

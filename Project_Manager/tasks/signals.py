@@ -1,5 +1,7 @@
+import hashlib
 from django.db.models.signals import post_save, pre_save, m2m_changed, post_delete, pre_delete
 from django.dispatch import receiver
+from django.core.cache import cache
 
 from teams.middleware import get_current_user
 
@@ -8,6 +10,13 @@ from .models import Task, Tag, Status, TaskImage, Comment
 from users.models import TaskExecutor
 
 from logs.services import log_action
+
+
+@receiver([post_save, post_delete], sender=Task)
+def invalidate_task_cache(sender, instance, *args, **kwargs):
+    project_id = instance.project_id
+    cache.delete_pattern(f'tasks_list_hash_{hashlib.md5(str(project_id).encode()).hexdigest()}')
+    cache.delete_pattern(f'task_detail_{hashlib.md5(str(instance.id).encode()).hexdigest()}')
 
 
 @receiver(signal=post_save, sender=Task)
