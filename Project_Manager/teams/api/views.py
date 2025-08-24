@@ -52,6 +52,7 @@ class TeamListCreateAPIView(generics.ListCreateAPIView):
     # @method_decorator(vary_on_headers('Authorization'))
     def list(self, request, *args, **kwargs):
 
+        # Если запрос с параметрами то ничего не кэшируем
         if request.query_params:
             return super().list(request, *args, **kwargs)
 

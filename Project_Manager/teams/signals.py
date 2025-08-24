@@ -9,7 +9,7 @@ from logs.services import log_action
 
 
 @receiver([post_save, post_delete], sender=Team)
-def invalidate_team_members_cache(sender, instance, **kwargs):
+def invalidate_team_cache(sender, instance, **kwargs):
     cache.delete_pattern('teams_list_hash_*')
 
 

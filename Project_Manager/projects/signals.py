@@ -11,6 +11,11 @@ from tasks.models import Status
 
 from logs.services import log_action
 
+@receiver((post_delete, post_save), sender=Project)
+def invalidate_project_cache(sender, instance, **kwargs):
+    cache_key = 'projects_list_hash_*'
+    cache.delete_pattern(cache_key)
+
 
 @receiver(m2m_changed, sender=Project.project_members.through)
 def invalidate_project_members_cache(sender, instance, **kwargs):

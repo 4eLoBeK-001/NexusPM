@@ -1,5 +1,8 @@
+import hashlib
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+from django.core.cache import cache
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, permissions, status, filters
@@ -61,12 +64,29 @@ class ProjectList(generics.ListCreateAPIView):
         return qs.filter(team=team, project_members=self.request.user).prefetch_related('project_members__profile')
 
     def list(self, request, *args, **kwargs):
-        response = super().list(request, *args, **kwargs)
         team = self.get_team()
+
+        # Если запрос с параметрами то ничего не кэшируем
+        if request.query_params:
+            return super().list(request, *args, **kwargs)
+
+        user = request.user
+        project_ids = list(Project.objects.filter(team=team, project_members=user).values_list("id", flat=True))
+        project_ids.sort()
+        projects_hash = hashlib.md5(str(project_ids).encode()).hexdigest()
+
+        cache_key = f'projects_list_hash_{projects_hash}'
+        cached_data = cache.get(cache_key)
+
+        if cached_data is not None:
+            return Response(cached_data)
+
+        response = super().list(request, *args, **kwargs)
         response.data = {
             'team': team.name,
             'projects': response.data
         }
+        cache.set(cache_key, response.data, timeout=60*60)
         return response
 
 
