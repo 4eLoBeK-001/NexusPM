@@ -118,6 +118,8 @@ class TeamMember(models.Model):
     date_joining = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        app_label = 'users'
+        db_table = 'users_teammember'
         ordering = ('-date_joining',)
         verbose_name = 'Участник команды'
         verbose_name_plural = 'Участники команд'
@@ -132,6 +134,8 @@ class ProjectMember(models.Model):
     date_joining = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        app_label = 'users'
+        db_table = 'users_projectmember'
         ordering = ('-date_joining',)
         verbose_name = 'Участник проекта'
         verbose_name_plural = 'Участники проектов'
@@ -146,7 +150,10 @@ class TaskExecutor(models.Model):
     
     def __str__(self):
         return f'{self.user} ответственен за {self.task}'
-
+    
+    class Meta:
+        app_label = 'users'
+        db_table = 'users_taskexecutor'
 
 
 class Feedback(models.Model):

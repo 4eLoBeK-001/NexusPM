@@ -1,0 +1,91 @@
+[
+  {
+    "model": "tasks.color",
+    "pk": 1,
+    "fields": {
+      "name": "Красный",
+      "color_name": "red",
+      "bg_color": "bg-red-100",
+      "text_color": "text-red-500",
+      "border_color": "border-red-600"
+    }
+  },
+  {
+    "model": "tasks.color",
+    "pk": 2,
+    "fields": {
+      "name": "Жёлтый",
+      "color_name": "yellow",
+      "bg_color": "bg-yellow-50",
+      "text_color": "text-yellow-600",
+      "border_color": "border-yellow-600"
+    }
+  },
+  {
+    "model": "tasks.color",
+    "pk": 3,
+    "fields": {
+      "name": "Зеленый",
+      "color_name": "green",
+      "bg_color": "bg-green-50",
+      "text_color": "text-green-600",
+      "border_color": "border-green-600"
+    }
+  },
+  {
+    "model": "tasks.color",
+    "pk": 4,
+    "fields": {
+      "name": "Синий",
+      "color_name": "blue",
+      "bg_color": "bg-blue-100",
+      "text_color": "text-blue-700",
+      "border_color": "border-blue-600"
+    }
+  },
+  {
+    "model": "tasks.color",
+    "pk": 5,
+    "fields": {
+      "name": "Фиолетовый",
+      "color_name": "purple",
+      "bg_color": "bg-purple-100",
+      "text_color": "text-purple-600",
+      "border_color": "border-purple-600"
+    }
+  },
+  {
+    "model": "tasks.color",
+    "pk": 6,
+    "fields": {
+      "name": "Оранжевый",
+      "color_name": "orange",
+      "bg_color": "bg-orange-100",
+      "text_color": "text-orange-500",
+      "border_color": "border-orange-600"
+    }
+  },
+  {
+    "model": "tasks.color",
+    "pk": 7,
+    "fields": {
+      "name": "Бирюзовый",
+      "color_name": "teal",
+      "bg_color": "bg-teal-100",
+      "text_color": "text-teal-600",
+      "border_color": "border-teal-600"
+    }
+  },
+  {
+      "model": "tasks.color",
+      "pk": 8,
+      "fields": {
+        "name": "Серый",
+        "color_name": "slate",
+        "bg_color": "bg-slate-100",
+        "text_color": "text-slate-600",
+        "border_color": "border-slate-600"
+      }
+    }
+  ]
+  
