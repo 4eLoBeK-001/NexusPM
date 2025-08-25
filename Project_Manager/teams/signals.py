@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save, pre_save, pre_delete, post_delete
+from django.db.models.signals import post_save, pre_save, pre_delete, post_delete, m2m_changed
 from django.dispatch import receiver
 from django.core.cache import cache
 
@@ -11,6 +11,12 @@ from logs.services import log_action
 @receiver([post_save, post_delete], sender=Team)
 def invalidate_team_cache(sender, instance, **kwargs):
     cache.delete_pattern('teams_list_hash_*')
+
+
+@receiver(m2m_changed, sender=Team.team_member.through)
+def invalidate_team_members_cache(sender, instance, action, **kwargs):
+    if action in ['post_add', 'post_remove', 'post_clear']:
+        cache.delete(f'team_{instance.pk}_members')
 
 
 @receiver([post_save, post_delete], sender=TeamMember)

@@ -45,7 +45,7 @@ def register_user(request):
             user = form.save(commit=False)
             user.set_password(cd['password1'])
             user.save()
-            return redirect(reverse('projects:home'))
+            return redirect(reverse('home'))
     else:
         form = RegisterUserForm()
     context = {
