@@ -66,3 +66,5 @@
 `POST /api/projects/{project_id}/tasks/` — создать задачу
 
 `GET /api/tasks/{task_id}/` — детально о задаче
+
+## Установка

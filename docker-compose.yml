@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  
+  db:
+    image: postgres:17.6
+    environment:
+      POSTGRES_DB: NexusPMDB
+      POSTGRES_USER: adminUsr
+      POSTGRES_PASSWORD: postgres1
+    ports:
+      - "6222:5432"
+    volumes:
+      - "nexus_pgdata:/var/lib/postgresql/data"
+  
+  redis:
+    image: redis:8.2
+    ports:
+      - "6379:6379"
+
+  web:
+    build: ./Project_Manager
+    command: >
+      sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py loaddata colors_fixture.json && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./Project_Manager:/app
+    depends_on:
+      - db
+      - redis
+
+  celery:
+    build: ./Project_Manager
+    command: celery -A project_manager worker -l info
+    volumes:
+      - ./Project_Manager:/app
+    depends_on:
+      - redis
+      - db
+      - web
+  
+  celery-beat:
+    build: ./Project_Manager
+    command: celery -A project_manager beat -l info
+    volumes:
+      - ./Project_Manager:/app
+    depends_on:
+      - redis
+      - db
+      - web
+
+volumes:
+  nexus_pgdata:
