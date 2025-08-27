@@ -71,17 +71,17 @@
 
 
 Клонируем репозиторий
-```
-git clone <path>
+```sh
+git clone https://github.com/4eLoBeK-001/NexusPM.git
 ```
 
 Проходим вглубь проекта
-```
+```sh
 cd NexusPM
 ```
 
 Запускаем docker compose
-```
+```sh
 docker compose up -d
 ```
 
